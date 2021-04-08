@@ -1,0 +1,15 @@
+onim.en.etl.keyCategory=Extend TheLow
+onim.en.etl.openPrefs=Open ExtendTheLow Settings GUI
+
+onim.en.etl.settings=ExtendTheLow Settings
+onim.en.etl.category.util=Utilities
+
+onim.en.etl.dungeonMarker=Dungeon Marker
+onim.en.etl.dungeonMarker.distanceAlwaysRender=Distance always show
+onim.en.etl.dungeonMarker.maxRenderDistance=Max render distance
+
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=Normal
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulate
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=Off
+
+onim.en.etl.expMessageUtil=Exp message

@@ -1,0 +1,18 @@
+onim.en.etl.openPrefs=設定を開く
+onim.en.etl.keyCategory=Extend TheLow
+
+onim.en.etl.settings=ExtendTheLowの設定
+onim.en.etl.category.util=ユーティリティ
+
+onim.en.etl.dungeonMarker=ダンジョンマーカー
+onim.en.etl.dungeonMarker.distanceAlwaysRender=つねに描画する距離
+onim.en.etl.dungeonMarker.maxRenderDistance=最大描画距離
+onim.en.etl.dungeonMarker.levelLowest=表示する最低レベル
+onim.en.etl.dungeonMarker.levelHighest=表示する最高レベル
+onim.en.etl.dungeonMarker.displaySpecials=特殊ダンジョンの表示
+
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=通常
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=蓄積
+onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=オフ
+
+onim.en.etl.expMessageUtil=EXP取得メッセージ

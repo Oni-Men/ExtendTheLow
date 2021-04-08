@@ -1,0 +1,16 @@
+[
+{
+  "modid": "onim.en.etl",
+  "name": "ExtendTheLow",
+  "description": "Extend the Minecraft when you are playing TheLow.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Onimen"],
+  "credits": "The Forge and FML guys, https://sawarabi-fonts.osdn.jp/",
+  "logoFile": "/assets/onim.en.etl/icons/icon.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

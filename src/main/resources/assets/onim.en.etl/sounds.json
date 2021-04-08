@@ -1,0 +1,7 @@
+{
+	"onim.en.etl.click": {
+		"category": "master",
+		"subtitle": "onim.en.etl.subtitle.click",
+		"sounds": ["onim.en.etl:click"]
+	}
+}
