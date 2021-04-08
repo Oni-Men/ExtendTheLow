@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import onim.en.etl.Prefs;
 import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
@@ -20,6 +21,7 @@ public class GuiUtil {
   public static void openSettingGUI() {
     GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.settings");
     gui.setInitializer(buttonList -> {
+      buttonList.add(getFontSettingButton(gui));
       ExtensionManager.getCategories().forEach(category -> {
         Button button = new Button(100, category);
         button.setOnAction(() -> openCategorySettingGUI(category, gui));
@@ -149,5 +151,26 @@ public class GuiUtil {
     }
 
     return null;
+  }
+
+  public static Button getFontSettingButton(GuiScreen prevScreen) {
+    Button button = new Button(100, "onim.en.etl.fontSettings");
+    button.setOnAction(() -> openFontSettingsGUI(prevScreen));
+
+    return button;
+  }
+
+  public static void openFontSettingsGUI(GuiScreen prevScreen) {
+    GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.fontSettings", prevScreen);
+    gui.setInitializer(buttonList -> {
+      buttonList
+          .add(new ToggleButton("onim.en.etl.toggleEnabled", Prefs.get().betterFont, b -> {
+            Prefs.get().betterFont = b;
+          }));
+    });
+
+    gui.setOnClose(() -> Prefs.save());
+    
+    Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 }

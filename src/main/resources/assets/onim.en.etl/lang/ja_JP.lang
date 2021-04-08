@@ -1,6 +1,8 @@
 onim.en.etl.openPrefs=設定を開く
 onim.en.etl.keyCategory=Extend TheLow
 
+onim.en.etl.toggleEnabled=有効/無効
+
 onim.en.etl.settings=ExtendTheLowの設定
 onim.en.etl.category.util=ユーティリティ
 
@@ -16,3 +18,5 @@ onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=蓄積
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=オフ
 
 onim.en.etl.expMessageUtil=EXP取得メッセージ
+
+onim.en.etl.fontSettings=フォントの設定

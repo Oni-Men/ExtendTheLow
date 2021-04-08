@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
+import onim.en.etl.Prefs;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.util.FontUtil;
 import onim.en.etl.util.font.CharacterTextureData;
@@ -80,12 +81,11 @@ public class AdvancedFontRenderer extends FontRenderer {
   }
 
   @Override
-  public int drawString(String text, float x, float y, int color, boolean dropShadow) {
-    return super.drawString(text, x, y, color, dropShadow);
-  }
-
-  @Override
   protected float renderUnicodeChar(char ch, boolean italic) {
+    if (!Prefs.get().betterFont) {
+      return super.renderUnicodeChar(ch, italic);
+    }
+
     int scaleFactor = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
     if (prevScaleFactor != scaleFactor) {
       prevScaleFactor = scaleFactor;
@@ -157,11 +157,17 @@ public class AdvancedFontRenderer extends FontRenderer {
 
   @Override
   protected float renderDefaultChar(int ch, boolean italic) {
-    return this.renderUnicodeChar((char) ch, italic);
+    if (Prefs.get().betterFont) {
+      return this.renderUnicodeChar((char) ch, italic);
+    }
+    return super.renderDefaultChar(ch, italic);
   }
 
   @Override
   public int getCharWidth(char ch) {
+    if (!Prefs.get().betterFont) {
+      return super.getCharWidth(ch);
+    }
     return (int) (this.getCharWidthFloat_NonOptifine(ch));
   }
 

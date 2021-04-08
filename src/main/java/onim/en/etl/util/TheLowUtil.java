@@ -116,6 +116,24 @@ public class TheLowUtil {
         rule.accept(playerStatus, pare[1].trim());
       }
     }
+  }
 
+  public static String formatGalions(long galion) {
+    if (galion < 1000) {
+      return galion + "G";
+    }
+
+    if (galion < 1000000) {
+      return String.format("%.2fkG", (galion / 1000F));
+    }
+
+    return String.format("%.3fmG", (galion / 1000000F));
+  }
+
+  public static String formatPlayerName(PlayerStatus status) {
+    if (status.clanInfo == null) {
+      return status.mcid;
+    }
+    return String.format("%s§c[%s]", status.mcid, status.clanInfo.clanName);
   }
 }

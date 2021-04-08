@@ -1,6 +1,8 @@
 onim.en.etl.keyCategory=Extend TheLow
 onim.en.etl.openPrefs=Open ExtendTheLow Settings GUI
 
+onim.en.etl.toggleEnabled=On/Off
+
 onim.en.etl.settings=ExtendTheLow Settings
 onim.en.etl.category.util=Utilities
 
@@ -13,3 +15,5 @@ onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulat
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=Off
 
 onim.en.etl.expMessageUtil=Exp message
+
+onim.en.etl.fontSettings=Font Settings

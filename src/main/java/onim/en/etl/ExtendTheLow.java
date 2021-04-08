@@ -67,6 +67,9 @@ public class ExtendTheLow {
   @EventHandler
   public void init(FMLInitializationEvent event) {
     Minecraft mc = Minecraft.getMinecraft();
+
+    Prefs.load();
+
     ExtensionManager.registerAll();
     ExtensionManager.loadModuleSettings();
     MinecraftForge.EVENT_BUS.register(this);

@@ -1,5 +1,7 @@
 package onim.en.etl.ui.parts;
 
+import java.util.function.Consumer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -15,14 +17,22 @@ public class ToggleButton extends GuiActionButton {
   private boolean toggleState = false;
   private long toggleStateChagned = 0;
 
+  private Consumer<Boolean> atClicked;
+
   public ToggleButton(String buttonText) {
     this(buttonText, false);
   }
 
   public ToggleButton(String buttonText, boolean state) {
+    this(buttonText, state, null);
+  }
+
+  public ToggleButton(String buttonText, boolean state, Consumer<Boolean> onclick) {
     super(20, 10, buttonText);
     this.toggleState = state;
+    this.atClicked = onclick;
   }
+
 
   public void setState(boolean b) {
     this.toggleState = b;
@@ -75,6 +85,10 @@ public class ToggleButton extends GuiActionButton {
   public void onClick() {
     this.toggleState();
     super.onClick();
+
+    if (this.atClicked != null) {
+      this.atClicked.accept(this.toggleState);
+    }
   }
 
   private int getToggleStatePosition() {
