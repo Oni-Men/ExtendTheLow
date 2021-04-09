@@ -8,13 +8,14 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.ClassPath;
 import com.google.gson.ExclusionStrategy;
@@ -31,8 +32,9 @@ public class ExtensionManager {
 
   private static final String PACKAGE_NAME = "onim.en.etl.extension";
 
-  private static HashMap<String, TheLowExtension> idToExtension = Maps.newHashMap();
-  private static HashMultimap<String, TheLowExtension> extensionsByCategory = HashMultimap.create();
+  private static HashMap<String, TheLowExtension> idToExtension = Maps.newLinkedHashMap();
+  private static LinkedListMultimap<String, TheLowExtension> extensionsByCategory =
+      LinkedListMultimap.create();
 
   public static void registerAll() {
     try {
@@ -90,7 +92,7 @@ public class ExtensionManager {
     return extensionsByCategory.keySet();
   }
 
-  public static Set<TheLowExtension> getCategoryExtensions(String category) {
+  public static List<TheLowExtension> getCategoryExtensions(String category) {
     return extensionsByCategory.get(category);
   }
 
@@ -149,10 +151,11 @@ public class ExtensionManager {
   public static void loadModuleSettings() {
     for (Entry<String, TheLowExtension> entry : idToExtension.entrySet()) {
       try {
-        String json = Files
-            .lines(ExtendTheLow.configPath.resolve(entry.getKey() + ".json"),
-                StandardCharsets.UTF_8)
-            .collect(Collectors.joining("\n"));
+        String json =
+            Files
+                .lines(ExtendTheLow.configPath.resolve(entry.getKey() + ".json"),
+                    StandardCharsets.UTF_8)
+                .collect(Collectors.joining("\n"));
 
         TheLowExtension module = new Gson().fromJson(json, entry.getValue().getClass());
         JavaUtil.merge(entry.getValue(), module);

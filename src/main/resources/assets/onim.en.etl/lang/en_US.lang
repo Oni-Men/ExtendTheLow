@@ -17,6 +17,8 @@ onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=Normal
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulate
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=Off
 
+onim.en.etl.crashPrevention=Prevent crash on MagicOre
+
 onim.en.etl.expMessageUtil=Exp message
 
 onim.en.etl.generalSettings=General Settings

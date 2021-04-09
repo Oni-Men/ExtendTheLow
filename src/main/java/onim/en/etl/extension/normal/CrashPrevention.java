@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.MouseInputEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.custom.GuiEquipMagicOre;
@@ -15,7 +14,7 @@ public class CrashPrevention extends TheLowExtension {
 
   @Override
   public String id() {
-    return "crash-prevention";
+    return "crashPrevention";
   }
 
   @Override
@@ -55,19 +54,4 @@ public class CrashPrevention extends TheLowExtension {
     mc.displayGuiScreen(equipMagicOre);
   }
 
-  @SubscribeEvent
-  public void onMouseInput(MouseInputEvent.Pre event) {
-    if (!(event.gui instanceof GuiMerchant)) {
-      return;
-    }
-
-    GuiMerchant gui = (GuiMerchant) event.gui;
-    IChatComponent displayName = gui.getMerchant().getDisplayName();
-
-    if (!displayName.getUnformattedText().equals(MERCHANT_NAME)) {
-      return;
-    }
-    
-
-  }
 }

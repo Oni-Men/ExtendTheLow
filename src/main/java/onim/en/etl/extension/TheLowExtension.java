@@ -23,7 +23,7 @@ public abstract class TheLowExtension {
   public abstract void onDisable();
 
   public ToggleButton getToggleEnableButton() {
-    ToggleButton button = new ToggleButton(this.id(), this.enabled);
+    ToggleButton button = new ToggleButton("onim.en.etl.toggleEnabled", this.enabled);
     button.setOnAction(() -> {
       this.enabled = button.getState();
       if (this.enabled) {
