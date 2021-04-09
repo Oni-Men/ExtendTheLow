@@ -3,16 +3,19 @@ package onim.en.etl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -22,6 +25,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.HandleAPI;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
@@ -30,6 +35,7 @@ import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
 import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TickTaskExecutor;
+import onim.en.etl.util.TickTaskExecutor.TickTask;
 import onim.en.etl.util.font.FontGenerateData;
 import onim.en.etl.util.font.FontGenerateWorker;
 
@@ -45,6 +51,8 @@ public class ExtendTheLow {
   public static Path configPath = null;
   public static KeyBinding keyOpenModPrefs =
       new KeyBinding("onim.en.etl.openPrefs", Keyboard.KEY_P, "onim.en.etl.keyCategory");
+
+  public static TickTask apiScheduler = null;
 
   public static ExtendTheLow getInstance() {
     return instance;
@@ -69,6 +77,7 @@ public class ExtendTheLow {
     Minecraft mc = Minecraft.getMinecraft();
 
     Prefs.load();
+    DataStorage.load();
 
     ExtensionManager.registerAll();
     ExtensionManager.loadModuleSettings();
@@ -78,6 +87,7 @@ public class ExtendTheLow {
 
     RenderFont = new AdvancedFontRenderer(mc.gameSettings,
         new ResourceLocation("textures/font/ascii.png"), mc.getTextureManager());
+    ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(RenderFont);
   }
 
   @EventHandler
@@ -108,6 +118,10 @@ public class ExtendTheLow {
     if (task != null) {
       task.run();
     }
+
+    if (event.phase == Phase.END) {
+      TickTaskExecutor.advanceScheduledTasks();
+    }
   }
 
   @SubscribeEvent
@@ -115,11 +129,22 @@ public class ExtendTheLow {
     event.setCanceled(HandleAPI.process(event));
 
     if (event.message.getFormattedText().startsWith(HandleAPI.PLAYER_DATA_MSG)) {
-      for (String type : HandleAPI.API_TYPES) {
-        TickTaskExecutor.addTask(() -> {
-          Minecraft.getMinecraft().thePlayer.sendChatMessage(String.format("/thelow_api %s", type));
-        });
-      }
+      apiScheduler = TickTaskExecutor.scheduleTask(() -> {
+        for (String type : HandleAPI.API_TYPES) {
+          TickTaskExecutor.addTask(() -> {
+            Minecraft.getMinecraft().thePlayer
+                .sendChatMessage(String.format("/thelow_api %s", type));
+          });
+        }
+      }, new Random().nextInt(100) * 20, 20 * 60);
+    }
+  }
+
+  @SubscribeEvent
+  public void onWorldUnload(WorldEvent.Unload event) {
+    if (apiScheduler != null) {
+      apiScheduler.cancel();
+      apiScheduler = null;
     }
   }
 

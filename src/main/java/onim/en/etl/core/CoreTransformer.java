@@ -43,9 +43,17 @@ public class CoreTransformer implements IClassTransformer {
 
       }
 
-      ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+      ClassWriter classWriter =
+          new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
       classNode.accept(classWriter);
 
+      // if (transformedName.equals("net.minecraft.client.network.NetHandlerPlayClient")) {
+      // System.out.println("a");
+      // byte[] byteArray = classWriter.toByteArray();
+      // Path path = Paths.get("C:\\Users\\onigi\\Desktop\\java\\nethandler.class");
+      // Files.createFile(path);
+      // Files.write(path, byteArray);
+      // }
       return classWriter.toByteArray();
     } catch (Exception e) {
       e.printStackTrace();

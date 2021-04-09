@@ -40,7 +40,7 @@ public class TheLowUtil {
     pareRules.put("お金", (playerStatus, s) -> {
       playerStatus.galions = getGalion(s);
     });
-    
+
     pareRules.put("ユニット", (playerStatus, s) -> {
       playerStatus.unit = JavaUtil.parseInt(s, 0);
     });
@@ -122,12 +122,7 @@ public class TheLowUtil {
     if (galion < 1000) {
       return galion + "G";
     }
-
-    if (galion < 1000000) {
-      return String.format("%.2fkG", (galion / 1000F));
-    }
-
-    return String.format("%.3fmG", (galion / 1000000F));
+    return String.format("%.2fkG", (galion / 1000F));
   }
 
   public static String formatPlayerName(PlayerStatus status) {

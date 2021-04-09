@@ -26,6 +26,7 @@ import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.AdvancedFontRenderer;
+import onim.en.etl.util.TheLowUtil;
 
 public class DungeonMarker extends TheLowExtension {
 
@@ -88,6 +89,13 @@ public class DungeonMarker extends TheLowExtension {
 
     Minecraft mc = Minecraft.getMinecraft();
     RenderManager renderManager = mc.getRenderManager();
+
+    if (!TheLowUtil.isPlayingTheLow())
+      return;
+
+    if (renderManager == null)
+      return;
+
 
     GlStateManager.disableDepth();
     GlStateManager.enableBlend();
@@ -190,8 +198,7 @@ public class DungeonMarker extends TheLowExtension {
         this.drawCenteredString("Lv. " + dungeonInfo.difficulty, 0, 2, alpha);
 
         if (alpha > 0.5F) {
-          this.drawCenteredString(String.format("%.1fm", distance), 0, 14,
-              (alpha - 0.5F) * 2F);
+          this.drawCenteredString(String.format("%.1fm", distance), 0, 14, (alpha - 0.5F) * 2F);
         }
         AdvancedFontRenderer.bigMode = false;
       }

@@ -7,6 +7,8 @@ import org.objectweb.asm.tree.InsnList;
 
 public abstract class HookInjector {
 
+  protected static final String HOOK = "onim/en/etl/Hooks";
+
   static class MethodIdentifier {
     public final String methodName;
     public final String methodDesc;

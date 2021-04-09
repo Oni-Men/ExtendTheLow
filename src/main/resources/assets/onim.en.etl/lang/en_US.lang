@@ -9,6 +9,9 @@ onim.en.etl.category.util=Utilities
 onim.en.etl.dungeonMarker=Dungeon Marker
 onim.en.etl.dungeonMarker.distanceAlwaysRender=Distance always show
 onim.en.etl.dungeonMarker.maxRenderDistance=Max render distance
+onim.en.etl.dungeonMarker.levelLowest=Displayed lowest level
+onim.en.etl.dungeonMarker.levelHighest=Displayed highest level
+onim.en.etl.dungeonMarker.displaySpecials=Special dungeons
 
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=Normal
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulate
@@ -16,4 +19,7 @@ onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=Off
 
 onim.en.etl.expMessageUtil=Exp message
 
-onim.en.etl.fontSettings=Font Settings
+onim.en.etl.generalSettings=General Settings
+onim.en.etl.advancedFont=Better Font
+onim.en.etl.customStatus=Change status rendering
+onim.en.etl.invertCustomStatus=Invert status position

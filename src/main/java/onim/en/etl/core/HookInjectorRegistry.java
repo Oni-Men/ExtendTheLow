@@ -5,6 +5,7 @@ import java.util.Set;
 import com.google.common.collect.HashMultimap;
 
 import onim.en.etl.core.injector.GetCharWidthFloatHook;
+import onim.en.etl.core.injector.PatchScoreNullError;
 import onim.en.etl.core.injector.PreventRenderBold;
 import onim.en.etl.core.injector.RenderCharAtPos;
 
@@ -29,5 +30,6 @@ public class HookInjectorRegistry {
     registerInjector(new GetCharWidthFloatHook());
     registerInjector(new PreventRenderBold());
     registerInjector(new RenderCharAtPos());
+    registerInjector(new PatchScoreNullError());
   }
 }

@@ -36,6 +36,7 @@ public class HandleAPI {
 
     service.submit(() -> {
       processJSON(split[1]);
+      DataStorage.cache();
     });
 
     return true;

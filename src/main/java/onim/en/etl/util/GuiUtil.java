@@ -21,7 +21,7 @@ public class GuiUtil {
   public static void openSettingGUI() {
     GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.settings");
     gui.setInitializer(buttonList -> {
-      buttonList.add(getFontSettingButton(gui));
+      buttonList.add(getGeneralSettingButton(gui));
       ExtensionManager.getCategories().forEach(category -> {
         Button button = new Button(100, category);
         button.setOnAction(() -> openCategorySettingGUI(category, gui));
@@ -153,24 +153,30 @@ public class GuiUtil {
     return null;
   }
 
-  public static Button getFontSettingButton(GuiScreen prevScreen) {
-    Button button = new Button(100, "onim.en.etl.fontSettings");
-    button.setOnAction(() -> openFontSettingsGUI(prevScreen));
-
+  public static Button getGeneralSettingButton(GuiScreen prevScreen) {
+    Button button = new Button(100, "onim.en.etl.generalSettings");
+    button.setOnAction(() -> openGeneralSettingsGUI(prevScreen));
     return button;
   }
 
-  public static void openFontSettingsGUI(GuiScreen prevScreen) {
-    GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.fontSettings", prevScreen);
+  public static void openGeneralSettingsGUI(GuiScreen prevScreen) {
+    GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.generalSettings", prevScreen);
     gui.setInitializer(buttonList -> {
+      buttonList.add(new ToggleButton("onim.en.etl.advancedFont", Prefs.get().betterFont, b -> {
+        Prefs.get().betterFont = b;
+      }));
       buttonList
-          .add(new ToggleButton("onim.en.etl.toggleEnabled", Prefs.get().betterFont, b -> {
-            Prefs.get().betterFont = b;
+          .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> {
+            Prefs.get().customTheLowStatus = b;
+          }));
+      buttonList.add(
+          new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
+            Prefs.get().invertTheLowStatus = b;
           }));
     });
 
     gui.setOnClose(() -> Prefs.save());
-    
+
     Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 }

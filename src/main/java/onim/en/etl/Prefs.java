@@ -40,16 +40,21 @@ public class Prefs {
   }
 
   public static void save() {
-    Path path = ExtendTheLow.configPath.resolve("general.json");
-    Gson gson = new Gson();
-    try {
-      Files.write(path, Arrays.asList(gson.toJson(instance).split("\n")), StandardCharsets.UTF_8);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
+    new Thread(() -> {
+      Path path = ExtendTheLow.configPath.resolve("general.json");
+      Gson gson = new Gson();
+      try {
+        Files.write(path, Arrays.asList(gson.toJson(instance).split("\n")), StandardCharsets.UTF_8);
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
+    }).start();
   }
 
   public boolean betterFont = false;
 
+  public boolean customTheLowStatus = true;
+
+  public boolean invertTheLowStatus = false;
 }

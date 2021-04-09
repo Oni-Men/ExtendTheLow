@@ -14,6 +14,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import onim.en.etl.Prefs;
@@ -23,9 +25,9 @@ import onim.en.etl.util.font.CharacterTextureData;
 import onim.en.etl.util.font.FontData;
 import onim.en.etl.util.font.FontTextureData;
 
-public class AdvancedFontRenderer extends FontRenderer {
+public class AdvancedFontRenderer extends FontRenderer implements IResourceManagerReloadListener {
 
-  public static Font Ubuntu, UbuntuBold, Sawarabi, NotoEmoji;
+  public static Font Ubuntu, UbuntuBold, Sawarabi;
 
   public static boolean bigMode = false;
   public static boolean boldMode = false;
@@ -70,14 +72,27 @@ public class AdvancedFontRenderer extends FontRenderer {
 
   public AdvancedFontRenderer(GameSettings gameSettingsIn, ResourceLocation location,
       TextureManager textureManagerIn) {
-    super(gameSettingsIn, location, textureManagerIn, true);
+    super(gameSettingsIn, location, textureManagerIn, false);
 
     Ubuntu = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-R.ttf"));
     UbuntuBold = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-B.ttf"));
     Sawarabi =
         FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/SawarabiGothic-Regular.ttf"));
 
-    fonts = Arrays.asList(Ubuntu, Sawarabi, NotoEmoji);
+    fonts = Arrays.asList(Ubuntu, Sawarabi);
+  }
+
+  @Override
+  public int drawString(String text, float x, float y, int color, boolean dropShadow) {
+    if (!Prefs.get().betterFont) {
+      return super.drawString(text, x, y, color, dropShadow);
+    }
+    return super.drawString(text, x, y, color, false);
+  }
+
+  @Override
+  public void onResourceManagerReload(IResourceManager resourceManager) {
+    super.onResourceManagerReload(resourceManager);
   }
 
   @Override
@@ -157,10 +172,10 @@ public class AdvancedFontRenderer extends FontRenderer {
 
   @Override
   protected float renderDefaultChar(int ch, boolean italic) {
-    if (Prefs.get().betterFont) {
-      return this.renderUnicodeChar((char) ch, italic);
+    if (!Prefs.get().betterFont) {
+      return super.renderDefaultChar(ch, italic);
     }
-    return super.renderDefaultChar(ch, italic);
+    return this.renderUnicodeChar((char) ch, italic);
   }
 
   @Override
