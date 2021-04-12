@@ -1,10 +1,10 @@
 package onim.en.etl.core.injector;
 
+import java.util.ListIterator;
+
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -27,32 +27,22 @@ public class GetCharWidthFloatHook extends HookInjector {
 
   @Override
   public boolean injectHook(InsnList list, ObfuscateType type) {
-    InsnList injectings = new InsnList();
 
-    String descriptor = "(C)Lonim/en/etl/event/GetCharWidthEvent;";
-    MethodInsnNode onGetCharWidth = new MethodInsnNode(Opcodes.INVOKESTATIC, "onim/en/etl/Hooks",
-        "onGetCharWidth", descriptor, false);
+    ListIterator<AbstractInsnNode> itr = list.iterator();
+    AbstractInsnNode next;
+    while (itr.hasNext()) {
+      next = itr.next();
 
-    MethodInsnNode isCanceled = new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
-        "onim/en/etl/event/GetCharWidthEvent", "isCanceled", "()Z", false);
+      if (next.getOpcode() != Opcodes.FRETURN)
+        continue;
 
-    MethodInsnNode getWidthFloat = new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
-        "onim/en/etl/event/GetCharWidthEvent", "getWidth", "()F", false);
+      InsnList injectings = new InsnList();
+      injectings.add(new VarInsnNode(Opcodes.ILOAD, 1));
+      injectings.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "onim/en/etl/Hooks",
+          "onGetCharWidth", "(FC)F", false));
+      list.insertBefore(next, injectings);
+    }
 
-    LabelNode jumpTo = new LabelNode();
-
-    injectings.add(new VarInsnNode(Opcodes.ILOAD, 1));
-    injectings.add(onGetCharWidth);
-    injectings.add(new VarInsnNode(Opcodes.ASTORE, 5));
-    injectings.add(new VarInsnNode(Opcodes.ALOAD, 5));
-    injectings.add(isCanceled);
-    injectings.add(new JumpInsnNode(Opcodes.IFEQ, jumpTo));
-    injectings.add(new VarInsnNode(Opcodes.ALOAD, 5));
-    injectings.add(getWidthFloat);
-    injectings.add(new InsnNode(Opcodes.FRETURN));
-    injectings.add(jumpTo);
-
-    list.insert(injectings);
     return true;
   }
 

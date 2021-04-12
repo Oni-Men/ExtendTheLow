@@ -7,14 +7,9 @@ public class GetCharWidthEvent extends Event {
   private char ch;
   private float width;
 
-  public GetCharWidthEvent(char ch) {
+  public GetCharWidthEvent(char ch, float width) {
     this.ch = ch;
-    this.width = 0;
-  }
-
-  @Override
-  public boolean isCancelable() {
-    return true;
+    this.width = width;
   }
 
   public char getChar() {

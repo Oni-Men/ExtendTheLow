@@ -26,7 +26,9 @@ public class RenderCharAtPos extends HookInjector {
     
     InsnList inject = new InsnList();
 
-    inject.add(this.stackField(type == ObfuscateType.NONE ? "boldStyle" : "t", "Z"));
+    String owner = type == ObfuscateType.NONE ? "net/minecraft/client/gui/FontRenderer" : "avn";
+
+    inject.add(this.stackField(owner, type == ObfuscateType.NONE ? "boldStyle" : "s", "Z"));
     inject.add(hook);
 
     list.insert(inject);
@@ -34,11 +36,11 @@ public class RenderCharAtPos extends HookInjector {
     return true;
   }
 
-  private InsnList stackField(String fieldName, String desc) {
+  private InsnList stackField(String owner, String fieldName, String desc) {
     InsnList list = new InsnList();
 
     list.add(new VarInsnNode(Opcodes.ALOAD, 0));
-    list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/gui/FontRenderer", fieldName,
+    list.add(new FieldInsnNode(Opcodes.GETFIELD, owner, fieldName,
         desc));
     
     return list;

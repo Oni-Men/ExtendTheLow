@@ -11,10 +11,10 @@ import onim.en.etl.event.RenderCharAtPosEvent;
 
 public class Hooks {
 
-  public static GetCharWidthEvent onGetCharWidth(char ch) {
-    GetCharWidthEvent event = new GetCharWidthEvent(ch);
+  public static float onGetCharWidth(float width, char ch) {
+    GetCharWidthEvent event = new GetCharWidthEvent(ch, width);
     MinecraftForge.EVENT_BUS.post(event);
-    return event;
+    return event.getWidth();
   }
 
   public static void onRenderCharAtPos(boolean boldStyle) {

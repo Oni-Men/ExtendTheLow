@@ -48,8 +48,8 @@ public class PreventRenderBold extends HookInjector {
         continue;
       }
       
-      // boldStyle is named "t" in obfuscated code
-      if (!fieldInsnNode.name.equals(type == ObfuscateType.NONE ? "boldStyle" : "t")) {
+      // boldStyle is named "s" in obfuscated code
+      if (!fieldInsnNode.name.equals(type == ObfuscateType.NONE ? "boldStyle" : "s")) {
         continue;
       }
 
