@@ -99,6 +99,10 @@ public class ExtendTheLow {
 
   @SubscribeEvent
   public void onClientTick(ClientTickEvent event) {
+    if (event.phase != Phase.END) {
+      return;
+    }
+
     Minecraft mc = Minecraft.getMinecraft();
     mc.ingameGUI = ingameGUI;
 
@@ -119,16 +123,19 @@ public class ExtendTheLow {
       task.run();
     }
 
-    if (event.phase == Phase.END) {
-      TickTaskExecutor.advanceScheduledTasks();
-    }
+    TickTaskExecutor.advanceScheduledTasks();
   }
 
   @SubscribeEvent
   public void onClientChatReceived(ClientChatReceivedEvent event) {
     event.setCanceled(HandleAPI.process(event));
 
+    // 一斉にログインした際の負荷軽減の為にランダムにディレイをかける
+    long randomDelay = new Random().nextInt(100) * 20;
+
     if (event.message.getFormattedText().startsWith(HandleAPI.PLAYER_DATA_MSG)) {
+
+      // 一分ごとにデータを更新
       apiScheduler = TickTaskExecutor.scheduleTask(() -> {
         for (String type : HandleAPI.API_TYPES) {
           TickTaskExecutor.addTask(() -> {
@@ -136,7 +143,7 @@ public class ExtendTheLow {
                 .sendChatMessage(String.format("/thelow_api %s", type));
           });
         }
-      }, new Random().nextInt(100) * 20, 20 * 60);
+      }, randomDelay, 20 * 60);
     }
   }
 
@@ -150,8 +157,9 @@ public class ExtendTheLow {
 
   @SubscribeEvent
   public void onGetCharWidth(GetCharWidthEvent event) {
-    event.setCanceled(true);
-    event.setWidth(RenderFont.getCharWidth(event.getChar()));
+    if (Prefs.get().betterFont) {
+      event.setWidth(RenderFont.getCharWidth(event.getChar()));
+    }
   }
 
   @SubscribeEvent
