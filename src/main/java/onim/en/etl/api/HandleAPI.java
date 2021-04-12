@@ -11,9 +11,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import onim.en.etl.api.dto.ApiResponse;
 import onim.en.etl.api.dto.DungeonInfo;
+import onim.en.etl.api.dto.LocationResponse;
 import onim.en.etl.api.dto.PlayerStatus;
+import onim.en.etl.api.dto.SkillCooltimeResponse;
+import onim.en.etl.event.SkillEnterCooltimeEvent;
 
 public class HandleAPI {
   public static final String PLAYER_DATA_MSG = "§r§a正常にプレイヤーデータを";
@@ -56,13 +60,20 @@ public class HandleAPI {
       case "dungeon":
         type = new TypeToken<ApiResponse<DungeonInfo[]>>() {}.getType();
         ApiResponse<DungeonInfo[]> dungeonInfos = gson.fromJson(json, type);
-
         DataStorage.clearDungeons();
         for (DungeonInfo dungeonInfo : dungeonInfos.response) {
           DataStorage.addDungeon(dungeonInfo);
         }
-
         break;
+      case "location":
+        type = new TypeToken<ApiResponse<LocationResponse>>() {}.getType();
+        ApiResponse<LocationResponse> location = gson.fromJson(json, type);
+        DataStorage.setCurrentWorldName(location.response.worldName);
+        break;
+      case "skill_cooltime":
+        type = new TypeToken<ApiResponse<SkillCooltimeResponse>>() {}.getType();
+        ApiResponse<SkillCooltimeResponse> skillCooltime = gson.fromJson(json, type);
+        MinecraftForge.EVENT_BUS.post(new SkillEnterCooltimeEvent(skillCooltime.response));
       default:
     }
   }

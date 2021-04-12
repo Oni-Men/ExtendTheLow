@@ -26,6 +26,8 @@ public class DataStorage {
   private static PlayerStatusProvider playerStatusProvider = new PlayerStatusProvider();
   private static HashSet<DungeonInfo> dungeons = Sets.newHashSet();
 
+  private static String currentWorldName = "";
+
   public static void setStatus(PlayerStatus status) {
     playerStatusProvider.setStatus(status);
   }
@@ -50,6 +52,13 @@ public class DataStorage {
     dungeons.clear();
   }
 
+  public static String getCurrentWorldName() {
+    return currentWorldName;
+  }
+
+  public static void setCurrentWorldName(String name) {
+    currentWorldName = name;
+  }
 
   public static void load() {
     Gson gson = new GsonBuilder().create();
