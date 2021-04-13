@@ -28,8 +28,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.HandleAPI;
+import onim.en.etl.api.dto.SkillCooltimeResponse;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
+import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
@@ -46,7 +48,8 @@ public class ExtendTheLow {
 
   private static ExtendTheLow instance = null;
   private static AdvancedIngameGUI ingameGUI = null;
-  public static AdvancedFontRenderer RenderFont;
+
+  public static AdvancedFontRenderer AdvancedFont;
 
   public static Path configPath = null;
   public static KeyBinding keyOpenModPrefs =
@@ -85,15 +88,15 @@ public class ExtendTheLow {
 
     ClientRegistry.registerKeyBinding(keyOpenModPrefs);
 
-    RenderFont = new AdvancedFontRenderer(mc.gameSettings,
+    AdvancedFont = new AdvancedFontRenderer(mc.gameSettings,
         new ResourceLocation("textures/font/ascii.png"), mc.getTextureManager());
-    ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(RenderFont);
+    ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(AdvancedFont);
   }
 
   @EventHandler
   public void complete(FMLLoadCompleteEvent event) {
     Minecraft mc = Minecraft.getMinecraft();
-    mc.fontRendererObj = RenderFont;
+      mc.fontRendererObj = AdvancedFont;
     ingameGUI = new AdvancedIngameGUI(mc);
   }
 
@@ -135,14 +138,13 @@ public class ExtendTheLow {
 
     if (event.message.getFormattedText().startsWith(HandleAPI.PLAYER_DATA_MSG)) {
 
+      TickTaskExecutor.addTask(() -> {
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
+      });
+
       // 一分ごとにデータを更新
       apiScheduler = TickTaskExecutor.scheduleTask(() -> {
-        for (String type : HandleAPI.API_TYPES) {
-          TickTaskExecutor.addTask(() -> {
-            Minecraft.getMinecraft().thePlayer
-                .sendChatMessage(String.format("/thelow_api %s", type));
-          });
-        }
+        HandleAPI.requestDatas();
       }, randomDelay, 20 * 60);
     }
   }
@@ -158,14 +160,14 @@ public class ExtendTheLow {
   @SubscribeEvent
   public void onGetCharWidth(GetCharWidthEvent event) {
     if (Prefs.get().betterFont) {
-      event.setWidth(RenderFont.getCharWidth(event.getChar()));
+      event.setWidth(AdvancedFont.getCharWidth(event.getChar()));
     }
   }
 
   @SubscribeEvent
   public void onRenderCharAtPos(RenderCharAtPosEvent event) {
-    if (RenderFont != null) {
-      RenderFont.lastRenderCharAtPosEvent = event;
+    if (AdvancedFont != null) {
+      AdvancedFont.lastRenderCharAtPosEvent = event;
     }
   }
 
@@ -179,5 +181,12 @@ public class ExtendTheLow {
       }
     }
 
+    if (Keyboard.isKeyDown(Keyboard.KEY_U)) {
+      SkillCooltimeResponse res = new SkillCooltimeResponse();
+      res.cooltimeEndsWhen = System.currentTimeMillis() + 1000;
+      res.skillName = ">> TEST SKILL <<";
+      res.skillType = "NORMAL_SKILL";
+      MinecraftForge.EVENT_BUS.post(new SkillEnterCooltimeEvent(res));
+    }
   }
 }

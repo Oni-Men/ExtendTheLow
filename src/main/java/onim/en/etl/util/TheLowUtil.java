@@ -19,14 +19,12 @@ import onim.en.etl.api.dto.PlayerStatus;
 
 public class TheLowUtil {
 
-  private static final String THELOW_SCOREBOARD_TITLE =
-      EnumChatFormatting.AQUA + "===== The Low =====";
+  private static final String THELOW_SCOREBOARD_TITLE = EnumChatFormatting.AQUA + "===== The Low =====";
 
   private static final Pattern levelPattern = Pattern.compile("(?<level>\\d+)レベル");
   private static final Pattern galionPattern = Pattern.compile("(?<galion>\\d+) G");
 
-  private static final HashMap<String, BiConsumer<PlayerStatus, String>> pareRules =
-      Maps.newHashMap();
+  private static final HashMap<String, BiConsumer<PlayerStatus, String>> pareRules = Maps.newHashMap();
   static {
     BiConsumer<PlayerStatus, String> levelRule = (playerStatus, s) -> {
       playerStatus.mainLevel = getLevel(s);
@@ -130,5 +128,26 @@ public class TheLowUtil {
       return status.mcid;
     }
     return String.format("%s§c[%s]", status.mcid, status.clanInfo.clanName);
+  }
+
+  public static String formatCooltime(long tickRemaining) {
+    StringBuilder builder = new StringBuilder();
+    float sec = tickRemaining / 1000F;
+
+    if (sec < 0) {
+      builder.append("Ready!");
+    } else if (sec < 1) {
+      builder.append(sec);
+      builder.setLength(3);
+    } else {
+      if (sec / 60 >= 1) {
+        builder.append((int) sec / 60);
+        builder.append(":");
+      }
+
+      builder.append((int) sec % 60);
+    }
+
+    return builder.toString();
   }
 }

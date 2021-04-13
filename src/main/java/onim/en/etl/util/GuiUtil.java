@@ -5,8 +5,14 @@ import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import onim.en.etl.Prefs;
 import onim.en.etl.annotation.PrefItem;
+import onim.en.etl.api.DataStorage;
+import onim.en.etl.api.HandleAPI;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
@@ -173,10 +179,52 @@ public class GuiUtil {
           new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
             Prefs.get().invertTheLowStatus = b;
           }));
+      buttonList.add(getClearCacheButton());
     });
 
     gui.setOnClose(() -> Prefs.save());
 
     Minecraft.getMinecraft().displayGuiScreen(gui);
+  }
+
+  public static Button getClearCacheButton() {
+    Button button = new Button(100, "onim.en.etl.clearCache");
+    button.setOnAction(() -> {
+      DataStorage.clearCache();
+      HandleAPI.requestDatas();
+    });
+    return button;
+  }
+
+  public static void drawGradientRectHorizontal(int left, int top, int right, int bottom, int startColor, int endColor) {
+    float alpha1 = (float) (startColor >> 24 & 255) / 255.0F;
+    float red1 = (float) (startColor >> 16 & 255) / 255.0F;
+    float green1 = (float) (startColor >> 8 & 255) / 255.0F;
+    float blue1 = (float) (startColor & 255) / 255.0F;
+    float alpha2 = (float) (endColor >> 24 & 255) / 255.0F;
+    float red2 = (float) (endColor >> 16 & 255) / 255.0F;
+    float green2 = (float) (endColor >> 8 & 255) / 255.0F;
+    float blue2 = (float) (endColor & 255) / 255.0F;
+    GlStateManager.disableTexture2D();
+    GlStateManager.enableBlend();
+    GlStateManager.disableAlpha();
+    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+    GlStateManager.shadeModel(7425);
+    Tessellator tessellator = Tessellator.getInstance();
+    WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
+    worldrenderer.func_181662_b((double) right, (double) top, (double) 0).func_181666_a(red2, green2, blue2,
+        alpha2).func_181675_d();
+    worldrenderer.func_181662_b((double) left, (double) top, (double) 0).func_181666_a(red1, green1, blue1,
+        alpha1).func_181675_d();
+    worldrenderer.func_181662_b((double) left, (double) bottom, (double) 0).func_181666_a(red1, green1, blue1,
+        alpha1).func_181675_d();
+    worldrenderer.func_181662_b((double) right, (double) bottom, (double) 0).func_181666_a(red2, green2, blue2,
+        alpha2).func_181675_d();
+    tessellator.draw();
+    GlStateManager.shadeModel(7424);
+    GlStateManager.disableBlend();
+    GlStateManager.enableAlpha();
+    GlStateManager.enableTexture2D();
   }
 }

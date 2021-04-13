@@ -31,4 +31,8 @@ public class PlayerStatusProvider {
     return nameToStatus.get(name);
   }
 
+  public void clear() {
+    nameToStatus.clear();
+    idToStatus.clear();
+  }
 }

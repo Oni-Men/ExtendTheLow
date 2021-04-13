@@ -6,11 +6,13 @@ import onim.en.etl.api.dto.SkillCooltimeResponse;
 public class SkillEnterCooltimeEvent extends Event {
 
   private final long cooltimeEndsWhen;
+  private final long cooltimeStartsWhen;
   private final boolean isSpecialSkill;
   private SkillCooltimeResponse data;
 
   public SkillEnterCooltimeEvent(SkillCooltimeResponse data) {
     this.data = data;
+    cooltimeStartsWhen = System.currentTimeMillis();
     cooltimeEndsWhen = data.cooltimeEndsWhen;
     isSpecialSkill = data.skillType.equals("SPECIAL_SKILL");
   }
@@ -34,5 +36,9 @@ public class SkillEnterCooltimeEvent extends Event {
 
   public boolean isSpecialSkill() {
     return this.isSpecialSkill;
+  }
+
+  public long getCooltimeStartsWhen() {
+    return cooltimeStartsWhen;
   }
 }

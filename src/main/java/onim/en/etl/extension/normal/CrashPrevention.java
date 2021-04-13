@@ -14,7 +14,7 @@ public class CrashPrevention extends TheLowExtension {
 
   @Override
   public String id() {
-    return "crashPrevention";
+    return "onim.en.etl.crashPrevention";
   }
 
   @Override

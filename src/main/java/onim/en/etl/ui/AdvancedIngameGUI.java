@@ -9,32 +9,30 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
+import onim.en.etl.ExtendTheLow;
 import onim.en.etl.Prefs;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.dto.PlayerStatus;
+import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TheLowUtil;
 
 public class AdvancedIngameGUI extends GuiIngameForge {
 
-  private static final ResourceLocation TEX_SWORD =
-      new ResourceLocation("onim.en.etl:textures/sword.png");
-  private static final ResourceLocation TEX_WAND =
-      new ResourceLocation("onim.en.etl:textures/wand.png");
-  private static final ResourceLocation TEX_BOW =
-      new ResourceLocation("onim.en.etl:textures/bow.png");
+  private static final ResourceLocation TEX_SWORD = new ResourceLocation("onim.en.etl:textures/sword.png");
+  private static final ResourceLocation TEX_WAND = new ResourceLocation("onim.en.etl:textures/wand.png");
+  private static final ResourceLocation TEX_BOW = new ResourceLocation("onim.en.etl:textures/bow.png");
 
   public AdvancedIngameGUI(Minecraft mc) {
     super(mc);
@@ -43,13 +41,58 @@ public class AdvancedIngameGUI extends GuiIngameForge {
   @Override
   protected void renderTitle(int width, int height, float partialTicks) {
     AdvancedFontRenderer.bigMode = true;
-    super.renderTitle(width, height, partialTicks);
+
+    if (field_175195_w > 0) {
+      mc.mcProfiler.startSection("titleAndSubtitle");
+      float age = (float) this.field_175195_w - partialTicks;
+      int opacity = 255;
+
+      if (field_175195_w > field_175193_B + field_175192_A) {
+        float f3 = (float) (field_175199_z + field_175192_A + field_175193_B) - age;
+        opacity = (int) (f3 * 255.0F / (float) field_175199_z);
+      }
+      if (field_175195_w <= field_175193_B)
+        opacity = (int) (age * 255.0F / (float) this.field_175193_B);
+
+      opacity = MathHelper.clamp_int(opacity, 0, 255);
+
+      if (opacity > 8) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) (width / 2), (float) (height / 2), 0.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(4.0F, 4.0F, 4.0F);
+
+        int l = opacity << 24 & -16777216;
+        float textWidth = ExtendTheLow.AdvancedFont.getStringWidth(field_175201_x);
+        this.getFontRenderer().drawString(this.field_175201_x, -textWidth / 2F + 2.5F, -10, 16777215 | l, true);
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(2.0F, 2.0F, 2.0F);
+        textWidth = ExtendTheLow.AdvancedFont.getStringWidth(field_175200_y);
+
+        this.getFontRenderer().drawString(this.field_175200_y, -textWidth / 2F + 2.5F, 5.0F, 16777215 | l, true);
+        GlStateManager.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+      }
+
+      this.mc.mcProfiler.endSection();
+    }
+
     AdvancedFontRenderer.bigMode = false;
   }
 
   @Override
-  protected void renderScoreboard(ScoreObjective scoreObjective,
-      ScaledResolution scaledResolution) {
+  protected void renderBossHealth() {
+    Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.icons);
+    super.renderBossHealth();
+  }
+
+  @Override
+  protected void renderScoreboard(ScoreObjective scoreObjective, ScaledResolution scaledResolution) {
     if (TheLowUtil.isPlayingTheLow() && Prefs.get().customTheLowStatus) {
       TheLowUtil.applyPlayerStatus(scoreObjective);
       this.renderTheLowStatus(scaledResolution);
@@ -93,16 +136,14 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       int l = scaledResolution.getScaledWidth() - k1 + 2;
       drawRect(l1 - 2, k, l, k + this.getFontRenderer().FONT_HEIGHT, 1342177280);
       this.getFontRenderer().drawString(s1, l1, k, 0xffffffff);
-      this.getFontRenderer()
-          .drawString(s2, l - this.getFontRenderer().getStringWidth(s2), k, 0xffffffff);
+      this.getFontRenderer().drawString(s2, l - this.getFontRenderer().getStringWidth(s2), k, 0xffffffff);
 
       if (j == collection.size()) {
         String s3 = scoreObjective.getDisplayName();
         drawRect(l1 - 2, k - this.getFontRenderer().FONT_HEIGHT - 1, l, k - 1, 1610612736);
         drawRect(l1 - 2, k - 1, l, k, 1342177280);
-        this.getFontRenderer()
-            .drawString(s3, l1 + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2,
-                k - this.getFontRenderer().FONT_HEIGHT, 0xffffffff);
+        this.getFontRenderer().drawString(s3, l1 + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2,
+            k - this.getFontRenderer().FONT_HEIGHT, 0xffffffff);
       }
     }
   }
@@ -110,6 +151,10 @@ public class AdvancedIngameGUI extends GuiIngameForge {
   public void renderTheLowStatus(ScaledResolution scaledResolution) {
     Minecraft mc = Minecraft.getMinecraft();
     Entity entity = mc.getRenderViewEntity();
+
+    if (this.mc.gameSettings.showDebugInfo) {
+      return;
+    }
 
     if (!(entity instanceof AbstractClientPlayer)) {
       return;
@@ -122,11 +167,11 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     boolean right = Prefs.get().invertTheLowStatus;
 
     if (right) {
-      drawGradientRectHorizontal(i - 120, 0, i - 60, 30, 0x00000000, 0xAA000000);
-      drawGradientRectHorizontal(i - 60, 0, i, 30, 0xAA000000, 0xAA000000);
+      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 30, 0x00000000, 0xAA000000);
+      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 30, 0xAA000000, 0xAA000000);
     } else {
-      drawGradientRectHorizontal(0, 0, 60, 30, 0xAA000000, 0xAA000000);
-      drawGradientRectHorizontal(60, 0, 120, 30, 0xAA000000, 0x00000000);
+      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 30, 0xAA000000, 0xAA000000);
+      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 30, 0xAA000000, 0x00000000);
     }
 
     mc.getTextureManager().bindTexture(player.getLocationSkin());
@@ -144,8 +189,7 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     if (playerStatus != null) {
 
       this.getFontRenderer().drawStringWithShadow("Lv." + playerStatus.mainLevel, 20, 2, 0xFFFFFF);
-      this.getFontRenderer()
-          .drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 20, 10, 0xFFFFFF);
+      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 20, 10, 0xFFFFFF);
 
       float f = (Minecraft.getSystemTime() % 9000) / 1000F;
 
@@ -165,11 +209,9 @@ public class AdvancedIngameGUI extends GuiIngameForge {
         this.getFontRenderer().drawStringWithShadow(s, 55, 2, 0xFFFFFF);
       }
 
-      this.getFontRenderer()
-          .drawString(TheLowUtil.formatGalions(playerStatus.galions), 4, 18, 0xFFFFFF);
+      this.getFontRenderer().drawString(TheLowUtil.formatGalions(playerStatus.galions), 4, 18, 0xFFFFFF);
 
-      this.getFontRenderer()
-          .drawString(String.format("%d Units", playerStatus.unit), 55, 18, 0xFFFFFF);
+      this.getFontRenderer().drawString(String.format("%d Units", playerStatus.unit), 55, 18, 0xFFFFFF);
 
     } else {
       this.getFontRenderer().drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
@@ -183,40 +225,4 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     drawScaledCustomSizeModalRect(x, y, 0, 0, 32, 32, w, h, 32, 32);
   }
 
-  public void drawGradientRectHorizontal(int left, int top, int right, int bottom, int startColor,
-      int endColor) {
-    float alpha1 = (float) (startColor >> 24 & 255) / 255.0F;
-    float red1 = (float) (startColor >> 16 & 255) / 255.0F;
-    float green1 = (float) (startColor >> 8 & 255) / 255.0F;
-    float blue1 = (float) (startColor & 255) / 255.0F;
-    float alpha2 = (float) (endColor >> 24 & 255) / 255.0F;
-    float red2 = (float) (endColor >> 16 & 255) / 255.0F;
-    float green2 = (float) (endColor >> 8 & 255) / 255.0F;
-    float blue2 = (float) (endColor & 255) / 255.0F;
-    GlStateManager.disableTexture2D();
-    GlStateManager.enableBlend();
-    GlStateManager.disableAlpha();
-    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-    GlStateManager.shadeModel(7425);
-    Tessellator tessellator = Tessellator.getInstance();
-    WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
-    worldrenderer.func_181662_b((double) right, (double) top, (double) this.zLevel)
-        .func_181666_a(red2, green2, blue2, alpha2)
-        .func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) top, (double) this.zLevel)
-        .func_181666_a(red1, green1, blue1, alpha1)
-        .func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) bottom, (double) this.zLevel)
-        .func_181666_a(red1, green1, blue1, alpha1)
-        .func_181675_d();
-    worldrenderer.func_181662_b((double) right, (double) bottom, (double) this.zLevel)
-        .func_181666_a(red2, green2, blue2, alpha2)
-        .func_181675_d();
-    tessellator.draw();
-    GlStateManager.shadeModel(7424);
-    GlStateManager.disableBlend();
-    GlStateManager.enableAlpha();
-    GlStateManager.enableTexture2D();
-  }
 }

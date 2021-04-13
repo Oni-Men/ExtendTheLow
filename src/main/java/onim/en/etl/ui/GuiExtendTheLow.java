@@ -54,7 +54,7 @@ public class GuiExtendTheLow extends GuiScreen {
 
     int y = 12;
 
-    this.drawCenteredString(ExtendTheLow.RenderFont, I18n.format(this.title), width / 2, y,
+    this.drawCenteredString(ExtendTheLow.AdvancedFont, I18n.format(this.title), width / 2, y,
         0xFFFFFF);
     y += 20;
 

@@ -50,7 +50,7 @@ public class ToggleButton extends GuiActionButton {
   @Override
   public void drawButton(Minecraft mc, int mouseX, int mouseY) {
     if (this.visible) {
-      FontRenderer font = ExtendTheLow.RenderFont;
+      FontRenderer font = ExtendTheLow.AdvancedFont;
       mc.renderEngine.bindTexture(TEX_TOGGLE_BUTTON);
 
       int i = font.getStringWidth(this.displayString);

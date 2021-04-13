@@ -20,7 +20,7 @@ public class Button extends GuiActionButton {
   @Override
   public void drawButton(Minecraft mc, int mouseX, int mouseY) {
     if (this.visible) {
-      FontRenderer font = ExtendTheLow.RenderFont;
+      FontRenderer font = ExtendTheLow.AdvancedFont;
       mc.renderEngine.bindTexture(TEX_BUTTON);
 
       boolean xInside = mouseX >= this.xPosition && mouseX < this.xPosition + this.width;

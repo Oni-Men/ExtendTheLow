@@ -10,6 +10,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import onim.en.etl.api.dto.ApiResponse;
@@ -18,12 +19,21 @@ import onim.en.etl.api.dto.LocationResponse;
 import onim.en.etl.api.dto.PlayerStatus;
 import onim.en.etl.api.dto.SkillCooltimeResponse;
 import onim.en.etl.event.SkillEnterCooltimeEvent;
+import onim.en.etl.util.TickTaskExecutor;
 
 public class HandleAPI {
   public static final String PLAYER_DATA_MSG = "§r§a正常にプレイヤーデータを";
   private static ExecutorService service = Executors.newFixedThreadPool(20);
 
   public static List<String> API_TYPES = Arrays.asList("dungeon", "player");
+
+  public static void requestDatas() {
+    for (String type : HandleAPI.API_TYPES) {
+      TickTaskExecutor.addTask(() -> {
+        Minecraft.getMinecraft().thePlayer.sendChatMessage(String.format("/thelow_api %s", type));
+      });
+    }
+  }
 
   public static boolean process(ClientChatReceivedEvent event) {
     String message = event.message.getUnformattedText();

@@ -40,6 +40,10 @@ public class DataStorage {
     return playerStatusProvider.getStatusByName(name);
   }
 
+  public static PlayerStatusProvider getStatusProvider() {
+    return playerStatusProvider;
+  }
+
   public static void addDungeon(DungeonInfo dungeonInfo) {
     dungeons.add(dungeonInfo);
   }
@@ -90,6 +94,21 @@ public class DataStorage {
           StandardCharsets.UTF_8);
       Files.write(dungeonsPath, Arrays.asList(gson.toJson(dungeons).split("\n")),
           StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void clearCache() {
+    Path statusesPath = ExtendTheLow.configPath.resolve("dataStorage.statuses.json");
+    Path dungeonsPath = ExtendTheLow.configPath.resolve("dataStorage.dungeons.json");
+
+    playerStatusProvider.clear();
+    dungeons.clear();
+
+    try {
+      Files.delete(statusesPath);
+      Files.delete(dungeonsPath);
     } catch (IOException e) {
       e.printStackTrace();
     }

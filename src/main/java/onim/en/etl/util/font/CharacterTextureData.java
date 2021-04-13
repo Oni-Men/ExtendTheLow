@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -49,15 +50,21 @@ public class CharacterTextureData extends FontData {
         RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
     FontMetrics fm = g.getFontMetrics();
+    Rectangle2D bounds = fm.getStringBounds(Character.toString(ch), g);
 
-    float x = 0F;
+    float x = (float) bounds.getX();
     float y = fm.getHeight() - fm.getLeading() - fm.getDescent();
 
     g.drawString(String.valueOf(ch), x, y);
     g.drawString(String.valueOf(ch), x, y);
 
-    this.baseline = y;
-    this.glyphWidth = fm.charWidth(ch) / scale;
+    // g.translate(0, scale * 8);
+    // g.scale(0.2, 0.2);
+    // g.setColor(Color.gray);
+    // g.drawString(String.format("%.1f", bounds.getWidth()), 0, 0);
+
+    this.baseline = fm.getLeading() + fm.getDescent();
+    this.glyphWidth = (float) (bounds.getWidth() / scale);
 
     return image;
   }
