@@ -70,14 +70,12 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     }
   }
 
-  public AdvancedFontRenderer(GameSettings gameSettingsIn, ResourceLocation location,
-      TextureManager textureManagerIn) {
-    super(gameSettingsIn, location, textureManagerIn, false);
+  public AdvancedFontRenderer(GameSettings gameSettingsIn, ResourceLocation location, TextureManager textureManagerIn) {
+    super(gameSettingsIn, location, textureManagerIn, true);
 
     Ubuntu = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-R.ttf"));
     UbuntuBold = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-B.ttf"));
-    Sawarabi =
-        FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/SawarabiGothic-Regular.ttf"));
+    Sawarabi = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/SawarabiGothic-Regular.ttf"));
 
     fonts = Arrays.asList(Ubuntu, Sawarabi);
   }
@@ -87,7 +85,8 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     if (!Prefs.get().betterFont) {
       return super.drawString(text, x, y, color, dropShadow);
     }
-    return super.drawString(text, x, y, color, false);
+
+    return super.drawString(text, x, y, color, dropShadow);
   }
 
   @Override
@@ -129,9 +128,8 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
 
     GlStateManager.bindTexture(data.getGlTextureId());
     GlStateManager.enableBlend();
-    GlStateManager.disableAlpha();
-    GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA,
-        GL11.GL_ZERO, GL11.GL_ONE);
+    GlStateManager.enableAlpha();
+    GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
 
     switch (ch) {
       case 160:
@@ -200,12 +198,30 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     if (prevScaleFactor != scaleFactor) {
       prevScaleFactor = scaleFactor;
     }
+
     FontData data = this.getFontTextureData(ch, scaleFactor);
     if (!data.isInitialized()) {
       return 0F;
     }
 
-    return (data.getCharWidth(ch) / 2F + 1F);
+    float charWidth = data.getCharWidth(ch);
+    if (charWidth == -1) {
+      return super.getCharWidth(ch);
+    }
+
+    return charWidth / 2F + 1F;
+  }
+
+  public int getStringWidth(String text) {
+    if (!Prefs.get().betterFont) {
+      return super.getStringWidth(text);
+    }
+    if (text == null) {
+      return 0;
+    } else {
+      double sum = text.chars().mapToDouble(i -> this.getCharWidth((char) i)).sum();
+      return (int) sum;
+    }
   }
 
   private List<Font> deriveFonts(float scale) {
@@ -227,8 +243,7 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
       CharacterTextureData[] datas = (this.isBoldStyle() ? bigFontBoldDatas : bigFontDatas);
 
       if (datas[ch] == null) {
-        List<Font> fonts =
-            this.deriveFonts(12 * scaleFactor * 4, this.isBoldStyle() ? Font.BOLD : Font.PLAIN);
+        List<Font> fonts = this.deriveFonts(12 * scaleFactor * 4, this.isBoldStyle() ? Font.BOLD : Font.PLAIN);
 
         if (this.isBoldStyle()) {
           bigFontBoldDatas[ch] = new CharacterTextureData(fonts, ch, scaleFactor * 4);

@@ -241,8 +241,8 @@ public class DungeonMarker extends TheLowExtension {
   }
 
   private void drawCenteredString(String text, int x, int y, float alpha) {
-    int i = ExtendTheLow.RenderFont.getStringWidth(text);
+    int i = ExtendTheLow.AdvancedFont.getStringWidth(text);
     int color = 0x00ffffff | ((int) (alpha * 255) & 255) << 24;
-    ExtendTheLow.RenderFont.drawString(text, x - i / 2, y, color);
+    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, color);
   }
 }
