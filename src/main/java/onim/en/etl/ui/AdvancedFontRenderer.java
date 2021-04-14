@@ -71,7 +71,7 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
   }
 
   public AdvancedFontRenderer(GameSettings gameSettingsIn, ResourceLocation location, TextureManager textureManagerIn) {
-    super(gameSettingsIn, location, textureManagerIn, true);
+    super(gameSettingsIn, location, textureManagerIn, false);
 
     Ubuntu = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-R.ttf"));
     UbuntuBold = FontUtil.loadFont(new ResourceLocation("onim.en.etl:font/Ubuntu-B.ttf"));

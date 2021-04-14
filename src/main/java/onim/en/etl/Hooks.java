@@ -38,8 +38,7 @@ public class Hooks {
         scoreplayerteam.setNameSuffix(packetIn.func_149309_f());
         scoreplayerteam.setChatFormat(EnumChatFormatting.func_175744_a(packetIn.func_179813_h()));
         scoreplayerteam.func_98298_a(packetIn.func_149308_i());
-        Team.EnumVisible team$enumvisible =
-            Team.EnumVisible.func_178824_a(packetIn.func_179814_i());
+        Team.EnumVisible team$enumvisible = Team.EnumVisible.func_178824_a(packetIn.func_179814_i());
 
         if (team$enumvisible != null) {
           scoreplayerteam.setNameTagVisibility(team$enumvisible);
@@ -66,5 +65,19 @@ public class Hooks {
     }
 
     return true;
+  }
+
+  public static float getShadowOffset(float offset) {
+    if (Prefs.get().betterFont) {
+      return .5F;
+    }
+    return offset;
+  }
+
+  public static float getShadowOffsetMinus(float offset) {
+    if (Prefs.get().betterFont) {
+      return 0F;
+    }
+    return offset;
   }
 }

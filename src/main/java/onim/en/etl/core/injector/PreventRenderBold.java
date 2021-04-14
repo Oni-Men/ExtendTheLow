@@ -8,9 +8,11 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 
 import onim.en.etl.core.HookInjector;
 import onim.en.etl.core.ObfuscateType;
+import onim.en.etl.util.BytecodeUtil;
 
 /**
  * FontRender#renderStringAtPosにて太字描画をさせない
@@ -19,6 +21,12 @@ import onim.en.etl.core.ObfuscateType;
  *
  */
 public class PreventRenderBold extends HookInjector {
+
+  private static final int[] OPCODE_LIST_VANILLA = new int[] {Opcodes.ALOAD, Opcodes.GETFIELD, Opcodes.IFEQ, -1,
+      Opcodes.LDC, Opcodes.GOTO, -1, Opcodes.FCONST_1, -1, Opcodes.FSTORE};
+
+  private static final int[] OPCODE_LIST_OPTIFINE = new int[] {Opcodes.ALOAD, Opcodes.GETFIELD, Opcodes.IFEQ,
+      Opcodes.LDC, Opcodes.GOTO, Opcodes.ALOAD, Opcodes.GETFIELD, Opcodes.FSTORE};
 
   public PreventRenderBold() {
     super("net.minecraft.client.gui.FontRenderer");
@@ -43,11 +51,11 @@ public class PreventRenderBold extends HookInjector {
       if (fieldInsnNode.getOpcode() != Opcodes.GETFIELD) {
         continue;
       }
-      
+
       if (!fieldInsnNode.desc.equals("Z")) {
         continue;
       }
-      
+
       // boldStyle is named "s" in obfuscated code
       if (!fieldInsnNode.name.equals(type == ObfuscateType.NONE ? "boldStyle" : "s")) {
         continue;
@@ -68,9 +76,14 @@ public class PreventRenderBold extends HookInjector {
       list.set(fieldInsnNode, falseNode);
     }
 
-    return true;
+    MethodInsnNode hook = new MethodInsnNode(Opcodes.INVOKESTATIC, "onim/en/etl/Hooks", "getShadowOffsetMinus", "(F)F", false);
+    return (BytecodeUtil.injectAfterSequence(list, OPCODE_LIST_VANILLA, (location) -> {
+      list.insertBefore(location, hook);
+      return true;
+    }) || BytecodeUtil.injectAfterSequence(list, OPCODE_LIST_OPTIFINE, (location) -> {
+      list.insertBefore(location, hook);
+      return true;
+    }));
+
   }
-
-
-
 }
