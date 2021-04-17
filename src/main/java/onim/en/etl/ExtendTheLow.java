@@ -28,10 +28,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.HandleAPI;
-import onim.en.etl.api.dto.SkillCooltimeResponse;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
-import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
@@ -52,8 +50,7 @@ public class ExtendTheLow {
   public static AdvancedFontRenderer AdvancedFont;
 
   public static Path configPath = null;
-  public static KeyBinding keyOpenModPrefs =
-      new KeyBinding("onim.en.etl.openPrefs", Keyboard.KEY_P, "onim.en.etl.keyCategory");
+  public static KeyBinding keyOpenModPrefs = new KeyBinding("onim.en.etl.openPrefs", Keyboard.KEY_P, "onim.en.etl.keyCategory");
 
   public static TickTask apiScheduler = null;
 
@@ -88,15 +85,15 @@ public class ExtendTheLow {
 
     ClientRegistry.registerKeyBinding(keyOpenModPrefs);
 
-    AdvancedFont = new AdvancedFontRenderer(mc.gameSettings,
-        new ResourceLocation("textures/font/ascii.png"), mc.getTextureManager());
+    AdvancedFont = new AdvancedFontRenderer(mc.gameSettings, new ResourceLocation("textures/font/ascii.png"), mc
+      .getTextureManager());
     ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(AdvancedFont);
   }
 
   @EventHandler
   public void complete(FMLLoadCompleteEvent event) {
     Minecraft mc = Minecraft.getMinecraft();
-      mc.fontRendererObj = AdvancedFont;
+    mc.fontRendererObj = AdvancedFont;
     ingameGUI = new AdvancedIngameGUI(mc);
   }
 
@@ -133,11 +130,9 @@ public class ExtendTheLow {
   public void onClientChatReceived(ClientChatReceivedEvent event) {
     event.setCanceled(HandleAPI.process(event));
 
-    // 一斉にログインした際の負荷軽減の為にランダムにディレイをかける
-    long randomDelay = new Random().nextInt(100) * 20;
-
     if (event.message.getFormattedText().startsWith(HandleAPI.PLAYER_DATA_MSG)) {
-
+      // 再起動などで一斉にログインした際の負荷軽減の為にランダムにディレイをかける
+      long randomDelay = new Random().nextInt(100) * 20;
       TickTaskExecutor.addTask(() -> {
         Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
       });
@@ -181,12 +176,5 @@ public class ExtendTheLow {
       }
     }
 
-    if (Keyboard.isKeyDown(Keyboard.KEY_U)) {
-      SkillCooltimeResponse res = new SkillCooltimeResponse();
-      res.cooltimeEndsWhen = System.currentTimeMillis() + 1000;
-      res.skillName = ">> TEST SKILL <<";
-      res.skillType = "NORMAL_SKILL";
-      MinecraftForge.EVENT_BUS.post(new SkillEnterCooltimeEvent(res));
-    }
   }
 }

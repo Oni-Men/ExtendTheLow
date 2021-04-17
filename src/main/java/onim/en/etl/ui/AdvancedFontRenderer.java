@@ -164,7 +164,6 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     GL11.glEnd();
 
     GlStateManager.popMatrix();
-    GlStateManager.enableAlpha();
     return charWidth / 2F + 1F;
   }
 

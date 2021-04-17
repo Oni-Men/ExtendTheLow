@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.api.DataStorage;
+import onim.en.etl.api.HandleAPI;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.AdvancedFontRenderer;
@@ -33,7 +35,7 @@ public class DungeonMarker extends TheLowExtension {
   private static final ResourceLocation MARKER_BG =
       new ResourceLocation("onim.en.etl:textures/marker_bg.png");
 
-  private boolean isDungeonWorld = false;
+  private boolean worldHasLoaded = false;
 
   @PrefItem(id = "onim.en.etl.dungeonMarker.distanceAlwaysRender", type = float.class, min = 0F,
       max = 500F, unit = "m", step = 10F)
@@ -71,31 +73,39 @@ public class DungeonMarker extends TheLowExtension {
   public void onDisable() {}
 
   @SubscribeEvent
-  public void onInitGui(GuiScreenEvent.InitGuiEvent event) {
-    // TODO ダンジョンワールドと通常ワールドの判別する
+  public void onInitGui(GuiScreenEvent.InitGuiEvent.Post event) {
     if (event.gui instanceof GuiDisconnected) {
       DataStorage.clearDungeons();
-      this.isDungeonWorld = false;
     }
   }
 
   @SubscribeEvent
-  public void onWorldUnload(WorldEvent.Unload event) {
-    this.isDungeonWorld = !this.isDungeonWorld;
+  public void onOpenGui(GuiOpenEvent event) {
+    if (TheLowUtil.isPlayingTheLow() && event.gui == null && worldHasLoaded) {
+      HandleAPI.sendRequest("location");
+      worldHasLoaded = false;
+    }
+  }
+
+  @SubscribeEvent
+  public void onWorldLoad(WorldEvent.Load event) {
+    worldHasLoaded = true;
   }
 
   @SubscribeEvent
   public void onRenderWorldLast(RenderWorldLastEvent event) {
-
     Minecraft mc = Minecraft.getMinecraft();
     RenderManager renderManager = mc.getRenderManager();
 
     if (!TheLowUtil.isPlayingTheLow())
       return;
 
+    if (!DataStorage.getCurrentWorldName().equals("thelow")) {
+      return;
+    }
+
     if (renderManager == null)
       return;
-
 
     GlStateManager.disableDepth();
     GlStateManager.enableBlend();

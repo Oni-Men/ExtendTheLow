@@ -174,14 +174,12 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       GuiUtil.drawGradientRectHorizontal(60, 0, 120, 30, 0xAA000000, 0x00000000);
     }
 
-    mc.getTextureManager().bindTexture(player.getLocationSkin());
     GlStateManager.pushMatrix();
     GlStateManager.translate(right ? i - 116 : 4, 4, 0);
-    GlStateManager.scale(0.8, 0.8, 1.0);
-    drawScaledCustomSizeModalRect(0, 0, 8, 8, 8, 8, 16, 16, 64, 64);
-    GlStateManager.scale(1.1, 1.1, 1.0);
-    GlStateManager.translate(-0.8, -0.8, 0);
-    drawScaledCustomSizeModalRect(0, 0, 40, 8, 8, 8, 16, 16, 64, 64);
+    GlStateManager.color(0.3F, 0.3F, 0.3F);
+    this.drawFace(player.getLocationSkin(), 1, 1);
+    GlStateManager.color(1.0F, 1.0F, 1.0F);
+    this.drawFace(player.getLocationSkin(), 0, 0);
     GlStateManager.popMatrix();
 
     GlStateManager.pushMatrix();
@@ -223,6 +221,19 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     Minecraft mc = Minecraft.getMinecraft();
     mc.getTextureManager().bindTexture(iconLocation);
     drawScaledCustomSizeModalRect(x, y, 0, 0, 32, 32, w, h, 32, 32);
+  }
+
+  private void drawFace(ResourceLocation locationSkin, float x, float y) {
+    mc.getTextureManager().bindTexture(locationSkin);
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(x, y, 0);
+    GlStateManager.scale(0.8, 0.8, 1.0);
+    drawScaledCustomSizeModalRect(0, 0, 8, 8, 8, 8, 16, 16, 64, 64);
+    GlStateManager.scale(1.1, 1.1, 1.0);
+    GlStateManager.translate(-0.8, -0.8, 0);
+    drawScaledCustomSizeModalRect(0, 0, 40, 8, 8, 8, 16, 16, 64, 64);
+    GlStateManager.popMatrix();
+
   }
 
 }

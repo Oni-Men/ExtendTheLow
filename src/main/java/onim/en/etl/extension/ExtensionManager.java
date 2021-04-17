@@ -33,20 +33,19 @@ public class ExtensionManager {
   private static final String PACKAGE_NAME = "onim.en.etl.extension";
 
   private static HashMap<String, TheLowExtension> idToExtension = Maps.newLinkedHashMap();
-  private static LinkedListMultimap<String, TheLowExtension> extensionsByCategory =
-      LinkedListMultimap.create();
+  private static LinkedListMultimap<String, TheLowExtension> extensionsByCategory = LinkedListMultimap.create();
 
   public static void registerAll() {
     try {
       ClassLoader loader = Thread.currentThread().getContextClassLoader();
       ClassPath.from(loader)
-          .getTopLevelClassesRecursive(PACKAGE_NAME)
-          .stream()
-          .map(info -> info.load())
-          .sorted((a, b) -> a.getSimpleName().compareTo(b.getSimpleName()))
-          .forEach(c -> {
-            register(c);
-          });
+        .getTopLevelClassesRecursive(PACKAGE_NAME)
+        .stream()
+        .map(info -> info.load())
+        .sorted((a, b) -> a.getSimpleName().compareTo(b.getSimpleName()))
+        .forEach(c -> {
+          register(c);
+        });
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -101,6 +100,7 @@ public class ExtensionManager {
       return;
     }
 
+    MinecraftForge.EVENT_BUS.unregister(extension);
     MinecraftForge.EVENT_BUS.register(extension);
     extension.onEnable();
   }
@@ -151,11 +151,9 @@ public class ExtensionManager {
   public static void loadModuleSettings() {
     for (Entry<String, TheLowExtension> entry : idToExtension.entrySet()) {
       try {
-        String json =
-            Files
-                .lines(ExtendTheLow.configPath.resolve(entry.getKey() + ".json"),
-                    StandardCharsets.UTF_8)
-                .collect(Collectors.joining("\n"));
+        String json = Files
+          .lines(ExtendTheLow.configPath.resolve(entry.getKey() + ".json"), StandardCharsets.UTF_8)
+          .collect(Collectors.joining("\n"));
 
         TheLowExtension module = new Gson().fromJson(json, entry.getValue().getClass());
         JavaUtil.merge(entry.getValue(), module);

@@ -29,10 +29,14 @@ public class HandleAPI {
 
   public static void requestDatas() {
     for (String type : HandleAPI.API_TYPES) {
-      TickTaskExecutor.addTask(() -> {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage(String.format("/thelow_api %s", type));
-      });
+      sendRequest(type);
     }
+  }
+
+  public static void sendRequest(String apiType) {
+    TickTaskExecutor.addTask(() -> {
+      Minecraft.getMinecraft().thePlayer.sendChatMessage(String.format("/thelow_api %s", apiType));
+    });
   }
 
   public static boolean process(ClientChatReceivedEvent event) {
@@ -60,6 +64,10 @@ public class HandleAPI {
     Gson gson = new GsonBuilder().create();
     ApiResponse<?> response = gson.fromJson(json, ApiResponse.class);
 
+    if (response.version != 1) {
+      return;
+    }
+    
     Type type;
     switch (response.apiType) {
       case "player_status":
