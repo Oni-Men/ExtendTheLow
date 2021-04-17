@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.extension.TheLowExtension;
+import onim.en.etl.util.Easing;
 import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TheLowUtil;
 
@@ -32,14 +33,10 @@ public class SkillCooltimeView extends TheLowExtension {
   }
 
   @Override
-  public void onEnable() {
-
-  }
+  public void onEnable() {}
 
   @Override
-  public void onDisable() {
-
-  }
+  public void onDisable() {}
 
   @SubscribeEvent
   public void onSkillEnterCooltime(SkillEnterCooltimeEvent event) {
@@ -71,48 +68,40 @@ public class SkillCooltimeView extends TheLowExtension {
     Minecraft mc = Minecraft.getMinecraft();
     FontRenderer font = mc.fontRendererObj;
 
-    long t = data.getRemainingTicks();
+    float elapsed = data.getElapsedSeconds();
+    float remaining = data.getRemainingSeconds();
 
-    if (t < -3000) {
+    if (remaining < -3F) {
       return false;
     }
 
-    String text = TheLowUtil.formatCooltime(t) + " " + data.getSkillName();
+    String text = TheLowUtil.formatCooltime(remaining) + " " + data.getSkillName();
 
     int i = font.getStringWidth(text);
     int left = x - i - 16;
 
-    float alpha = Math.abs(MathHelper.sin(t / 1000F * (float) Math.PI));
+    float alpha = Math.abs(MathHelper.sin(remaining * (float) Math.PI));
+
+    if (elapsed < 0.5F) {
+      alpha = (elapsed / 0.5F);
+      left += (1 - Easing.easeOutCubic(alpha)) * i;
+    }
+
+    if (remaining < -2.5F) {
+      alpha = (3F - Math.abs(remaining)) / 0.5F;
+      left += (1 - Easing.easeInCubic(alpha)) * i;
+    }
+
     int color = 0xCC3333 | ((int) (alpha * 255) << 24);
-
-    if (t < 0) {
+    if (remaining < 0) {
       color = 0x5533CC33;
-    }
-
-    long elapsed = System.currentTimeMillis() - data.getCooltimeStartsWhen();
-    if (elapsed < 500) {
-      alpha = (elapsed / 500F);
-      color = color & 0x00FFFFFF;
-      color = color | ((int) (alpha * 0x55)) << 24;
-    }
-
-    if (t < 0 && t > -500) {
-      alpha = (float) -Math.pow((t + 250) / 500F, 2) + 1F;
-      color = color & 0x00FFFFFF;
-      color = color | ((int) (alpha * 0xDD) & 0xFF) << 24;
-    }
-
-    if (t < -2500) {
-      alpha = (3000 - Math.abs(t)) / 500F;
-      color = color & 0x00FFFFFF;
-      color = color | ((int) (alpha * 0x33) & 0xFF) << 24;
     }
 
     GuiUtil.drawGradientRectHorizontal(left - 8, y - 10, left + i / 3, y, 0, color);
     GuiUtil.drawGradientRectHorizontal(left + i / 3, y - 10, left + i + 16, y, color, color);
 
     color = color | 0xFFFFFF;
-    if (elapsed < 500 || t > -2500) {
+    if (elapsed < 0.5F || remaining > -2.5F) {
       color = 0xFFFFFFFF;
     }
 

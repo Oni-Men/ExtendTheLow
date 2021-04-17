@@ -130,22 +130,16 @@ public class TheLowUtil {
     return String.format("%s§c[%s]", status.mcid, status.clanInfo.clanName);
   }
 
-  public static String formatCooltime(long tickRemaining) {
+  public static String formatCooltime(float sec) {
     StringBuilder builder = new StringBuilder();
-    float sec = tickRemaining / 1000F;
 
     if (sec < 0) {
       builder.append("Ready!");
-    } else if (sec < 1) {
-      builder.append(sec);
-      builder.setLength(3);
     } else {
-      if (sec / 60 >= 1) {
-        builder.append((int) sec / 60);
-        builder.append(":");
-      }
+      builder.append(JavaUtil.padding(String.valueOf((int) sec / 60), "00"));
+      builder.append(":");
 
-      builder.append((int) sec % 60);
+      builder.append(JavaUtil.padding(String.valueOf((int) sec % 60), "00"));
     }
 
     return builder.toString();

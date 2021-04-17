@@ -5,16 +5,14 @@ import onim.en.etl.api.dto.SkillCooltimeResponse;
 
 public class SkillEnterCooltimeEvent extends Event {
 
-  private final long cooltimeEndsWhen;
-  private final long cooltimeStartsWhen;
+  private long eventFiredWhen;
   private final boolean isSpecialSkill;
   private SkillCooltimeResponse data;
 
   public SkillEnterCooltimeEvent(SkillCooltimeResponse data) {
     this.data = data;
-    cooltimeStartsWhen = System.currentTimeMillis();
-    cooltimeEndsWhen = data.cooltimeEndsWhen;
-    isSpecialSkill = data.skillType.equals("SPECIAL_SKILL");
+    eventFiredWhen = System.currentTimeMillis();
+    isSpecialSkill = data.type.equals("SPECIAL_SKILL");
   }
 
   @Override
@@ -23,22 +21,27 @@ public class SkillEnterCooltimeEvent extends Event {
   }
 
   public String getSkillName() {
-    return this.data.skillName;
+    return this.data.name;
   }
   
-  public long getRemainingTicks() {
-    return cooltimeEndsWhen - System.currentTimeMillis();
+  public float getRemainingSeconds() {
+    return data.cooltime - this.getElapsedSeconds();
+  }
+
+  public float getElapsedSeconds() {
+    return (System.currentTimeMillis() - eventFiredWhen) / 1000F;
   }
 
   public String getSkillType() {
-    return this.data.skillType;
+    return this.data.type;
   }
 
   public boolean isSpecialSkill() {
     return this.isSpecialSkill;
   }
 
-  public long getCooltimeStartsWhen() {
-    return cooltimeStartsWhen;
+  public long getEventFiredWhen() {
+    return eventFiredWhen;
   }
+
 }

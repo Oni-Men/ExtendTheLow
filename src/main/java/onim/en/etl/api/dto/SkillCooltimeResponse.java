@@ -2,10 +2,10 @@ package onim.en.etl.api.dto;
 
 public class SkillCooltimeResponse {
 
-  public String skillName;
+  public String name;
 
-  public long cooltimeEndsWhen;
+  public float cooltime;
 
-  public String skillType;
+  public String type;
 
 }

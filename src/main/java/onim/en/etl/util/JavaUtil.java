@@ -135,4 +135,16 @@ public class JavaUtil {
       return orElse;
     }
   }
+
+  public static String padding(String text, String padding) {
+    if (text.length() >= padding.length()) {
+      return text;
+    }
+    int i = padding.length();
+    StringBuilder builder = new StringBuilder();
+    builder.append(padding);
+    builder.append(text);
+
+    return builder.substring(builder.length() - i, builder.length());
+  }
 }
