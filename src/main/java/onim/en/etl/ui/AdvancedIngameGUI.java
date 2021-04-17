@@ -207,9 +207,9 @@ public class AdvancedIngameGUI extends GuiIngameForge {
         this.getFontRenderer().drawStringWithShadow(s, 55, 2, 0xFFFFFF);
       }
 
-      this.getFontRenderer().drawString(TheLowUtil.formatGalions(playerStatus.galions), 4, 18, 0xFFFFFF);
+      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatGalions(playerStatus.galions), 4, 18, 0xFFFFFF);
 
-      this.getFontRenderer().drawString(String.format("%d Units", playerStatus.unit), 55, 18, 0xFFFFFF);
+      this.getFontRenderer().drawStringWithShadow(String.format("%d Units", playerStatus.unit), 55, 18, 0xFFFFFF);
 
     } else {
       this.getFontRenderer().drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
