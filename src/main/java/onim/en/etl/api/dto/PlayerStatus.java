@@ -32,7 +32,7 @@ public class PlayerStatus {
 
     public int maxLevel;
 
-    public int reinCount;
+    public int reincCount;
 
   }
 
@@ -46,4 +46,11 @@ public class PlayerStatus {
 
   }
 
+  public int getReinCount() {
+    int i = 0;
+    i += swordStatus != null ? swordStatus.reincCount : 0;
+    i += magicStatus != null ? magicStatus.reincCount : 0;
+    i += bowStatus != null ? bowStatus.reincCount : 0;
+    return i;
+  }
 }

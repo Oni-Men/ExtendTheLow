@@ -6,6 +6,7 @@ onim.en.etl.clearCache=Clear caches
 
 onim.en.etl.settings=ExtendTheLow Settings
 onim.en.etl.category.util=Utilities
+onim.en.etl.category.rendering=Rendering
 
 onim.en.etl.dungeonMarker=Dungeon Marker
 onim.en.etl.dungeonMarker.distanceAlwaysRender=Distance always show
@@ -24,7 +25,10 @@ onim.en.etl.expMessageUtil=Exp message
 
 onim.en.etl.skillCooltimeView=Skill Cooltime view
 
+onim.en.etl.playerStatusView=Player Status View
+
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font
+onim.en.etl.changeFont=Change Font
 onim.en.etl.customStatus=Change status rendering
 onim.en.etl.invertCustomStatus=Invert status position

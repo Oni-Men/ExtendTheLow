@@ -6,6 +6,7 @@ onim.en.etl.clearCache=キャッシュを削除
 
 onim.en.etl.settings=ExtendTheLowの設定
 onim.en.etl.category.util=ユーティリティ
+onim.en.etl.category.rendering=描画
 
 onim.en.etl.dungeonMarker=ダンジョンマーカー
 onim.en.etl.dungeonMarker.distanceAlwaysRender=つねに描画する距離
@@ -24,7 +25,10 @@ onim.en.etl.expMessageUtil=EXP取得メッセージ
 
 onim.en.etl.skillCooltimeView=スキルクールタイム表示
 
+onim.en.etl.playerStatusView=プレイヤーステータス表示
+
 onim.en.etl.generalSettings=一般設定
 onim.en.etl.advancedFont=高解像度フォント
+onim.en.etl.changeFont=フォントを変更
 onim.en.etl.customStatus=ステータス描画の変更
 onim.en.etl.invertCustomStatus=ステータス位置を右
