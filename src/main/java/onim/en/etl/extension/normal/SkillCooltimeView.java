@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.extension.TheLowExtension;
+import onim.en.etl.util.ColorUtil;
 import onim.en.etl.util.Easing;
 import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TheLowUtil;
@@ -92,7 +93,7 @@ public class SkillCooltimeView extends TheLowExtension {
       left += (1 - Easing.easeInCubic(alpha)) * i;
     }
 
-    int color = 0xCC3333 | ((int) (alpha * 255) << 24);
+    int color = ColorUtil.applyAlpha(0xCC3333, alpha);
     if (remaining < 0) {
       color = 0x5533CC33;
     }
@@ -105,7 +106,7 @@ public class SkillCooltimeView extends TheLowExtension {
       color = 0xFFFFFFFF;
     }
 
-    if (((color >> 24) & 255) > 4) {
+    if (ColorUtil.getAlpha(color) > 4F) {
       font.drawString(text, left + 8, y - 10, color);
     }
 

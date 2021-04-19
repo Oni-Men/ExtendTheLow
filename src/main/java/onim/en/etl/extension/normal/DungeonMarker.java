@@ -28,6 +28,7 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.AdvancedFontRenderer;
+import onim.en.etl.util.ColorUtil;
 import onim.en.etl.util.TheLowUtil;
 
 public class DungeonMarker extends TheLowExtension {
@@ -63,7 +64,7 @@ public class DungeonMarker extends TheLowExtension {
 
   @Override
   public String category() {
-    return "onim.en.etl.category.util";
+    return "onim.en.etl.category.rendering";
   }
 
   @Override
@@ -252,7 +253,6 @@ public class DungeonMarker extends TheLowExtension {
 
   private void drawCenteredString(String text, int x, int y, float alpha) {
     int i = ExtendTheLow.AdvancedFont.getStringWidth(text);
-    int color = 0x00ffffff | ((int) (alpha * 255) & 255) << 24;
-    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, color);
+    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, ColorUtil.applyAlpha(0xFFFFFF, alpha));
   }
 }
