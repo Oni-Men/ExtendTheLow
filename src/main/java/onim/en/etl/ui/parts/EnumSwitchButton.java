@@ -40,8 +40,8 @@ public class EnumSwitchButton<T extends Enum<T>> extends Button {
   }
 
   @Override
-  public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-    super.drawButton(mc, mouseX, mouseY);
+  public int draw(Minecraft mc) {
+    return super.draw(mc);
   }
 
   private void displayTranslateString() {

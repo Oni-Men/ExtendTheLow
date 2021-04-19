@@ -3,11 +3,15 @@ package onim.en.etl.util;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +52,19 @@ public class FontUtil {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public static List<String> installedFontNames() {
+    GraphicsEnvironment localGfxEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    // String[] availableFontFamilyNames = localGfxEnv.getAvailableFontFamilyNames();
+    // return Arrays.asList(availableFontFamilyNames);
+    return Stream.of(localGfxEnv.getAllFonts()).map(
+        f -> f.getFamily()).distinct().collect(
+        Collectors.toList());
+  }
+
+  public static List<String> getFontFaces(String family) {
+    return new ArrayList<>();
   }
 
 }

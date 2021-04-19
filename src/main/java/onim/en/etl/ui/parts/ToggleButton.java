@@ -8,11 +8,12 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import onim.en.etl.ExtendTheLow;
+import onim.en.etl.ui.RenderingContext;
+import onim.en.etl.util.Easing;
 
-public class ToggleButton extends GuiActionButton {
+public class ToggleButton extends ActionButton {
 
-  private static ResourceLocation TEX_TOGGLE_BUTTON =
-      new ResourceLocation("onim.en.etl:textures/toggle_button.png");
+  private static ResourceLocation TEX_TOGGLE_BUTTON = new ResourceLocation("onim.en.etl:textures/toggle_button.png");
 
   private boolean toggleState = false;
   private long toggleStateChagned = 0;
@@ -48,37 +49,35 @@ public class ToggleButton extends GuiActionButton {
   }
 
   @Override
-  public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-    if (this.visible) {
-      FontRenderer font = ExtendTheLow.AdvancedFont;
-      mc.renderEngine.bindTexture(TEX_TOGGLE_BUTTON);
-
-      int i = font.getStringWidth(this.displayString);
-      boolean xInside = mouseX >= this.xPosition && mouseX < this.xPosition + this.width + i;
-      boolean yInside = mouseY >= this.yPosition && mouseY < this.yPosition + this.height;
-      this.hovered = xInside && yInside;
-
-      GlStateManager.enableBlend();
-      GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-
-      // bg
-      GlStateManager.color(1.0f, 1.0f, 1.0f);
-      Gui.drawScaledCustomSizeModalRect(this.xPosition, this.yPosition, 64F, 0F, 128, 64, 20, 10,
-          256F,
-          64F);
-
-      // fg
-      if (this.toggleState) {
-        GlStateManager.color(0.3f, 1.0f, 0.3f);
-      }
-      Gui.drawScaledCustomSizeModalRect(this.xPosition + this.getToggleStatePosition(),
-          this.yPosition, 0F,
-          0F, 64, 64, 10, 10, 256F, 64F);
-
-      this.mouseDragged(mc, mouseX, mouseY);
-
-      this.drawString(font, displayString, this.xPosition + 22, this.yPosition + 1, 0xffffff);
+  public int draw(Minecraft mc) {
+    if (!this.visible) {
+      return 0;
     }
+    FontRenderer font = ExtendTheLow.AdvancedFont;
+    mc.renderEngine.bindTexture(TEX_TOGGLE_BUTTON);
+
+    int i = font.getStringWidth(this.displayString);
+    this.width = 22 + i;
+
+    this.hovered = RenderingContext.isHovering(this);
+    RenderingContext ctx = RenderingContext.current;
+
+    GlStateManager.enableBlend();
+    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
+    // bg
+    GlStateManager.color(1.0f, 1.0f, 1.0f);
+    Gui.drawScaledCustomSizeModalRect(ctx.x, ctx.y, 64F, 0F, 128, 64, 20, 10, 256F, 64F);
+
+    // fg
+    if (this.toggleState) {
+      GlStateManager.color(0.3f, 1.0f, 0.3f);
+    }
+    Gui.drawScaledCustomSizeModalRect(ctx.x + this.getToggleStatePosition(), ctx.y, 0F, 0F, 64, 64, 10, 10, 256F, 64F);
+
+
+    this.drawString(font, displayString, ctx.x + 22, ctx.y + 1, 0xffffff);
+    return height;
   }
 
   @Override
@@ -97,10 +96,7 @@ public class ToggleButton extends GuiActionButton {
     }
     long elapsed = Minecraft.getSystemTime() - this.toggleStateChagned;
 
-    float translate = (elapsed / 10F);
-    if (elapsed > 100) {
-      translate = 10F;
-    }
+    float translate = Easing.easeOutCubic(elapsed / 100F) * 10F;
 
     if (this.toggleState) {
       return (int) translate;

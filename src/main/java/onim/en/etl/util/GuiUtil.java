@@ -16,9 +16,10 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
+import onim.en.etl.ui.custom.GuiFontChoose;
 import onim.en.etl.ui.parts.Button;
 import onim.en.etl.ui.parts.EnumSwitchButton;
-import onim.en.etl.ui.parts.GuiActionButton;
+import onim.en.etl.ui.parts.ActionButton;
 import onim.en.etl.ui.parts.Slider;
 import onim.en.etl.ui.parts.ToggleButton;
 
@@ -61,7 +62,7 @@ public class GuiUtil {
         if (item == null)
           return;
 
-        GuiActionButton button = getSuitableButtonForItem(item, field, extension);
+        ActionButton button = getSuitableButtonForItem(item, field, extension);
 
         if (button != null) {
           buttonList.add(button);
@@ -72,8 +73,7 @@ public class GuiUtil {
     Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 
-  public static GuiActionButton getSuitableButtonForItem(PrefItem item, Field field,
-      TheLowExtension extension) {
+  public static ActionButton getSuitableButtonForItem(PrefItem item, Field field, TheLowExtension extension) {
     field.setAccessible(true);
     switch (item.type().getName()) {
       case "boolean":
@@ -91,8 +91,7 @@ public class GuiUtil {
     return new Button(100, item.id());
   }
 
-  public static ToggleButton getToggleButton(PrefItem item, Field field,
-      TheLowExtension extension) {
+  public static ToggleButton getToggleButton(PrefItem item, Field field, TheLowExtension extension) {
     try {
       ToggleButton toggleButton = new ToggleButton(item.id(), field.getBoolean(extension));
       toggleButton.setOnAction(() -> {
@@ -109,11 +108,10 @@ public class GuiUtil {
     return null;
   }
 
-  public static Slider getSliderButton(PrefItem item, Field field, TheLowExtension extension,
-      boolean integer) {
+  public static Slider getSliderButton(PrefItem item, Field field, TheLowExtension extension, boolean integer) {
     try {
-      Slider slider = new Slider(100, item.id(), field.getFloat(extension), item.min(), item.max(),
-          item.step(), integer);
+      Slider slider = new Slider(100, item.id(), field.getFloat(extension), item.min(), item.max(), item
+        .step(), integer);
       if (integer) {
         slider.formatter = (f) -> String.format("%.0f%s", f, item.unit());
       } else {
@@ -138,9 +136,10 @@ public class GuiUtil {
     return null;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  public static EnumSwitchButton<?> getEnumSwitchButton(PrefItem item, Field field,
-      TheLowExtension extension) {
+  @SuppressWarnings({
+      "rawtypes",
+      "unchecked"})
+  public static EnumSwitchButton<?> getEnumSwitchButton(PrefItem item, Field field, TheLowExtension extension) {
     try {
       Enum value = (Enum) field.get(extension);
       EnumSwitchButton<?> button = new EnumSwitchButton(100, value.name(), item.type());
@@ -171,14 +170,14 @@ public class GuiUtil {
       buttonList.add(new ToggleButton("onim.en.etl.advancedFont", Prefs.get().betterFont, b -> {
         Prefs.get().betterFont = b;
       }));
+      // buttonList.add(getFontSettingButton(gui));
       buttonList
-          .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> {
-            Prefs.get().customTheLowStatus = b;
-          }));
-      buttonList.add(
-          new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
-            Prefs.get().invertTheLowStatus = b;
-          }));
+        .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> {
+          Prefs.get().customTheLowStatus = b;
+        }));
+      buttonList.add(new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
+        Prefs.get().invertTheLowStatus = b;
+      }));
       buttonList.add(getClearCacheButton());
     });
 
@@ -190,10 +189,23 @@ public class GuiUtil {
   public static Button getClearCacheButton() {
     Button button = new Button(100, "onim.en.etl.clearCache");
     button.setOnAction(() -> {
+      if (!TheLowUtil.isPlayingTheLow())
+        return;
       DataStorage.clearCache();
       HandleAPI.requestDatas();
     });
     return button;
+  }
+
+  public static Button getFontSettingButton(GuiScreen prev) {
+    Button button = new Button(100, "onim.en.etl.changeFont");
+    button.setOnAction(() -> openFontSettingsGUI(prev));
+    return button;
+  }
+
+  public static void openFontSettingsGUI(GuiScreen prev) {
+    GuiFontChoose gui = new GuiFontChoose(prev);
+    Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 
   public static void drawGradientRectHorizontal(int left, int top, int right, int bottom, int startColor, int endColor) {
@@ -213,14 +225,14 @@ public class GuiUtil {
     Tessellator tessellator = Tessellator.getInstance();
     WorldRenderer worldrenderer = tessellator.getWorldRenderer();
     worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
-    worldrenderer.func_181662_b((double) right, (double) top, (double) 0).func_181666_a(red2, green2, blue2,
-        alpha2).func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) top, (double) 0).func_181666_a(red1, green1, blue1,
-        alpha1).func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) bottom, (double) 0).func_181666_a(red1, green1, blue1,
-        alpha1).func_181675_d();
-    worldrenderer.func_181662_b((double) right, (double) bottom, (double) 0).func_181666_a(red2, green2, blue2,
-        alpha2).func_181675_d();
+    worldrenderer.func_181662_b((double) right, (double) top, (double) 0).func_181666_a(red2, green2, blue2, alpha2)
+      .func_181675_d();
+    worldrenderer.func_181662_b((double) left, (double) top, (double) 0).func_181666_a(red1, green1, blue1, alpha1)
+      .func_181675_d();
+    worldrenderer.func_181662_b((double) left, (double) bottom, (double) 0).func_181666_a(red1, green1, blue1, alpha1)
+      .func_181675_d();
+    worldrenderer.func_181662_b((double) right, (double) bottom, (double) 0).func_181666_a(red2, green2, blue2, alpha2)
+      .func_181675_d();
     tessellator.draw();
     GlStateManager.shadeModel(7424);
     GlStateManager.disableBlend();
