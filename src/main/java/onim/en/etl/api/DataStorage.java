@@ -75,11 +75,22 @@ public class DataStorage {
             gson.fromJson(Files.newBufferedReader(statusesPath), PlayerStatusProvider.class);
       }
 
+    } catch (JsonSyntaxException jsonSyntaxError) {
+      playerStatusProvider = new PlayerStatusProvider();
+      clearCache();
+    } catch (JsonIOException | IOException e) {
+      e.printStackTrace();
+    }
+
+    try {
       if (Files.exists(dungeonsPath)) {
         dungeons = gson.fromJson(Files.newBufferedReader(dungeonsPath),
             new TypeToken<HashSet<DungeonInfo>>() {}.getType());
       }
-    } catch (JsonSyntaxException | JsonIOException | IOException e) {
+    } catch (JsonSyntaxException jsonSyntaxError) {
+      dungeons = new HashSet<>();
+      clearCache();
+    } catch (JsonIOException | IOException e) {
       e.printStackTrace();
     }
   }
