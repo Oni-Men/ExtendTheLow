@@ -26,6 +26,12 @@ onim.en.etl.expMessageUtil=Exp message
 onim.en.etl.skillCooltimeView=Skill Cooltime view
 
 onim.en.etl.playerStatusView=Player Status View
+onim.en.etl.playerStatusView.reincarnationCount=Reincarnation %d times
+onim.en.etl.playerStatusView.mainLevel=Main level %d
+onim.en.etl.playerStatusView.clanInfo=[%s]
+onim.en.etl.playerStatusView.showReincCount=Show Reinc. always
+onim.en.etl.playerStatusView.showMainLevel=Show Level always
+onim.en.etl.playerStatusView.showClanName=Show clan name always
 
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font

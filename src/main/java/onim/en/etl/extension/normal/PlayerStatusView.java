@@ -6,21 +6,30 @@ import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.ExtendTheLow;
+import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.dto.PlayerStatus;
 import onim.en.etl.extension.TheLowExtension;
-import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.util.ColorUtil;
+import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TheLowUtil;
 
 public class PlayerStatusView extends TheLowExtension {
 
-  private int countShowDetail = 0;
+  @PrefItem(id = "onim.en.etl.playerStatusView.showReincCount", type = boolean.class)
+  public boolean showReincCount = true;
+
+  @PrefItem(id = "onim.en.etl.playerStatusView.showMainLevel", type = boolean.class)
+  public boolean showMainLevel = false;
+
+  @PrefItem(id = "onim.en.etl.playerStatusView.showClanName", type = boolean.class)
+  public boolean showClanName = false;
 
   @Override
   public String id() {
@@ -33,14 +42,10 @@ public class PlayerStatusView extends TheLowExtension {
   }
 
   @Override
-  public void onEnable() {
-    // TODO Auto-generated method stub
-  }
+  public void onEnable() {}
 
   @Override
-  public void onDisable() {
-    // TODO Auto-generated method stub
-  }
+  public void onDisable() {}
 
   @SubscribeEvent
   public void onRenderPlayer(RenderPlayerEvent.Post event) {
@@ -59,33 +64,24 @@ public class PlayerStatusView extends TheLowExtension {
       return;
     }
 
-    boolean detailed = renderManager.pointedEntity != null && renderManager.pointedEntity.equals(target);
-
-    if (detailed) {
-      this.countShowDetail++;
-    } else {
-      this.countShowDetail = 0;
-    }
-
     double x = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTick;
     double y = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTick;
     double z = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTick;
 
-    Vector3f vec3f = new Vector3f((float) x, (float) y, (float) z);
-    float a = this.alphaByAngle(vec3f, renderManager);
-    
     x -= renderManager.viewerPosX;
     y -= renderManager.viewerPosY;
     z -= renderManager.viewerPosZ;
 
+    Vector3f vec3f = new Vector3f((float) x, (float) y, (float) z);
+    float a = this.alphaByAngle(vec3f, renderManager);
+
+    boolean detailed = a > 0.75;
+
     GlStateManager.disableLighting();
-    GlStateManager.depthMask(false);
-    GlStateManager.disableDepth();
     GlStateManager.enableTexture2D();
     GlStateManager.enableBlend();
     GlStateManager.disableAlpha();
     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-    GlStateManager.color(1F, 1F, 1F);
 
     GlStateManager.pushMatrix();
     GlStateManager.translate(x, y + target.height, z);
@@ -93,15 +89,26 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
     GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
     GlStateManager.scale(-0.0266667F, -0.0266667F, 0.0266667F);
-    AdvancedFontRenderer font = ExtendTheLow.AdvancedFont;
-    String text = String.format("Rein. %d times", status.getReinCount());
 
-    int i = font.getStringWidth(text);
-    font.drawString(text, -i / 2, -40, ColorUtil.applyAlpha(553648127, a));
-    GlStateManager.enableDepth();
-    GlStateManager.depthMask(true);
-    font.drawString(text, -i / 2, -40, ColorUtil.applyAlpha(-1, a));
 
+    int i = -40;
+    if (detailed || showReincCount) {
+      String text = I18n.format("onim.en.etl.playerStatusView.reincarnationCount", status.getReinCount());
+      this.drawText(text, 0, i, a);
+      i -= 10;
+
+    }
+
+    if (detailed || showMainLevel) {
+      String text = I18n.format("onim.en.etl.playerStatusView.mainLevel", status.mainLevel);
+      this.drawText(text, 0, i, a);
+      i -= 10;
+    }
+
+    if ((detailed || showClanName) && status.clanInfo != null) {
+      String text = I18n.format("onim.en.etl.playerStatusView.clanInfo", status.clanInfo.clanName);
+      this.drawText(text, 0, i, a);
+    }
     GlStateManager.popMatrix();
 
     GlStateManager.enableDepth();
@@ -110,20 +117,36 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.enableLighting();
   }
 
-  private float alphaByAngle(Vector3f loc, RenderManager renderManager) {
-    float x = (float) (loc.x - renderManager.viewerPosX);
-    float z = (float) (loc.y - renderManager.viewerPosZ);
+  private void drawText(String text, int x, int y, float a) {
+    int i = ExtendTheLow.AdvancedFont.getStringWidth(text);
 
+    if (a < 0.08) {
+      return;
+    }
+
+    GlStateManager.depthMask(false);
+    GlStateManager.disableDepth();
+    GuiUtil.drawGradientRectHorizontal(x - i / 2 - 2, y, x + i / 2 + 2, y + 8, 0x66668866, 0x66333366);
+
+    GlStateManager.enableBlend();
+    GlStateManager.disableAlpha();
+    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
+    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, ColorUtil.applyAlpha(0x00FFFFFF, a * 0.2F));
+    GlStateManager.enableDepth();
+    GlStateManager.depthMask(true);
+    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, ColorUtil.applyAlpha(0x00FFFFFF, a));
+  }
+
+  private float alphaByAngle(Vector3f loc, RenderManager renderManager) {
     float look = (float) Math.toRadians(renderManager.playerViewY);
 
-    float cos = MathHelper.cos(look);
-    float sin = MathHelper.sin(look);
+    Vector2f locationVec = new Vector2f(loc.z, -loc.x);
+    Vector2f viewVec = new Vector2f(MathHelper.cos(look), MathHelper.sin(look));
 
-    Vector2f locationVec = new Vector2f(z, -x);
-    Vector2f viewVec = new Vector2f(cos, sin);
+    float angle = Vector2f.angle(locationVec, viewVec) / (float) Math.PI;
 
-    float angle = (float) Math.toDegrees(Vector2f.angle(locationVec, viewVec));
-
-    return MathHelper.clamp_float(1F - (angle / 15F), 0F, 1F);
+    return MathHelper.clamp_float(1F - angle * 4F, 0F, 1F);
   }
+
 }

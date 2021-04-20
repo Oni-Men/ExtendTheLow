@@ -74,7 +74,6 @@ public class FontTextureData extends FontData {
     float y = fm.getHeight() - fm.getLeading() - fm.getDescent();
 
     g.drawString(String.valueOf(ch), x, y);
-    g.drawString(String.valueOf(ch), x, y);
 
     Rectangle2D bounds = fm.getStringBounds(Character.toString(ch), g);
 

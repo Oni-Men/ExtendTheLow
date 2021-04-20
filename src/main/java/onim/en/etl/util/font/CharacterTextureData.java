@@ -56,7 +56,6 @@ public class CharacterTextureData extends FontData {
     float y = fm.getHeight() - fm.getLeading() - fm.getDescent();
 
     g.drawString(String.valueOf(ch), x, y);
-    g.drawString(String.valueOf(ch), x, y);
 
     // g.translate(0, scale * 8);
     // g.scale(0.2, 0.2);

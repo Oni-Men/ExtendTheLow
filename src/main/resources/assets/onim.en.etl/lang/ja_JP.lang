@@ -26,6 +26,12 @@ onim.en.etl.expMessageUtil=EXP取得メッセージ
 onim.en.etl.skillCooltimeView=スキルクールタイム表示
 
 onim.en.etl.playerStatusView=プレイヤーステータス表示
+onim.en.etl.playerStatusView.reincarnationCount=転生 %d回
+onim.en.etl.playerStatusView.mainLevel=メインレベル %d
+onim.en.etl.playerStatusView.clanInfo=[%s]
+onim.en.etl.playerStatusView.showReincCount=常に転生数を表示
+onim.en.etl.playerStatusView.showMainLevel=常にレベルを表示
+onim.en.etl.playerStatusView.showClanName=常にクラン名を表示
 
 onim.en.etl.generalSettings=一般設定
 onim.en.etl.advancedFont=高解像度フォント

@@ -167,11 +167,11 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     boolean right = Prefs.get().invertTheLowStatus;
 
     if (right) {
-      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 30, 0x00000000, 0xAA000000);
-      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 30, 0xAA000000, 0xAA000000);
+      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 30, 0x00336633, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 30, 0xAA336666, 0xAA336699);
     } else {
-      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 30, 0xAA000000, 0xAA000000);
-      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 30, 0xAA000000, 0x00000000);
+      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 30, 0xAA336699, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 30, 0xAA336666, 0x00336633);
     }
 
     GlStateManager.pushMatrix();
