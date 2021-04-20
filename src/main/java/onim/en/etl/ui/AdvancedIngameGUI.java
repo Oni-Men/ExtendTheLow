@@ -142,8 +142,8 @@ public class AdvancedIngameGUI extends GuiIngameForge {
         String s3 = scoreObjective.getDisplayName();
         drawRect(l1 - 2, k - this.getFontRenderer().FONT_HEIGHT - 1, l, k - 1, 1610612736);
         drawRect(l1 - 2, k - 1, l, k, 1342177280);
-        this.getFontRenderer().drawString(s3, l1 + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2,
-            k - this.getFontRenderer().FONT_HEIGHT, 0xffffffff);
+        this.getFontRenderer().drawString(s3, l1 + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2, k
+            - this.getFontRenderer().FONT_HEIGHT, 0xffffffff);
       }
     }
   }
@@ -167,11 +167,11 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     boolean right = Prefs.get().invertTheLowStatus;
 
     if (right) {
-      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 30, 0x00336633, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 30, 0xAA336666, 0xAA336699);
+      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 32, 0x00336633, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 32, 0xAA336666, 0xAA336699);
     } else {
-      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 30, 0xAA336699, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 30, 0xAA336666, 0x00336633);
+      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 32, 0xAA336699, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 32, 0xAA336666, 0x00336633);
     }
 
     GlStateManager.pushMatrix();
@@ -186,30 +186,37 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     GlStateManager.translate(right ? i - 120 : 0, 0, 0);
     if (playerStatus != null) {
 
-      this.getFontRenderer().drawStringWithShadow("Lv." + playerStatus.mainLevel, 20, 2, 0xFFFFFF);
-      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 20, 10, 0xFFFFFF);
+      int widthLevel = this.getFontRenderer().drawStringWithShadow("Lv." + playerStatus.mainLevel, 22, 2, 0xFFFFFF);
+      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 22, 12, 0xFFFFFF);
 
       float f = (Minecraft.getSystemTime() % 9000) / 1000F;
 
       GlStateManager.color(1F, 1F, 1F);
 
+      GlStateManager.pushMatrix();
+      GlStateManager.translate(widthLevel + 4, 0, 0);
+
       if (f < 3) {
-        drawIcon(TEX_SWORD, 45, 2, 8, 8);
+        drawIcon(TEX_SWORD, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.swordStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 55, 2, 0xFFFFFF);
+        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else if (f < 6) {
-        drawIcon(TEX_WAND, 45, 2, 8, 8);
+        drawIcon(TEX_WAND, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.magicStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 55, 2, 0xFFFFFF);
+        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else {
-        drawIcon(TEX_BOW, 45, 2, 8, 8);
+        drawIcon(TEX_BOW, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.bowStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 55, 2, 0xFFFFFF);
+        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       }
 
-      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatGalions(playerStatus.galions), 4, 18, 0xFFFFFF);
+      GlStateManager.popMatrix();
 
-      this.getFontRenderer().drawStringWithShadow(String.format("%d Units", playerStatus.unit), 55, 18, 0xFFFFFF);
+      int widthGalions = this.getFontRenderer()
+        .drawStringWithShadow(TheLowUtil.formatGalions(playerStatus.galions), 4, 22, 0xFFFFFF);
+
+      this.getFontRenderer()
+        .drawStringWithShadow(String.format("%d Units", playerStatus.unit), widthGalions + 4, 22, 0xFFFFFF);
 
     } else {
       this.getFontRenderer().drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);

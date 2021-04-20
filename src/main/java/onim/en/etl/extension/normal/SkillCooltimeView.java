@@ -106,7 +106,7 @@ public class SkillCooltimeView extends TheLowExtension {
       color = 0xFFFFFFFF;
     }
 
-    if (ColorUtil.getAlpha(color) > 4F) {
+    if (ColorUtil.getAlpha(color) > 0.08F) {
       font.drawString(text, left + 8, y - 10, color);
     }
 
