@@ -160,8 +160,8 @@ public class ExtensionManager {
         TheLowExtension module = new Gson().fromJson(json, entry.getValue().getClass());
         JavaUtil.merge(entry.getValue(), module);
 
-        if (module.isEnabled()) {
-          ExtensionManager.enableExtension(module);
+        if (entry.getValue().isEnabled()) {
+          ExtensionManager.enableExtension(entry.getValue());
         }
       } catch (Exception e) {
         continue;

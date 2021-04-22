@@ -104,7 +104,7 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.scale(scale, scale, scale);
 
     // HP BAR Start
-    float healthRatio = target.getHealth() / target.getMaxHealth();
+    float healthRatio = MathHelper.clamp_float(target.getHealth() / target.getMaxHealth(), 0F, 1F);
     int bgColor = ColorUtil.applyAlpha(0xFF303030, a);
 
     int barWidth = 40;
