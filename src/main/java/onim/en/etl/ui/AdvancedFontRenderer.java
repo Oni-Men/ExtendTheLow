@@ -127,6 +127,7 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     Vector2f uv = data.getUVCoord(ch);
 
     GlStateManager.bindTexture(data.getGlTextureId());
+
     GlStateManager.enableBlend();
     GlStateManager.enableAlpha();
     GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
@@ -205,7 +206,7 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
 
     float charWidth = data.getCharWidth(ch);
     if (charWidth == -1) {
-      return super.getCharWidth(ch);
+      return 0F;
     }
 
     return charWidth / 2F + 1F;
