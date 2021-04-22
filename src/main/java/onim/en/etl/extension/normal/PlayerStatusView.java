@@ -100,7 +100,7 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
     GlStateManager.pushMatrix();
-    GlStateManager.translate(0, -20, 0);
+    GlStateManager.translate(0, -30, 0);
     GlStateManager.scale(scale, scale, scale);
 
     // HP BAR Start
@@ -118,9 +118,9 @@ public class PlayerStatusView extends TheLowExtension {
           .applyAlpha(applyColorHealthBar(0xFF336699, healthRatio), a));
     GL11.glPushAttrib(GL11.GL_DEPTH_BUFFER_BIT);
     GlStateManager.pushMatrix();
-    GlStateManager.scale(0.5, 0.5, 0.5);
+    GlStateManager.scale(0.75, 0.75, 0.75);
     GlStateManager.disableDepth();
-    this.drawText(String.format("%.0f/%.0f", target.getHealth(), target.getMaxHealth()), 0, 0, a, true);
+    this.drawText(String.format("%.0f/%.0f", target.getHealth(), target.getMaxHealth()), 0, -1, a, true);
     GL11.glPopAttrib();
     GlStateManager.popMatrix();
     // HP BAR End
@@ -138,7 +138,7 @@ public class PlayerStatusView extends TheLowExtension {
     // Reinc count and main level
     GlStateManager.pushMatrix();
     GlStateManager.translate(-barWidth, 8, 0);
-    GlStateManager.scale(0.5, 0.5, 0.5);
+    GlStateManager.scale(0.75, 0.75, 0.75);
 
     List<String> details = new ArrayList<>();
     if (detailed || showReincCount) {
@@ -148,7 +148,7 @@ public class PlayerStatusView extends TheLowExtension {
     if (detailed || showMainLevel) {
       details.add(I18n.format("onim.en.etl.playerStatusView.mainLevel", status.mainLevel));
     }
-    this.drawText(String.join("/", details), 0, 0, a, false);
+    this.drawText(String.join(" / ", details), 0, 0, a, false);
 
     GlStateManager.popMatrix();
     GlStateManager.popMatrix();

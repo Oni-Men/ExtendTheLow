@@ -31,7 +31,7 @@ public class CrashPrevention extends TheLowExtension {
   }
 
   @SubscribeEvent
-  public void onInitGui(InitGuiEvent event) {
+  public void onInitGui(InitGuiEvent.Pre event) {
     if (event.gui instanceof GuiEquipMagicOre) {
       return;
     }
