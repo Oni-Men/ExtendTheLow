@@ -86,7 +86,7 @@ public abstract class ComponentBase extends Gui {
   }
 
   public void renderTooltip(String s, int x, int y) {
-    FontRenderer f = Minecraft.getMinecraft().fontRendererObj;
+    FontRenderer f = ExtendTheLow.AdvancedFont;
 
     GlStateManager.pushMatrix();
     GlStateManager.translate(0, 0, 100);

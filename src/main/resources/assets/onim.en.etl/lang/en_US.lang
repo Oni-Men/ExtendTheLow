@@ -14,6 +14,7 @@ onim.en.etl.dungeonMarker.maxRenderDistance=Max render distance
 onim.en.etl.dungeonMarker.levelLowest=Displayed lowest level
 onim.en.etl.dungeonMarker.levelHighest=Displayed highest level
 onim.en.etl.dungeonMarker.displaySpecials=Special dungeons
+onim.en.etl.dungeonMarker.scale=Scale
 
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=Normal
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulate
@@ -35,9 +36,9 @@ onim.en.etl.playerStatusView.showClanName=Show clan name always
 onim.en.etl.playerStatusView.scale=Scale
 
 onim.en.etl.quickAction=Quick Action
-onim.en.etl.quickAction.toggleDungeonMarker=Toggle Dungeon Marker
+onim.en.etl.quickAction.toggleDungeonMarker=Dungeon Marker%nON/OFF
 onim.en.etl.quickAction.openSettingsGUI=Open Settings
-onim.en.etl.quickAction.requestApiDatas=Update Data
+onim.en.etl.quickAction.requestApiDatas=Fetch Latest%n(TheLowPlayer Infos)
 onim.en.etl.quickAction.commandQuest=Open Quest GUI
 onim.en.etl.quickAction.commandNoThrow=Execute /NoThrow
 onim.en.etl.quickAction.commandStats=View my stats
