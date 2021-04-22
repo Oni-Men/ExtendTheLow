@@ -6,13 +6,13 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import onim.en.etl.ExtendTheLow;
 import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.util.ColorUtil;
@@ -67,8 +67,7 @@ public class SkillCooltimeView extends TheLowExtension {
   }
 
   private boolean renderCooltimeView(SkillEnterCooltimeEvent data, int x, int y) {
-    Minecraft mc = Minecraft.getMinecraft();
-    FontRenderer font = mc.fontRendererObj;
+    FontRenderer font = ExtendTheLow.AdvancedFont;
 
     float elapsed = data.getElapsedSeconds();
     float remaining = data.getRemainingSeconds();

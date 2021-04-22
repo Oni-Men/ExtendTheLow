@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import onim.en.etl.ExtendTheLow;
 import onim.en.etl.ui.RenderingContext;
 import onim.en.etl.util.GuiUtil;
 
@@ -68,7 +69,7 @@ public abstract class ComponentBase extends Gui {
   }
 
   public int drawTrimedStringWithLeader(String s, int width, boolean centered, boolean shadow) {
-    FontRenderer f = Minecraft.getMinecraft().fontRendererObj;
+    FontRenderer f = ExtendTheLow.AdvancedFont;
 
     if (f.getStringWidth(s) > width) {
       tooltipText = s;

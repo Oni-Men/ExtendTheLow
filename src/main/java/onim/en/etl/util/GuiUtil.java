@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import onim.en.etl.ExtendTheLow;
 import onim.en.etl.Prefs;
 import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.api.DataStorage;
@@ -19,6 +20,7 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
+import onim.en.etl.ui.RenderingContext;
 import onim.en.etl.ui.custom.GuiFontChoose;
 import onim.en.etl.ui.parts.ActionButton;
 import onim.en.etl.ui.parts.Button;
@@ -262,8 +264,9 @@ public class GuiUtil {
   }
 
   public static int drawCenteredString(String s, float x, float y, boolean shadow) {
-    Minecraft mc = Minecraft.getMinecraft();
-    FontRenderer font = mc.fontRendererObj;
-    return font.drawString(s, x - font.getStringWidth(s) / 2, y, 0xFFFFFF, shadow);
+    FontRenderer font = ExtendTheLow.AdvancedFont;
+    RenderingContext current = RenderingContext.current;
+    return font.drawString(s, x - font.getStringWidth(s) / 2, y, current == null ? -1 : current.color, shadow);
   }
+
 }

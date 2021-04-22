@@ -11,6 +11,9 @@ public class RenderingContext implements Cloneable {
   public static RenderingContext current;
 
   public static void push() {
+    if (current == null) {
+      current = new RenderingContext(0, 0);
+    }
     stack.push(current);
     current = current.clone();
   }
@@ -23,11 +26,17 @@ public class RenderingContext implements Cloneable {
   }
 
   public static void translate(int x, int y) {
+    if (current == null) {
+      current = new RenderingContext(0, 0);
+    }
     current.x += x;
     current.y += y;
   }
 
   public static void color(int color) {
+    if (current == null) {
+      current = new RenderingContext(0, 0);
+    }
     current.color = color;
   }
 
@@ -62,6 +71,9 @@ public class RenderingContext implements Cloneable {
   }
 
   public static boolean isHovering(ComponentBase base) {
+    if (current == null) {
+      return false;
+    }
     boolean xInside = current.mouseX >= current.x && current.mouseX < current.x + base.width;
     boolean yInside = current.mouseY >= current.y && current.mouseY < current.y + base.height;
     return xInside && yInside;

@@ -16,6 +16,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.action.QuickActionExecutor;
 import onim.en.etl.extension.TheLowExtension;
+import onim.en.etl.ui.RenderingContext;
+import onim.en.etl.util.ColorUtil;
+import onim.en.etl.util.Easing;
 import onim.en.etl.util.GuiUtil;
 
 public class QuickAction extends TheLowExtension {
@@ -23,6 +26,8 @@ public class QuickAction extends TheLowExtension {
   private boolean displayed = false;
 
   private String actionId = null;
+
+  private int frames = 0;
 
   @Override
   public String id() {
@@ -42,33 +47,31 @@ public class QuickAction extends TheLowExtension {
 
   @SubscribeEvent
   public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
+    Minecraft mc = Minecraft.getMinecraft();
     if (event.type != ElementType.CHAT) {
       return;
     }
 
-    Minecraft mc = Minecraft.getMinecraft();
-    if (mc.currentScreen != null) {
-      return;
+    if (mc.currentScreen == null && !mc.inGameHasFocus) {
+      if (ExtendTheLow.keyQuickAction.isKeyDown()) {
+        this.frames++;
+        this.drawQuickActionMenu(event.resolution);
+        displayed = true;
+        return;
+      } else if (displayed) {
+        Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+        mc.setIngameFocus();
+        displayed = false;
+
+        QuickActionExecutor.execute(actionId);
+      }
     }
-
-    if (mc.inGameHasFocus) {
-      return;
-    }
-
-    if (ExtendTheLow.keyQuickAction.isKeyDown()) {
-      this.drawQuickActionMenu(event.resolution);
-      displayed = true;
-    } else if (displayed) {
-      Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
-      mc.setIngameFocus();
-      displayed = false;
-
-      QuickActionExecutor.execute(actionId);
-    }
-
+    this.frames = 0;
   }
 
   private void drawQuickActionMenu(ScaledResolution resolution) {
+    float ratio = Easing.easeOutCubic(MathHelper.clamp_float(frames / 10F, 0, 1));
+
     Minecraft mc = Minecraft.getMinecraft();
     int width = resolution.getScaledWidth();
     int height = resolution.getScaledHeight();
@@ -93,10 +96,10 @@ public class QuickAction extends TheLowExtension {
 
       degree = degree % 360;
 
-      GlStateManager.color(0F, 0F, 0F, 0.3F);
+      ColorUtil.glColor(0x88336699);
       if (Math.hypot(mouseX, mouseY) > 24) {
         if ((int) (degree / tileAngle) == i) {
-          GlStateManager.color(1F, 1F, 1F, 0.3F);
+          ColorUtil.glColor(0x886699BB);
           this.actionId = actionIds[i];
         }
       } else {
@@ -106,9 +109,9 @@ public class QuickAction extends TheLowExtension {
       GlStateManager.disableTexture2D();
       GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
 
-      this.addVertex(rad1, 96);
+      this.addVertex(rad1, 96 * ratio);
       this.addVertex(rad1, 24);
-      this.addVertex(rad2, 96);
+      this.addVertex(rad2, 96 * ratio);
       this.addVertex(rad2, 24);
       GL11.glEnd();
 
@@ -122,15 +125,29 @@ public class QuickAction extends TheLowExtension {
 
       GlStateManager.pushMatrix();
       GlStateManager.translate((vec2.x + vec1.x) / 2, (vec2.y + vec1.y) / 2, 1);
-      String s = I18n.format(actionIds[i]);
-      GlStateManager.scale(0.5, 0.5, 1);
-      GuiUtil.drawCenteredString(s, 0, 0, true);
+
+      String[] lines = I18n.format(actionIds[i]).split("\n");
+
+      if (ratio > 0.08F) {
+        RenderingContext.push();
+        RenderingContext.color(ColorUtil.applyAlpha(0xFFFFFFFF, ratio));
+
+        for (int k = 0; k < lines.length; k++) {
+          GuiUtil.drawCenteredString(lines[k].trim(), 0, k * 10 - lines.length / 2F * 10, true);
+        }
+
+        RenderingContext.pop();
+      }
+
       GlStateManager.popMatrix();
     }
     GlStateManager.popMatrix();
 
-    String s = this.actionId != null ? this.actionId : I18n.format(this.id());
-    GuiUtil.drawCenteredString(I18n.format(s), width / 2, height / 2 - 104, true);
+    if (ratio > 0.08F) {
+      String s = this.actionId != null ? this.actionId : I18n.format(this.id());
+      RenderingContext.color(ColorUtil.applyAlpha(0xFFFFFFFF, ratio));
+      GuiUtil.drawCenteredString(I18n.format(s), width / 2, height / 2 - 104, true);
+    }
   }
 
   private void addVertex(float rad, float radius) {

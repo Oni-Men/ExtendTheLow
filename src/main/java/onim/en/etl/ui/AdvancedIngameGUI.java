@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -70,13 +71,13 @@ public class AdvancedIngameGUI extends GuiIngameForge {
         GlStateManager.scale(4.0F, 4.0F, 4.0F);
 
         int l = opacity << 24 & -16777216;
-        float textWidth = ExtendTheLow.AdvancedFont.getStringWidth(field_175201_x);
+        float textWidth = this.getFontRenderer().getStringWidth(field_175201_x);
         this.getFontRenderer().drawString(this.field_175201_x, -textWidth / 2F + 2.5F, -10, 16777215 | l, true);
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(2.0F, 2.0F, 2.0F);
-        textWidth = ExtendTheLow.AdvancedFont.getStringWidth(field_175200_y);
+        textWidth = this.getFontRenderer().getStringWidth(field_175200_y);
 
         this.getFontRenderer().drawString(this.field_175200_y, -textWidth / 2F + 2.5F, 5.0F, 16777215 | l, true);
         GlStateManager.popMatrix();
@@ -168,6 +169,8 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     AbstractClientPlayer player = (AbstractClientPlayer) entity;
     PlayerStatus playerStatus = DataStorage.getStatusByUniqueId(player.getUniqueID());
 
+    FontRenderer font = ExtendTheLow.AdvancedFont;
+
     int i = scaledResolution.getScaledWidth();
     boolean right = Prefs.get().invertTheLowStatus;
 
@@ -191,8 +194,8 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     GlStateManager.translate(right ? i - 120 : 0, 0, 0);
     if (playerStatus != null) {
 
-      int widthLevel = this.getFontRenderer().drawStringWithShadow("Lv." + playerStatus.mainLevel, 22, 2, 0xFFFFFF);
-      this.getFontRenderer().drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 22, 12, 0xFFFFFF);
+      int widthLevel = font.drawStringWithShadow("Lv." + playerStatus.mainLevel, 22, 2, 0xFFFFFF);
+      font.drawStringWithShadow(TheLowUtil.formatPlayerName(playerStatus), 22, 12, 0xFFFFFF);
 
       float f = (Minecraft.getSystemTime() % 9000) / 1000F;
 
@@ -204,27 +207,27 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       if (f < 3) {
         drawIcon(TEX_SWORD, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.swordStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
+        font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else if (f < 6) {
         drawIcon(TEX_WAND, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.magicStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
+        font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else {
         drawIcon(TEX_BOW, 2, 2, 8, 8);
         String s = String.format("(lv. %d)", playerStatus.bowStatus.leve);
-        this.getFontRenderer().drawStringWithShadow(s, 12, 2, 0xFFFFFF);
+        font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       }
 
       GlStateManager.popMatrix();
 
-      int widthGalions = this.getFontRenderer()
+      int widthGalions = font
         .drawStringWithShadow(TheLowUtil.formatGalions(playerStatus.galions), 4, 22, 0xFFFFFF);
 
-      this.getFontRenderer()
+      font
         .drawStringWithShadow(String.format("%d Units", playerStatus.unit), widthGalions + 4, 22, 0xFFFFFF);
 
     } else {
-      this.getFontRenderer().drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
+      font.drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
     }
     GlStateManager.popMatrix();
   }
