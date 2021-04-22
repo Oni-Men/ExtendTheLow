@@ -15,8 +15,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import onim.en.etl.ExtendTheLow;
-import onim.en.etl.action.QuickActionExecutor;
 import onim.en.etl.extension.TheLowExtension;
+import onim.en.etl.qucikaction.QuickActionManager;
 import onim.en.etl.ui.RenderingContext;
 import onim.en.etl.util.ColorUtil;
 import onim.en.etl.util.Easing;
@@ -25,9 +25,7 @@ import onim.en.etl.util.GuiUtil;
 public class QuickAction extends TheLowExtension {
 
   private boolean displayed = false;
-
   private String actionId = null;
-
   private int frames = 0;
 
   @Override
@@ -51,7 +49,6 @@ public class QuickAction extends TheLowExtension {
     Minecraft mc = Minecraft.getMinecraft();
 
     if (mc.currentScreen == null) {
-
       if (ExtendTheLow.keyQuickAction.isPressed()) {
         mc.mouseHelper.ungrabMouseCursor();
         mc.inGameHasFocus = false;
@@ -78,7 +75,7 @@ public class QuickAction extends TheLowExtension {
         mc.setIngameFocus();
         displayed = false;
 
-        QuickActionExecutor.execute(actionId);
+        QuickActionManager.execute(actionId);
       }
     }
     this.frames = 0;
@@ -98,7 +95,7 @@ public class QuickAction extends TheLowExtension {
     GlStateManager.enableBlend();
     GlStateManager.translate(width / 2F, height / 2F, 0);
 
-    String[] actionIds = QuickActionExecutor.getActionIds();
+    String[] actionIds = QuickActionManager.getActionIds();
 
     float tileAngle = 360F / actionIds.length;
     for (int i = 0; i < actionIds.length; i++) {
@@ -125,9 +122,9 @@ public class QuickAction extends TheLowExtension {
       GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
 
       this.addVertex(rad1, 96 * ratio);
-      this.addVertex(rad1, 24);
+      this.addVertex(rad1, 24 * Easing.easeInCubic(ratio));
       this.addVertex(rad2, 96 * ratio);
-      this.addVertex(rad2, 24);
+      this.addVertex(rad2, 24 * Easing.easeInCubic(ratio));
       GL11.glEnd();
 
       GlStateManager.enableTexture2D();

@@ -8,65 +8,45 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import onim.en.etl.ExtendTheLow;
+import onim.en.etl.ui.RenderingContext;
 
-public class ListView extends Gui {
+public class ListView extends ComponentBase {
 
   private float scroll = 0;
   private float initialMouseClickY = -1F;
 
-  public int left;
-  public int top;
-  public int width;
-  public int height;
-
   private List<String> list;
   private Consumer<String> onclick;
 
-  private long frames = 0;
+  private int index = 0;
 
-  public ListView(int x, int y, int width, int height) {
-    this.left = x;
-    this.top = y;
+  public ListView(int width, int height) {
     this.width = width;
     this.height = height;
 
     this.list = new ArrayList<>();
   }
 
-  public void drawListView(int mouseX, int mouseY) {
-    frames++;
+  @Override
+  public int draw(Minecraft mc) {
     if (list.isEmpty()) {
-      return;
+      return height;
     }
 
-    Minecraft mc = Minecraft.getMinecraft();
-    boolean isHovering = mouseX >= this.left && mouseX <= this.left + this.width && mouseY >= this.top
-        && mouseY <= this.top + this.height;
+    boolean isHovering = RenderingContext.isHovering(this);
+
+    RenderingContext.push();
+    RenderingContext ctx = RenderingContext.current;
 
     int actualHeight = Math.min(height, list.size() * 10);
-    int index = (int) Math.floor(mouseY - top - scroll) / 10;
+    index = (int) Math.floor(ctx.mouseY - ctx.y - scroll) / 10;
 
-    if (isHovering && frames > 6) {
-      if (Mouse.isButtonDown(0)) {
-        if (initialMouseClickY == -1F) {
-
-          if (index >= 0 && index < list.size()) {
-            if (this.onclick != null) {
-              this.onclick.accept(list.get(index));
-            }
-          }
-
-          initialMouseClickY = mouseY;
-        } else if (initialMouseClickY >= 0F) {
-          scroll += mouseY - initialMouseClickY;
-          initialMouseClickY = mouseY;
-        }
-      } else {
+    if (isHovering) {
+      if (!Mouse.isButtonDown(0)) {
         while (Mouse.next()) {
           int delta = Mouse.getEventDWheel();
           if (delta != 0) {
@@ -88,10 +68,10 @@ public class ListView extends Gui {
     int scaleW = (int) (mc.displayWidth / res.getScaledWidth_double());
     int scaleH = (int) (mc.displayHeight / res.getScaledHeight_double());
     GL11.glEnable(GL11.GL_SCISSOR_TEST);
-    GL11.glScissor(left * scaleW, top * scaleW, width * scaleW, height * scaleH);
+    GL11.glScissor(ctx.x * scaleW, ctx.y * scaleH, width * scaleW, height * scaleH);
 
     GlStateManager.pushMatrix();
-    GlStateManager.translate(0, scroll, 0);
+    GlStateManager.translate(ctx.x, scroll + ctx.y, 0);
 
     int renderFrom = (int) Math.max(0, Math.abs(scroll) / 10 - 1);
     int renderTo = (int) Math.min(list.size(), (Math.abs(scroll) + height) / 10 + 1);
@@ -101,12 +81,45 @@ public class ListView extends Gui {
       if (isHovering && i == index) {
         s = EnumChatFormatting.UNDERLINE + s;
       }
-      this.drawString(ExtendTheLow.AdvancedFont, s, left, top + i * 10, 0xFFFFFF);
+      this.drawString(ExtendTheLow.AdvancedFont, s, 0, i * 10, 0xFFFFFF);
     }
+
+    RenderingContext.pop();
 
     GL11.glDisable(GL11.GL_SCISSOR_TEST);
     GlStateManager.popMatrix();
 
+    return height;
+  }
+
+  @Override
+  public void mousePressed(int button) {
+    if (button != 0) {
+      return;
+    }
+    if (initialMouseClickY == -1F) {
+      initialMouseClickY = RenderingContext.current.mouseY;
+    }
+  }
+
+  @Override
+  public void mouseReleased(int button, boolean isInside) {
+    if (initialMouseClickY == -1F) {
+      initialMouseClickY = RenderingContext.current.mouseY;
+      if (index >= 0 && index < list.size()) {
+        if (this.onclick != null) {
+          this.onclick.accept(list.get(index));
+        }
+      }
+    }
+  }
+
+  @Override
+  public void mouseDragged() {
+    if (initialMouseClickY >= 0F) {
+      scroll += RenderingContext.current.mouseY - initialMouseClickY;
+      initialMouseClickY = RenderingContext.current.mouseY;
+    }
   }
 
   public void setList(List<String> list) {
@@ -150,4 +163,5 @@ public class ListView extends Gui {
   public void setOnClick(Consumer<String> onclick) {
     this.onclick = onclick;
   }
+
 }

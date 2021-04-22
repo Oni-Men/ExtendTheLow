@@ -22,6 +22,7 @@ import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
 import onim.en.etl.ui.RenderingContext;
 import onim.en.etl.ui.custom.GuiFontChoose;
+import onim.en.etl.ui.custom.QuickActionSetting;
 import onim.en.etl.ui.parts.ActionButton;
 import onim.en.etl.ui.parts.Button;
 import onim.en.etl.ui.parts.EnumSwitchButton;
@@ -39,6 +40,7 @@ public class GuiUtil {
         button.setOnAction(() -> openCategorySettingGUI(category, gui));
         buttonList.add(button);
       });
+      // buttonList.add(getQuickActionButton());
     });
 
     Minecraft.getMinecraft().displayGuiScreen(gui);
@@ -205,6 +207,12 @@ public class GuiUtil {
   public static Button getFontSettingButton(GuiScreen prev) {
     Button button = new Button(100, "onim.en.etl.changeFont");
     button.setOnAction(() -> openFontSettingsGUI(prev));
+    return button;
+  }
+
+  public static Button getQuickActionButton() {
+    Button button = new Button(100, "onim.en.etl.quickAction");
+    button.setOnAction(() -> Minecraft.getMinecraft().displayGuiScreen(new QuickActionSetting()));
     return button;
   }
 

@@ -14,6 +14,10 @@ public class RenderingContext implements Cloneable {
     if (current == null) {
       current = new RenderingContext(0, 0);
     }
+
+    if (stack.size() > 1000) {
+      throw new StackOverflowError("Rendering Context Stack > 1000");
+    }
     stack.push(current);
     current = current.clone();
   }
