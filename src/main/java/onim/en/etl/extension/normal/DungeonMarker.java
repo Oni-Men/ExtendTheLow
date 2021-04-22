@@ -57,6 +57,10 @@ public class DungeonMarker extends TheLowExtension {
   @PrefItem(id = "onim.en.etl.dungeonMarker.displaySpecials", type = boolean.class)
   public boolean displaySpecials = false;
 
+  @PrefItem(id = "onim.en.etl.dungeonMarker.scale", type = float.class, min = 0.05F, max = 2.0F, step = 0.05F,
+      format = "x%.2f")
+  public float configScale;
+
   @Override
   public String id() {
     return "onim.en.etl.dungeonMarker";
@@ -164,7 +168,7 @@ public class DungeonMarker extends TheLowExtension {
     GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
 
     double scaleByFOV = 0.3 + renderManager.options.fovSetting / 100F;
-    double scale = (adjustedDistance * 0.1F + 1.0F) * 0.03 * scaleByFOV;
+    double scale = (adjustedDistance * 0.1F + 1.0F) * 0.03 * scaleByFOV * configScale;
 
     GlStateManager.scale(-scale, -scale, scale);
 
