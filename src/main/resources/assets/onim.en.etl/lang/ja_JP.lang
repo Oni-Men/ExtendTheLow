@@ -19,7 +19,7 @@ onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=通常
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=蓄積
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=オフ
 
-onim.en.etl.crashPrevention=魔法石装着のクラッシュ防止
+onim.en.etl.crashPrevention=魔法石装着画面でのクラッシュ防止
 
 onim.en.etl.expMessageUtil=EXP取得メッセージ
 
@@ -27,11 +27,20 @@ onim.en.etl.skillCooltimeView=スキルクールタイム表示
 
 onim.en.etl.playerStatusView=プレイヤーステータス表示
 onim.en.etl.playerStatusView.reincarnationCount=転生 %d回
-onim.en.etl.playerStatusView.mainLevel=メインレベル %d
+onim.en.etl.playerStatusView.mainLevel=Lv.%d
 onim.en.etl.playerStatusView.clanInfo=[%s]
 onim.en.etl.playerStatusView.showReincCount=常に転生数を表示
 onim.en.etl.playerStatusView.showMainLevel=常にレベルを表示
 onim.en.etl.playerStatusView.showClanName=常にクラン名を表示
+onim.en.etl.playerStatusView.scale=拡大率
+
+onim.en.etl.quickAction=クイックアクション
+onim.en.etl.quickAction.toggleDungeonMarker=ダンジョンマーカーON/OFF
+onim.en.etl.quickAction.openSettingsGUI=設定を開く
+onim.en.etl.quickAction.requestApiDatas=データを更新
+onim.en.etl.quickAction.commandQuest=クエストを開く
+onim.en.etl.quickAction.commandNoThrow=/NoThrowを実行
+onim.en.etl.quickAction.commandStats=自分の情報を見る
 
 onim.en.etl.generalSettings=一般設定
 onim.en.etl.advancedFont=高解像度フォント
