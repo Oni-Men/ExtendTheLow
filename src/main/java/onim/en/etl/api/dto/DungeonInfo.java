@@ -41,13 +41,15 @@ public class DungeonInfo {
 
   public Color getColor() {
     if (this.color == null) {
-      try {
-        // TODO レベルに応じてダンジョンの色変化する機能をもっといい感じにする
-        float i = (float) Integer.parseInt(difficulty);
-        java.awt.Color c = java.awt.Color.getHSBColor((i / 80F), 1F, 1F);
-        this.color = new Color(c.getRed(), c.getGreen(), c.getRed());
-      } catch (NumberFormatException e) {
+      int i = this.getLevel();
+      if (i == 9999) {
         this.color = new Color(198, 0, 211);
+      } else {
+        int r = 255 & (int) (55 + (i / 80F) * 200);
+        int g = 255 & (int) (55 + (1F - i / 80F) * 200);
+        int b = 255 & (int) (55 + (i < 40 ? (0.5 - i / 80F) : (0.5 + i / 80F)) * 200);
+
+        this.color = new Color(r, g, b);
       }
     }
     return this.color;
