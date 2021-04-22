@@ -27,6 +27,10 @@ public class RenderingContext implements Cloneable {
     current.y += y;
   }
 
+  public static void color(int color) {
+    current.color = color;
+  }
+
   public static void clearStack() {
     stack.clear();
   }
@@ -40,6 +44,8 @@ public class RenderingContext implements Cloneable {
   public final int mouseY;
 
   public float alpha;
+
+  public int color = 0xFFFFFF;
 
   public RenderingContext(int mouseX, int mouseY) {
     this.mouseX = mouseX;

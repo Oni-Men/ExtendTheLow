@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -94,12 +95,14 @@ public class SkillCooltimeView extends TheLowExtension {
     }
 
     int color = ColorUtil.applyAlpha(0xCC3333, alpha);
+    int color2 = ColorUtil.applyAlpha(0xCC3366, alpha);
     if (remaining < 0) {
       color = 0x5533CC33;
+      color2 = 0x5533CC99;
     }
 
-    GuiUtil.drawGradientRectHorizontal(left - 8, y - 10, left + i / 3, y, 0, color);
-    GuiUtil.drawGradientRectHorizontal(left + i / 3, y - 10, left + i + 16, y, color, color);
+    GuiUtil.drawGradientRectHorizontal(left - 8, y - 12, left + i / 3, y, ColorUtil.applyAlpha(color, 0), color);
+    GuiUtil.drawGradientRectHorizontal(left + i / 3, y - 12, left + i + 16, y, color, color2);
 
     color = color | 0xFFFFFF;
     if (elapsed < 0.5F || remaining > -2.5F) {
@@ -110,6 +113,7 @@ public class SkillCooltimeView extends TheLowExtension {
       font.drawString(text, left + 8, y - 10, color);
     }
 
+    GlStateManager.enableBlend();
     return true;
   }
 }

@@ -39,6 +39,11 @@ public class AdvancedIngameGUI extends GuiIngameForge {
   }
 
   @Override
+  public void renderGameOverlay(float partialTicks) {
+    super.renderGameOverlay(partialTicks);
+  }
+
+  @Override
   protected void renderTitle(int width, int height, float partialTicks) {
     AdvancedFontRenderer.bigMode = true;
 
@@ -176,7 +181,7 @@ public class AdvancedIngameGUI extends GuiIngameForge {
 
     GlStateManager.pushMatrix();
     GlStateManager.translate(right ? i - 116 : 4, 4, 0);
-    GlStateManager.color(0.3F, 0.3F, 0.3F);
+    GlStateManager.color(0.3F, 0.3F, 0.4F);
     this.drawFace(player.getLocationSkin(), 1, 1);
     GlStateManager.color(1.0F, 1.0F, 1.0F);
     this.drawFace(player.getLocationSkin(), 0, 0);
