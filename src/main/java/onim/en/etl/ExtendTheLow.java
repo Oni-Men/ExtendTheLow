@@ -31,6 +31,7 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.extension.ExtensionManager;
+import onim.en.etl.render.ManagerRenderer;
 import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
 import onim.en.etl.util.GuiUtil;
@@ -51,6 +52,7 @@ public class ExtendTheLow {
 
   public static Path configPath = null;
   public static KeyBinding keyOpenModPrefs = new KeyBinding("onim.en.etl.openPrefs", Keyboard.KEY_P, "onim.en.etl.keyCategory");
+  public static KeyBinding keyQuickAction = new KeyBinding("onim.en.etl.quickAction", Keyboard.KEY_H, "onim.en.etl.keyCategory");
 
   public static TickTask apiScheduler = null;
 
@@ -60,6 +62,14 @@ public class ExtendTheLow {
 
   public ExtendTheLow() {
     instance = this;
+  }
+
+  public static void executeCommand(String command) {
+    if (Minecraft.getMinecraft().thePlayer != null) {
+      TickTaskExecutor.addTask(() -> {
+        Minecraft.getMinecraft().thePlayer.sendChatMessage(command);
+      });
+    }
   }
 
   @EventHandler
@@ -84,6 +94,7 @@ public class ExtendTheLow {
     MinecraftForge.EVENT_BUS.register(this);
 
     ClientRegistry.registerKeyBinding(keyOpenModPrefs);
+    ClientRegistry.registerKeyBinding(keyQuickAction);
 
     AdvancedFont = new AdvancedFontRenderer(mc.gameSettings, new ResourceLocation("textures/font/ascii.png"), mc
       .getTextureManager());
@@ -93,8 +104,9 @@ public class ExtendTheLow {
   @EventHandler
   public void complete(FMLLoadCompleteEvent event) {
     Minecraft mc = Minecraft.getMinecraft();
-    mc.fontRendererObj = AdvancedFont;
+    // mc.fontRendererObj = AdvancedFont;
     ingameGUI = new AdvancedIngameGUI(mc);
+    ManagerRenderer.replaceSkinMap(mc.getRenderManager());
   }
 
   @SubscribeEvent
@@ -173,6 +185,11 @@ public class ExtendTheLow {
     if (mc.currentScreen == null) {
       if (keyOpenModPrefs.isPressed()) {
         GuiUtil.openSettingGUI();
+      }
+
+      if (keyQuickAction.isPressed()) {
+        mc.mouseHelper.ungrabMouseCursor();
+        mc.inGameHasFocus = false;
       }
     }
 

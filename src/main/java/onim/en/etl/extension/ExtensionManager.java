@@ -103,6 +103,7 @@ public class ExtensionManager {
     MinecraftForge.EVENT_BUS.unregister(extension);
     MinecraftForge.EVENT_BUS.register(extension);
     extension.onEnable();
+    extension.setEnable(true);
   }
 
   public static void enableExtension(String extensionId) {
@@ -122,6 +123,7 @@ public class ExtensionManager {
 
     MinecraftForge.EVENT_BUS.unregister(extension);
     extension.onDisable();
+    extension.setEnable(false);
   }
 
   public static void disableExtension(String extensionId) {
