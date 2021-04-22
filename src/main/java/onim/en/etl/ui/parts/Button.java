@@ -1,11 +1,9 @@
 package onim.en.etl.ui.parts;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import onim.en.etl.ExtendTheLow;
 import onim.en.etl.ui.RenderingContext;
 
 public class Button extends ActionButton {
@@ -23,7 +21,6 @@ public class Button extends ActionButton {
       return 0;
     }
     RenderingContext ctx = RenderingContext.current;
-    FontRenderer font = ExtendTheLow.AdvancedFont;
     mc.renderEngine.bindTexture(TEX_BUTTON);
 
     this.hovered = RenderingContext.isHovering(this);
@@ -51,9 +48,17 @@ public class Button extends ActionButton {
     Gui.drawScaledCustomSizeModalRect(ctx.x + this.width
         - i, ctx.y, 240F, 0F, 16, 64, i, this.height, 256F, 64F);
 
-    int c = this.enabled ? 0xffffff : 0x666666;
+    RenderingContext.push();
+    RenderingContext.translate(width / 2, 2);
+    RenderingContext.color(this.enabled ? 0xffffff : 0x666666);
 
-    this.drawCenteredString(font, displayString, ctx.x + this.width / 2, ctx.y + 1, c);
+    this.drawTrimedStringWithLeader(displayString, (int) (width * 0.8), true);
+
+    if (this.hovered && tooltipText != null) {
+      this.renderTooltip(tooltipText, ctx.mouseX, ctx.mouseY);
+    }
+
+    RenderingContext.pop();
 
     return this.height;
   }

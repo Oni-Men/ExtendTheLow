@@ -16,6 +16,7 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.dto.PlayerStatus;
+import onim.en.etl.api.dto.PlayerStatus.ClanInfo;
 
 public class TheLowUtil {
 
@@ -127,7 +128,11 @@ public class TheLowUtil {
     if (status.clanInfo == null) {
       return status.mcid;
     }
-    return String.format("%s§c[%s]", status.mcid, status.clanInfo.clanName);
+    return String.format("%s %s", status.mcid, formatClanName(status.clanInfo));
+  }
+
+  public static String formatClanName(ClanInfo clanInfo) {
+    return ClanUtil.formatClanName(clanInfo);
   }
 
   public static String formatCooltime(float sec) {

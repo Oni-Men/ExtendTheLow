@@ -3,12 +3,10 @@ package onim.en.etl.ui.parts;
 import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import onim.en.etl.ExtendTheLow;
 import onim.en.etl.ui.RenderingContext;
 
 public class Slider extends ActionButton {
@@ -34,7 +32,7 @@ public class Slider extends ActionButton {
 
   public Slider(int width, String buttonText, float value, float min, float max, float step,
       boolean integer) {
-    super(width, 12, buttonText);
+    super(width, 22, buttonText);
     this.min = min;
     this.max = max;
     this.step = step;
@@ -48,13 +46,15 @@ public class Slider extends ActionButton {
     if (!this.visible) {
       return 0;
     }
-    FontRenderer font = ExtendTheLow.AdvancedFont;
     mc.renderEngine.bindTexture(TEX_SLIDER_BUTTON);
 
+    this.hovered = RenderingContext.isHovering(this);
+
+    RenderingContext.push();
+    RenderingContext.translate(0, 10);
     RenderingContext ctx = RenderingContext.current;
     this.mouseDragged(mc, ctx.mouseX, ctx.mouseY);
 
-    this.hovered = RenderingContext.isHovering(this);
 
     GlStateManager.enableBlend();
     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -63,14 +63,13 @@ public class Slider extends ActionButton {
     GlStateManager.color(1.0f, 1.0f, 1.0f);
     int k = 4;
 
-
     // left edge
-    Gui.drawScaledCustomSizeModalRect(ctx.x, ctx.y + 2, 80F, 0F, 32, 64, k, this.height / 2, 256F, 64F);
+    Gui.drawScaledCustomSizeModalRect(ctx.x, ctx.y + 2, 80F, 0F, 32, 64, k, 6, 256F, 64F);
     Gui.drawScaledCustomSizeModalRect(ctx.x + k, ctx.y
-        + 2, 112F, 0F, 32, 64, this.width - 2 * k, this.height / 2, 256F, 64F);
+        + 2, 112F, 0F, 32, 64, this.width - 2 * k, 6, 256F, 64F);
     // right edge
     Gui.drawScaledCustomSizeModalRect(ctx.x + this.width - k, ctx.y
-        + 2, 144F, 0F, 32, 64, k, this.height / 2, 256F, 64F);
+        + 2, 144F, 0F, 32, 64, k, 6, 256F, 64F);
 
     // fg
     if (this.dragging) {
@@ -79,12 +78,24 @@ public class Slider extends ActionButton {
     Gui.drawScaledCustomSizeModalRect((int) (ctx.x
         + width * 0.9 * sliderValue), ctx.y, 0F, 0F, 64, 64, 10, 10, 256F, 64F);
 
+    RenderingContext.pop();
+
+    RenderingContext.push();
+    RenderingContext.translate(width / 2, 2);
+
     if (this.dragging || this.hovered) {
-      this.drawCenteredString(font, this.formatter.apply(this.getFloat()), ctx.x
-          + this.width / 2, ctx.y + 1, 0xffffff);
+      String s = this.formatter.apply(this.getFloat());
+      this.drawTrimedStringWithLeader(s, width, true);
     } else {
-      this.drawCenteredString(font, displayString, ctx.x + this.width / 2, ctx.y + 1, 0xffffff);
+      this.drawTrimedStringWithLeader(displayString, width, true);
     }
+
+    if (this.hovered && !this.dragging) {
+      this.renderTooltip(displayString, ctx.mouseX, ctx.mouseY);
+    }
+
+    RenderingContext.pop();
+
     return height;
   }
 
@@ -101,10 +112,12 @@ public class Slider extends ActionButton {
   @Override
   public void mousePressed(int button) {
     RenderingContext ctx = RenderingContext.current;
-    this.sliderValue = (float) (ctx.mouseX - (ctx.x)) / (float) (this.width);
-    this.roundByStep();
-    this.sliderValue = MathHelper.clamp_float(this.sliderValue, 0.0F, 1.0F);
-    this.dragging = true;
+    if (button == 0 && ctx.mouseY - ctx.y > 10) {
+      this.sliderValue = (float) (ctx.mouseX - (ctx.x)) / (float) (this.width);
+      this.roundByStep();
+      this.sliderValue = MathHelper.clamp_float(this.sliderValue, 0.0F, 1.0F);
+      this.dragging = true;
+    }
   }
 
   private void roundByStep() {

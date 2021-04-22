@@ -3,7 +3,10 @@ package onim.en.etl.util;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,9 +20,9 @@ import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
 import onim.en.etl.ui.custom.GuiFontChoose;
+import onim.en.etl.ui.parts.ActionButton;
 import onim.en.etl.ui.parts.Button;
 import onim.en.etl.ui.parts.EnumSwitchButton;
-import onim.en.etl.ui.parts.ActionButton;
 import onim.en.etl.ui.parts.Slider;
 import onim.en.etl.ui.parts.ToggleButton;
 
@@ -238,5 +241,29 @@ public class GuiUtil {
     GlStateManager.disableBlend();
     GlStateManager.enableAlpha();
     GlStateManager.enableTexture2D();
+  }
+
+  public static void drawRect(float w, float h, float texW, float texH) {
+    GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
+
+    GL11.glTexCoord2f(0, 0);
+    GL11.glVertex3f(-w / 2, -h / 2, 0F);
+
+    GL11.glTexCoord2f(0, texH);
+    GL11.glVertex3f(-w / 2, h / 2F, 0F);
+
+    GL11.glTexCoord2f(texW, 0);
+    GL11.glVertex3f(w / 2, -h / 2, 0F);
+
+    GL11.glTexCoord2f(texW, texH);
+    GL11.glVertex3f(w / 2, h / 2, 0F);
+
+    GL11.glEnd();
+  }
+
+  public static int drawCenteredString(String s, float x, float y, boolean shadow) {
+    Minecraft mc = Minecraft.getMinecraft();
+    FontRenderer font = mc.fontRendererObj;
+    return font.drawString(s, x - font.getStringWidth(s) / 2, y, 0xFFFFFF, shadow);
   }
 }
