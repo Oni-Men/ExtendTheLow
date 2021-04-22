@@ -31,7 +31,6 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.extension.ExtensionManager;
-import onim.en.etl.render.ManagerRenderer;
 import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
 import onim.en.etl.util.GuiUtil;
@@ -106,7 +105,6 @@ public class ExtendTheLow {
     Minecraft mc = Minecraft.getMinecraft();
     // mc.fontRendererObj = AdvancedFont;
     ingameGUI = new AdvancedIngameGUI(mc);
-    ManagerRenderer.replaceSkinMap(mc.getRenderManager());
   }
 
   @SubscribeEvent
