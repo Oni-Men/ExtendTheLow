@@ -13,6 +13,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.action.QuickActionExecutor;
 import onim.en.etl.extension.TheLowExtension;
@@ -44,6 +45,20 @@ public class QuickAction extends TheLowExtension {
 
   @Override
   public void onDisable() {}
+
+  @SubscribeEvent
+  public void onInput(KeyInputEvent event) {
+    Minecraft mc = Minecraft.getMinecraft();
+
+    if (mc.currentScreen == null) {
+
+      if (ExtendTheLow.keyQuickAction.isPressed()) {
+        mc.mouseHelper.ungrabMouseCursor();
+        mc.inGameHasFocus = false;
+      }
+    }
+
+  }
 
   @SubscribeEvent
   public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {

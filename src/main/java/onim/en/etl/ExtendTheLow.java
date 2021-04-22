@@ -185,10 +185,6 @@ public class ExtendTheLow {
         GuiUtil.openSettingGUI();
       }
 
-      if (keyQuickAction.isPressed()) {
-        mc.mouseHelper.ungrabMouseCursor();
-        mc.inGameHasFocus = false;
-      }
     }
 
   }
