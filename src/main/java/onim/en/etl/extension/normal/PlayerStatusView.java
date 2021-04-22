@@ -1,15 +1,19 @@
 package onim.en.etl.extension.normal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.annotation.PrefItem;
@@ -31,6 +35,10 @@ public class PlayerStatusView extends TheLowExtension {
   @PrefItem(id = "onim.en.etl.playerStatusView.showClanName", type = boolean.class)
   public boolean showClanName = false;
 
+  @PrefItem(id = "onim.en.etl.playerStatusView.scale", type = float.class, min = 0.1F, max = 1.5F, step = 0.05F,
+      format = "x%.2f")
+  public float scale = 1.0F;
+
   @Override
   public String id() {
     return "onim.en.etl.playerStatusView";
@@ -48,67 +56,101 @@ public class PlayerStatusView extends TheLowExtension {
   public void onDisable() {}
 
   @SubscribeEvent
-  public void onRenderPlayer(RenderPlayerEvent.Post event) {
+  public void onRenderPlayer(RenderLivingEvent.Specials.Pre<AbstractClientPlayer> event) {
     if (!TheLowUtil.isPlayingTheLow()) {
       return;
     }
+    if (event.entity instanceof EntityPlayer) {
+      PlayerStatus status = DataStorage.getStatusByUniqueId(event.entity.getUniqueID());
+      if (status == null) {
+        return;
+      }
 
-    RenderManager renderManager = event.renderer.getRenderManager();
-    this.renderStatusView(renderManager, event.entityPlayer, event.partialRenderTick);
+      event.setCanceled(true);
+      RenderManager renderManager = event.renderer.getRenderManager();
+
+      Vector3f vec3f = new Vector3f((float) event.x, (float) event.y, (float) event.z);
+      float a = Math.max(0.2F, this.alphaByAngle(vec3f, renderManager));
+
+      GlStateManager.pushMatrix();
+      GlStateManager.translate(event.x, event.y + event.entity.height, event.z);
+
+      GL11.glNormal3f(0F, 1F, 0F);
+      GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
+      GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
+      GlStateManager.scale(-0.0266667F, -0.0266667F, 0.0266667F);
+
+      GlStateManager.depthMask(false);
+      GlStateManager.disableDepth();
+      this.renderStatusView(renderManager, (EntityPlayer) event.entity, status, 0.4F);
+      GlStateManager.depthMask(true);
+      GlStateManager.enableDepth();
+      this.renderStatusView(renderManager, (EntityPlayer) event.entity, status, a);
+
+      GlStateManager.popMatrix();
+    }
   }
 
-  private void renderStatusView(RenderManager renderManager, EntityPlayer target, float partialTick) {
-    PlayerStatus status = DataStorage.getStatusByUniqueId(target.getUniqueID());
-
-    if (status == null) {
-      return;
-    }
-
-    double x = target.lastTickPosX + (target.posX - target.lastTickPosX) * partialTick;
-    double y = target.lastTickPosY + (target.posY - target.lastTickPosY) * partialTick;
-    double z = target.lastTickPosZ + (target.posZ - target.lastTickPosZ) * partialTick;
-
-    x -= renderManager.viewerPosX;
-    y -= renderManager.viewerPosY;
-    z -= renderManager.viewerPosZ;
-
-    Vector3f vec3f = new Vector3f((float) x, (float) y, (float) z);
-    float a = this.alphaByAngle(vec3f, renderManager);
-
+  private void renderStatusView(RenderManager renderManager, EntityPlayer target, PlayerStatus status, float a) {
     boolean detailed = a > 0.75;
 
     GlStateManager.disableLighting();
-    GlStateManager.enableTexture2D();
     GlStateManager.enableBlend();
     GlStateManager.disableAlpha();
     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
     GlStateManager.pushMatrix();
-    GlStateManager.translate(x, y + target.height, z);
-    GL11.glNormal3f(0F, 1F, 0F);
-    GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
-    GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
-    GlStateManager.scale(-0.0266667F, -0.0266667F, 0.0266667F);
+    GlStateManager.translate(0, -20, 0);
+    GlStateManager.scale(scale, scale, scale);
 
+    // HP BAR Start
+    float healthRatio = target.getHealth() / target.getMaxHealth();
+    int bgColor = ColorUtil.applyAlpha(0xFF303030, a);
 
-    int i = -40;
+    int barWidth = 40;
+    int barWidthRatio = (int) (barWidth * healthRatio);
+
+    GuiUtil.drawGradientRectHorizontal(barWidth
+        - (int) (2 * (barWidth - barWidthRatio)), -2, barWidth, 6, bgColor, bgColor);
+    GuiUtil
+      .drawGradientRectHorizontal(-barWidth, -2, (int) (2 * barWidthRatio) - barWidth, 6, ColorUtil
+        .applyAlpha(applyColorHealthBar(0xFF336633, healthRatio), a), ColorUtil
+          .applyAlpha(applyColorHealthBar(0xFF336699, healthRatio), a));
+    GL11.glPushAttrib(GL11.GL_DEPTH_BUFFER_BIT);
+    GlStateManager.pushMatrix();
+    GlStateManager.scale(0.5, 0.5, 0.5);
+    GlStateManager.disableDepth();
+    this.drawText(String.format("%.0f/%.0f", target.getHealth(), target.getMaxHealth()), 0, 0, a, true);
+    GL11.glPopAttrib();
+    GlStateManager.popMatrix();
+    // HP BAR End
+
+    // MCID and ClanName
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(-barWidth, -10, 0);
+    GlStateManager.scale(0.75, 0.75, 0.75);
+    int i = this.drawText(status.mcid, 0, 0, a, false);
+    GlStateManager.translate(i + 1, 0, 0);
+    GlStateManager.scale(0.75, 0.75, 0.75);
+    this.drawText(TheLowUtil.formatClanName(status.clanInfo), 0, 2, a, false);
+    GlStateManager.popMatrix();
+
+    // Reinc count and main level
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(-barWidth, 8, 0);
+    GlStateManager.scale(0.5, 0.5, 0.5);
+
+    List<String> details = new ArrayList<>();
     if (detailed || showReincCount) {
-      String text = I18n.format("onim.en.etl.playerStatusView.reincarnationCount", status.getReinCount());
-      this.drawText(text, 0, i, a);
-      i -= 10;
-
+      details.add(I18n.format("onim.en.etl.playerStatusView.reincarnationCount", status.getReinCount()));
     }
 
     if (detailed || showMainLevel) {
-      String text = I18n.format("onim.en.etl.playerStatusView.mainLevel", status.mainLevel);
-      this.drawText(text, 0, i, a);
-      i -= 10;
+      details.add(I18n.format("onim.en.etl.playerStatusView.mainLevel", status.mainLevel));
     }
+    this.drawText(String.join("/", details), 0, 0, a, false);
 
-    if ((detailed || showClanName) && status.clanInfo != null) {
-      String text = I18n.format("onim.en.etl.playerStatusView.clanInfo", status.clanInfo.clanName);
-      this.drawText(text, 0, i, a);
-    }
+    GlStateManager.popMatrix();
     GlStateManager.popMatrix();
 
     GlStateManager.enableDepth();
@@ -117,25 +159,34 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.enableLighting();
   }
 
-  private void drawText(String text, int x, int y, float a) {
+  private int drawText(String text, int x, int y, float a, boolean centered) {
     int i = ExtendTheLow.AdvancedFont.getStringWidth(text);
-
     if (a < 0.08) {
-      return;
+      return 0;
     }
-
-    GlStateManager.depthMask(false);
-    GlStateManager.disableDepth();
-    GuiUtil.drawGradientRectHorizontal(x - i / 2 - 2, y, x + i / 2 + 2, y + 8, 0x66668866, 0x66333366);
 
     GlStateManager.enableBlend();
     GlStateManager.disableAlpha();
     GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+    ExtendTheLow.AdvancedFont.drawString(text, x + (centered ? -i / 2 : 0), y, ColorUtil.applyAlpha(0x00FFFFFF, a));
 
-    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, ColorUtil.applyAlpha(0x00FFFFFF, a * 0.2F));
-    GlStateManager.enableDepth();
-    GlStateManager.depthMask(true);
-    ExtendTheLow.AdvancedFont.drawString(text, x - i / 2, y, ColorUtil.applyAlpha(0x00FFFFFF, a));
+    return i;
+  }
+
+  private int applyColorHealthBar(int color, float ratio) {
+    float red = ColorUtil.getRed(color);
+    float green = ColorUtil.getGreen(color);
+    float blue = ColorUtil.getBlue(color);
+
+    red = MathHelper.clamp_float(red + (0.75F - ratio), 0F, 1F);
+    green = green * (ratio - (green / 255F));
+    blue = blue * (ratio - (blue / 255F));
+
+    color = ColorUtil.applyBlue(color, blue);
+    color = ColorUtil.applyGreen(color, green);
+    color = ColorUtil.applyRed(color, red);
+
+    return ColorUtil.scale(color, 1.2F);
   }
 
   private float alphaByAngle(Vector3f loc, RenderManager renderManager) {

@@ -129,7 +129,7 @@ public class DungeonMarker extends TheLowExtension {
       if (level == 9999 && !this.displaySpecials) {
         continue;
       }
-      if (level < displayLevelLowest || level > displayLevelHighest) {
+      if (level != 9999 && (level < displayLevelLowest || level > displayLevelHighest)) {
         continue;
       }
       this.renderDungeonMarker(renderManager, dungeonInfo, maxDistance);
@@ -204,9 +204,10 @@ public class DungeonMarker extends TheLowExtension {
         if (adjustedDistance < 10) {
           AdvancedFontRenderer.bigMode = true;
         }
+        GlStateManager.scale(0.75f, 0.7, 0.75f);
         this.drawCenteredString(dungeonInfo.name, 0, -6, alpha);
-        GlStateManager.scale(0.7f, 0.7f, 0.7f);
-        this.drawCenteredString("Lv. " + dungeonInfo.difficulty, 0, 2, alpha);
+        GlStateManager.scale(0.75f, 0.7, 0.75f);
+        this.drawCenteredString("Lv. " + dungeonInfo.difficulty, 0, 4, alpha);
 
         if (alpha > 0.5F) {
           this.drawCenteredString(String.format("%.1fm", distance), 0, 14, (alpha - 0.5F) * 2F);
