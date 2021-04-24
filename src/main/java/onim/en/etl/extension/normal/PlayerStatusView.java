@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -76,8 +77,14 @@ public class PlayerStatusView extends TheLowExtension {
       GlStateManager.translate(event.x, event.y + event.entity.height, event.z);
 
       GL11.glNormal3f(0F, 1F, 0F);
-      GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
-      GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
+
+      Minecraft mc = Minecraft.getMinecraft();
+      if (mc.gameSettings.thirdPersonView == 2) {
+        GlStateManager.rotate(-renderManager.playerViewX, 1F, 0F, 0F);
+      } else {
+        GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
+      }
+
       GlStateManager.scale(-0.0266667F, -0.0266667F, 0.0266667F);
 
       GlStateManager.depthMask(false);

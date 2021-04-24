@@ -164,8 +164,14 @@ public class DungeonMarker extends TheLowExtension {
     GlStateManager.pushMatrix();
     GlStateManager.translate(x, y, z);
     GL11.glNormal3f(0F, 1F, 0F);
+
     GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
-    GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
+    Minecraft mc = Minecraft.getMinecraft();
+    if (mc.gameSettings.thirdPersonView == 2) {
+      GlStateManager.rotate(-renderManager.playerViewX, 1F, 0F, 0F);
+    } else {
+      GlStateManager.rotate(renderManager.playerViewX, 1F, 0F, 0F);
+    }
 
     double scaleByFOV = 0.3 + renderManager.options.fovSetting / 100F;
     double scale = (adjustedDistance * 0.1F + 1.0F) * 0.03 * scaleByFOV * configScale;
