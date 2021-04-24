@@ -277,4 +277,18 @@ public class GuiUtil {
     return font.drawString(s, x - font.getStringWidth(s) / 2, y, current == null ? -1 : current.color, shadow);
   }
 
+  public static void renderTooltip(String s, int x, int y) {
+    FontRenderer f = ExtendTheLow.AdvancedFont;
+
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(0, 0, 900);
+
+    int i = f.getStringWidth(s);
+    GuiUtil.drawGradientRectHorizontal(x - 2, y - 2, x + i + 6, y + 14, 0xEE669966, 0xEE336699);
+    GuiUtil.drawGradientRectHorizontal(x - 1, y - 1, x + i + 5, y + 13, 0xEE336699, 0xEE669999);
+
+    f.drawString(s, x + 2, y + 2, 0xFFFFFF);
+
+    GlStateManager.popMatrix();
+  }
 }

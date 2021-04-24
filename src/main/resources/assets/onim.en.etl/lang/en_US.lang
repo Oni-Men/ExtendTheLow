@@ -43,6 +43,10 @@ onim.en.etl.quickAction.commandQuest=Open Quest GUI
 onim.en.etl.quickAction.commandNoThrow=Execute /NoThrow
 onim.en.etl.quickAction.commandStats=View my stats
 
+onim.en.etl.improveFreeMarket=FreeMarket+
+onim.en.etl.improveFreeMarket.preventAccidentalPurchases=Prevent accidental purchases
+onim.en.etl.improveFreeMarket.clickAgain=Click it again within %s to Purchase.
+
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font
 onim.en.etl.changeFont=Change Font

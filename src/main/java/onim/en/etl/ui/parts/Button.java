@@ -5,6 +5,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import onim.en.etl.ui.RenderingContext;
+import onim.en.etl.util.GuiUtil;
 
 public class Button extends ActionButton {
 
@@ -55,7 +56,7 @@ public class Button extends ActionButton {
     this.drawTrimedStringWithLeader(displayString, (int) (width * 0.8), true);
 
     if (this.hovered && tooltipText != null) {
-      this.renderTooltip(tooltipText, ctx.mouseX, ctx.mouseY);
+      GuiUtil.renderTooltip(tooltipText, ctx.mouseX, ctx.mouseY);
     }
 
     RenderingContext.pop();

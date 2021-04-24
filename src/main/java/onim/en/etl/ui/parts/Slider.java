@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import onim.en.etl.ui.RenderingContext;
+import onim.en.etl.util.GuiUtil;
 
 public class Slider extends ActionButton {
 
@@ -91,7 +92,7 @@ public class Slider extends ActionButton {
     }
 
     if (this.hovered && !this.dragging) {
-      this.renderTooltip(displayString, ctx.mouseX, ctx.mouseY);
+      GuiUtil.renderTooltip(displayString, ctx.mouseX, ctx.mouseY);
     }
 
     RenderingContext.pop();
