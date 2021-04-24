@@ -28,7 +28,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.HandleAPI;
-import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.font.FontGenerateData;
@@ -162,12 +161,12 @@ public class ExtendTheLow {
     }
   }
 
-  @SubscribeEvent
-  public void onGetCharWidth(GetCharWidthEvent event) {
-    if (Prefs.get().betterFont) {
-      event.setWidth(AdvancedFont.getCharWidth(event.getChar()));
-    }
-  }
+  // @SubscribeEvent
+  // public void onGetCharWidth(GetCharWidthEvent event) {
+  // if (Prefs.get().betterFont) {
+  // event.setWidth(AdvancedFont.getCharWidth(event.getChar()));
+  // }
+  // }
 
   @SubscribeEvent
   public void onRenderCharAtPos(RenderCharAtPosEvent event) {

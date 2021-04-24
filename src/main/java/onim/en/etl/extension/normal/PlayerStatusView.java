@@ -77,7 +77,7 @@ public class PlayerStatusView extends TheLowExtension {
       GlStateManager.translate(event.x, event.y + event.entity.height, event.z);
 
       GL11.glNormal3f(0F, 1F, 0F);
-
+      GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
       Minecraft mc = Minecraft.getMinecraft();
       if (mc.gameSettings.thirdPersonView == 2) {
         GlStateManager.rotate(-renderManager.playerViewX, 1F, 0F, 0F);
