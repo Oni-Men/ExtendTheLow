@@ -10,9 +10,9 @@ import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
+import onim.en.etl.core.Bytecodes;
 import onim.en.etl.core.HookInjector;
 import onim.en.etl.core.ObfuscateType;
-import onim.en.etl.util.BytecodeUtil;
 
 /**
  * FontRender#renderStringAtPosにて太字描画をさせない
@@ -77,10 +77,10 @@ public class PreventRenderBold extends HookInjector {
     }
 
     MethodInsnNode hook = new MethodInsnNode(Opcodes.INVOKESTATIC, "onim/en/etl/Hooks", "getShadowOffsetMinus", "(F)F", false);
-    return (BytecodeUtil.injectAfterSequence(list, OPCODE_LIST_VANILLA, (location) -> {
+    return (Bytecodes.injectAfterSequence(list, OPCODE_LIST_VANILLA, (location) -> {
       list.insertBefore(location, hook);
       return true;
-    }) || BytecodeUtil.injectAfterSequence(list, OPCODE_LIST_OPTIFINE, (location) -> {
+    }) || Bytecodes.injectAfterSequence(list, OPCODE_LIST_OPTIFINE, (location) -> {
       list.insertBefore(location, hook);
       return true;
     }));

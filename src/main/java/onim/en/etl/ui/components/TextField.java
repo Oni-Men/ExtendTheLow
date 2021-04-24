@@ -1,4 +1,4 @@
-package onim.en.etl.ui.parts;
+package onim.en.etl.ui.components;
 
 import net.minecraft.client.gui.GuiTextField;
 import onim.en.etl.ExtendTheLow;

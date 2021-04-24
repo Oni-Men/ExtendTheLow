@@ -1,4 +1,4 @@
-package onim.en.etl.util.font;
+package onim.en.etl.font;
 
 import org.lwjgl.util.vector.Vector2f;
 

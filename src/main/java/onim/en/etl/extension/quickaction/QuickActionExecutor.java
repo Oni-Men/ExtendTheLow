@@ -1,4 +1,4 @@
-package onim.en.etl.qucikaction;
+package onim.en.etl.extension.quickaction;
 
 import net.minecraft.client.Minecraft;
 import onim.en.etl.ExtendTheLow;

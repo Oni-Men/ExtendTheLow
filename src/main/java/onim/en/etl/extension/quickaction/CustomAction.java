@@ -1,4 +1,4 @@
-package onim.en.etl.qucikaction;
+package onim.en.etl.extension.quickaction;
 
 public abstract class CustomAction {
 

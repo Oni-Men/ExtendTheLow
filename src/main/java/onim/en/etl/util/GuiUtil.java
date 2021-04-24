@@ -21,13 +21,13 @@ import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.GuiExtendTheLow;
 import onim.en.etl.ui.RenderingContext;
+import onim.en.etl.ui.components.ActionButton;
+import onim.en.etl.ui.components.Button;
+import onim.en.etl.ui.components.EnumSwitchButton;
+import onim.en.etl.ui.components.Slider;
+import onim.en.etl.ui.components.ToggleButton;
 import onim.en.etl.ui.custom.GuiFontChoose;
 import onim.en.etl.ui.custom.QuickActionSetting;
-import onim.en.etl.ui.parts.ActionButton;
-import onim.en.etl.ui.parts.Button;
-import onim.en.etl.ui.parts.EnumSwitchButton;
-import onim.en.etl.ui.parts.Slider;
-import onim.en.etl.ui.parts.ToggleButton;
 
 public class GuiUtil {
 

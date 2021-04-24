@@ -1,7 +1,7 @@
 package onim.en.etl.ui.custom;
 
 import onim.en.etl.ui.GuiExtendTheLow;
-import onim.en.etl.ui.parts.ListView;
+import onim.en.etl.ui.components.ListView;
 
 public class QuickActionSetting extends GuiExtendTheLow {
 

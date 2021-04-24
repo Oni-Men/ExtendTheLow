@@ -19,7 +19,6 @@ import com.google.gson.JsonSyntaxException;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.api.dto.PlayerStatus;
-import onim.en.etl.api.dto.PlayerStatusProvider;
 
 public class DataStorage {
 

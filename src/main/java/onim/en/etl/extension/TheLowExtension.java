@@ -1,6 +1,6 @@
 package onim.en.etl.extension;
 
-import onim.en.etl.ui.parts.ToggleButton;
+import onim.en.etl.ui.components.ToggleButton;
 
 public abstract class TheLowExtension {
 

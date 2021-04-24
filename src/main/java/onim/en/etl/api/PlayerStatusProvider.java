@@ -1,9 +1,11 @@
-package onim.en.etl.api.dto;
+package onim.en.etl.api;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 import com.google.common.collect.Maps;
+
+import onim.en.etl.api.dto.PlayerStatus;
 
 public class PlayerStatusProvider {
 

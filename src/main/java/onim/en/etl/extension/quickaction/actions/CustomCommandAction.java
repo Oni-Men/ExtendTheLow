@@ -1,6 +1,6 @@
-package onim.en.etl.qucikaction.actions;
+package onim.en.etl.extension.quickaction.actions;
 
-import onim.en.etl.qucikaction.CustomAction;
+import onim.en.etl.extension.quickaction.CustomAction;
 
 public class CustomCommandAction extends CustomAction {
 

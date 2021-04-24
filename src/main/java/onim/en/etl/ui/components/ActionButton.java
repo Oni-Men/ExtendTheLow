@@ -1,4 +1,4 @@
-package onim.en.etl.ui.parts;
+package onim.en.etl.ui.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;

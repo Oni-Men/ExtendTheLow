@@ -1,11 +1,11 @@
-package onim.en.etl.util;
+package onim.en.etl.core;
 
 import java.util.function.Function;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
-public class BytecodeUtil {
+public class Bytecodes {
 
   public static boolean injectAfterSequence(InsnList list, int[] sequence, Function<AbstractInsnNode, Boolean> injector) {
     for (int i = 0; i < list.size(); i++) {

@@ -1,4 +1,4 @@
-package onim.en.etl.qucikaction;
+package onim.en.etl.extension.quickaction;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

@@ -1,4 +1,4 @@
-package onim.en.etl.extension.normal;
+package onim.en.etl.extension.quickaction;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.extension.TheLowExtension;
-import onim.en.etl.qucikaction.QuickActionManager;
 import onim.en.etl.ui.RenderingContext;
 import onim.en.etl.util.ColorUtil;
 import onim.en.etl.util.Easing;

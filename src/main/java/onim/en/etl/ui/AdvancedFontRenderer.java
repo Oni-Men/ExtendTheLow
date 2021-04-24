@@ -20,10 +20,10 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import onim.en.etl.Prefs;
 import onim.en.etl.event.RenderCharAtPosEvent;
+import onim.en.etl.font.CharacterTextureData;
+import onim.en.etl.font.FontData;
+import onim.en.etl.font.FontTextureData;
 import onim.en.etl.util.FontUtil;
-import onim.en.etl.util.font.CharacterTextureData;
-import onim.en.etl.util.font.FontData;
-import onim.en.etl.util.font.FontTextureData;
 
 public class AdvancedFontRenderer extends FontRenderer implements IResourceManagerReloadListener {
 

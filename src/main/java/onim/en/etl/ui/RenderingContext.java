@@ -2,7 +2,7 @@ package onim.en.etl.ui;
 
 import java.util.Stack;
 
-import onim.en.etl.ui.parts.ComponentBase;
+import onim.en.etl.ui.components.ComponentBase;
 
 public class RenderingContext implements Cloneable {
 

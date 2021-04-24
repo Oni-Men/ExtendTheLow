@@ -1,4 +1,4 @@
-package onim.en.etl.ui.parts;
+package onim.en.etl.ui.components;
 
 import java.util.function.Consumer;
 

@@ -1,8 +1,8 @@
-package onim.en.etl.qucikaction.actions;
+package onim.en.etl.extension.quickaction.actions;
 
 import onim.en.etl.extension.ExtensionManager;
 import onim.en.etl.extension.TheLowExtension;
-import onim.en.etl.qucikaction.CustomAction;
+import onim.en.etl.extension.quickaction.CustomAction;
 
 public class ToggleDungeonMarker extends CustomAction {
 

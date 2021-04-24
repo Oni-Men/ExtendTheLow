@@ -31,13 +31,13 @@ import onim.en.etl.api.HandleAPI;
 import onim.en.etl.event.GetCharWidthEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.extension.ExtensionManager;
+import onim.en.etl.font.FontGenerateData;
+import onim.en.etl.font.FontGenerateWorker;
 import onim.en.etl.ui.AdvancedFontRenderer;
 import onim.en.etl.ui.AdvancedIngameGUI;
 import onim.en.etl.util.GuiUtil;
 import onim.en.etl.util.TickTaskExecutor;
 import onim.en.etl.util.TickTaskExecutor.TickTask;
-import onim.en.etl.util.font.FontGenerateData;
-import onim.en.etl.util.font.FontGenerateWorker;
 
 @Mod(modid = ExtendTheLow.MODID, version = ExtendTheLow.VERSION)
 public class ExtendTheLow {
