@@ -36,6 +36,7 @@ public abstract class ActionButton extends ComponentBase {
     }
   }
 
+  @Override
   public void playPressSound(SoundHandler soundHandlerIn) {
     soundHandlerIn.playSound(PositionedSoundRecord.create(location, 1.0F));
   }

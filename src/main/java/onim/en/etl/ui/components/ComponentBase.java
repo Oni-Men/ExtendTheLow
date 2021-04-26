@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.google.common.collect.Maps;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import onim.en.etl.ExtendTheLow;
@@ -61,7 +62,9 @@ public abstract class ComponentBase extends Gui {
   public void mouseDragged() {
 
   }
-  
+
+  public void playPressSound(SoundHandler soundHandlerIn) {}
+
   public int drawTrimedStringWithLeader(String s, int width, boolean centered) {
     return this.drawTrimedStringWithLeader(s, width, centered, false);
   }

@@ -99,6 +99,7 @@ public class GuiExtendTheLow extends GuiScreen {
         continue;
       RenderingContext.translate(0, button.paddingTop);
       if (RenderingContext.isHovering(button)) {
+        button.playPressSound(this.mc.getSoundHandler());
         button.mousePressed(mouseButton);
       }
 

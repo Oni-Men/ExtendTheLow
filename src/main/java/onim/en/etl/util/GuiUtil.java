@@ -26,7 +26,6 @@ import onim.en.etl.ui.components.Button;
 import onim.en.etl.ui.components.EnumSwitchButton;
 import onim.en.etl.ui.components.Slider;
 import onim.en.etl.ui.components.ToggleButton;
-import onim.en.etl.ui.custom.GuiFontChoose;
 import onim.en.etl.ui.custom.QuickActionSetting;
 
 public class GuiUtil {
@@ -217,8 +216,8 @@ public class GuiUtil {
   }
 
   public static void openFontSettingsGUI(GuiScreen prev) {
-    GuiFontChoose gui = new GuiFontChoose(prev);
-    Minecraft.getMinecraft().displayGuiScreen(gui);
+    // GuiFontChoose gui = new GuiFontChoose(prev);
+    // Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 
   public static void drawGradientRectHorizontal(int left, int top, int right, int bottom, int startColor, int endColor) {

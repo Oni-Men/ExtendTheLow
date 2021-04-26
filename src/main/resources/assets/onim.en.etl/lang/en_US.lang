@@ -45,6 +45,7 @@ onim.en.etl.quickAction.commandStats=View my stats
 
 onim.en.etl.improveFreeMarket=FreeMarket+
 onim.en.etl.improveFreeMarket.preventAccidentalPurchases=Prevent accidental purchases
+onim.en.etl.improveFreeMarket.improveBackgroundRender=Improve render background
 onim.en.etl.improveFreeMarket.clickAgain=Click it again within %s to Purchase.
 
 onim.en.etl.generalSettings=General Settings

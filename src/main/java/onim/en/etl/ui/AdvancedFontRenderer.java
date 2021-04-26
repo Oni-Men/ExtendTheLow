@@ -181,10 +181,10 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     if (!Prefs.get().betterFont) {
       return super.getCharWidth(ch);
     }
-    return (int) (this.getCharWidthFloat_NonOptifine(ch));
+    return (int) (this.getCharWidthFloat(ch));
   }
 
-  public float getCharWidthFloat_NonOptifine(char ch) {
+  public float getCharWidthFloat(char ch) {
     switch (ch) {
       case 160:
         return 4F;
@@ -219,8 +219,36 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
     if (text == null) {
       return 0;
     } else {
-      double sum = text.chars().mapToDouble(i -> this.getCharWidth((char) i)).sum();
-      return (int) sum;
+      float f = 0.0F;
+      boolean flag = false;
+
+      for (int i = 0; i < text.length(); ++i) {
+        char c0 = text.charAt(i);
+        float f1 = this.getCharWidthFloat(c0);
+
+        if (f1 < 0.0F && i < text.length() - 1) {
+          ++i;
+          c0 = text.charAt(i);
+
+          if (c0 != 108 && c0 != 76) {
+            if (c0 == 114 || c0 == 82) {
+              flag = false;
+            }
+          } else {
+            flag = true;
+          }
+
+          f1 = 0.0F;
+        }
+
+        f += f1;
+
+        if (flag && f1 > 0.0F) {
+          ++f;
+        }
+      }
+
+      return (int) f;
     }
   }
 

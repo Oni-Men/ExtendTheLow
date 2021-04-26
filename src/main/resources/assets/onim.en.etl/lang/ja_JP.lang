@@ -45,6 +45,7 @@ onim.en.etl.quickAction.commandStats=自分の情報を見る
 
 onim.en.etl.improveFreeMarket=FreeMarket+
 onim.en.etl.improveFreeMarket.preventAccidentalPurchases=誤購入を防止
+onim.en.etl.improveFreeMarket.improveBackgroundRender=背景の描画を改善
 onim.en.etl.improveFreeMarket.clickAgain=%s秒以内に再度クリックすることで購入できます。
 
 onim.en.etl.generalSettings=一般設定
