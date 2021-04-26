@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.ui.components.Button;
 import onim.en.etl.ui.components.ComponentBase;
+import onim.en.etl.ui.components.DropdownMenu;
 import onim.en.etl.util.ColorUtil;
 import onim.en.etl.util.Easing;
 import onim.en.etl.util.GuiUtil;
@@ -26,6 +27,8 @@ public class GuiExtendTheLow extends GuiScreen {
   private Button done = null;
 
   private long frames = 0;
+
+  private DropdownMenu dropdownMenu = null;
 
   public GuiExtendTheLow(String title) {
     this.title = title;
@@ -85,7 +88,20 @@ public class GuiExtendTheLow extends GuiScreen {
     }
 
     RenderingContext.pop();
+
+    if (dropdownMenu != null) {
+      dropdownMenu.draw(mc);
+    }
+
     GlStateManager.popMatrix();
+  }
+
+  public void openDropdownMenu(DropdownMenu menu) {
+    this.dropdownMenu = menu;
+  }
+
+  public void closeDropdownMenu() {
+    this.dropdownMenu = null;
   }
 
   @Override
@@ -105,6 +121,10 @@ public class GuiExtendTheLow extends GuiScreen {
 
       RenderingContext.translate(0, button.height + button.paddingBottom);
     }
+    
+    if (this.dropdownMenu != null) {
+      this.dropdownMenu.mousePressed(mouseButton);
+    }
   }
 
   @Override
@@ -119,6 +139,10 @@ public class GuiExtendTheLow extends GuiScreen {
       RenderingContext.translate(0, button.paddingTop);
       button.mouseReleased(state, RenderingContext.isHovering(button));
       RenderingContext.translate(0, button.height + button.paddingBottom);
+    }
+
+    if (this.dropdownMenu != null) {
+      this.dropdownMenu.mouseReleased(state, RenderingContext.isHovering(dropdownMenu));
     }
   }
 

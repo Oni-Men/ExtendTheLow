@@ -188,7 +188,7 @@ public class DungeonMarker extends TheLowExtension {
     float alpha = MathHelper.clamp_float(alphaByAngle + alphaByDistance, 0F, 1F);
 
     FontRenderer font = renderManager.getFontRenderer();
-    float w = (float) (font.getStringWidth(dungeonInfo.name) * 0.75);
+    float w = (float) (font.getStringWidth(dungeonInfo.name) * 0.55);
 
     if (alpha > 0.1F) {
       Color c = dungeonInfo.getColor();

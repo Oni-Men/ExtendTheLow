@@ -1,5 +1,10 @@
 package onim.en.etl.extension.quickaction;
 
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import net.minecraft.client.Minecraft;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.api.HandleAPI;
@@ -8,6 +13,20 @@ import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.util.GuiUtil;
 
 public class QuickActionExecutor {
+
+  private static Map<String, Runnable> quickActions = Maps.newHashMap();
+  static {
+    quickActions.put("onim.en.etl.quickAction.toggleDungeonMarker", QuickActionExecutor::toggleDungoneMarker);
+    quickActions.put("onim.en.etl.quickAction.openSettingsGUI", QuickActionExecutor::openSettingsGUI);
+    quickActions.put("onim.en.etl.quickAction.requestApiDatas", QuickActionExecutor::requestApiDatas);
+    quickActions.put("onim.en.etl.quickAction.commandQuest", QuickActionExecutor::openQuestGUI);
+    quickActions.put("onim.en.etl.quickAction.commandNoThrow", QuickActionExecutor::executeNoThrow);
+    quickActions.put("onim.en.etl.quickAction.commandStats", QuickActionExecutor::executeStatsCommand);
+  }
+
+  public static Map<String, Runnable> getBuiltinActions() {
+    return ImmutableMap.copyOf(quickActions);
+  }
 
   public static void toggleDungoneMarker() {
     TheLowExtension extension = ExtensionManager.getExtension("onim.en.etl.dungeonMarker");

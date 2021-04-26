@@ -30,6 +30,7 @@ import onim.en.etl.api.DataStorage;
 import onim.en.etl.api.HandleAPI;
 import onim.en.etl.event.RenderCharAtPosEvent;
 import onim.en.etl.extension.ExtensionManager;
+import onim.en.etl.extension.quickaction.QuickActionManager;
 import onim.en.etl.font.FontGenerateData;
 import onim.en.etl.font.FontGenerateWorker;
 import onim.en.etl.ui.AdvancedFontRenderer;
@@ -86,6 +87,7 @@ public class ExtendTheLow {
 
     Prefs.load();
     DataStorage.load();
+    QuickActionManager.load();
 
     ExtensionManager.registerAll();
     ExtensionManager.loadModuleSettings();

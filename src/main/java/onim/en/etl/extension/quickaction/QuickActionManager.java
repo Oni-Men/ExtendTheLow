@@ -1,14 +1,13 @@
 package onim.en.etl.extension.quickaction;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,26 +15,21 @@ import onim.en.etl.ExtendTheLow;
 
 public class QuickActionManager {
 
-  private static Map<String, Runnable> quickActions = Maps.newHashMap();
+  private static final List<String> quickActions = Lists.newArrayList();
   static {
-    quickActions.put("onim.en.etl.quickAction.toggleDungeonMarker", QuickActionExecutor::toggleDungoneMarker);
-    quickActions.put("onim.en.etl.quickAction.openSettingsGUI", QuickActionExecutor::openSettingsGUI);
-    quickActions.put("onim.en.etl.quickAction.requestApiDatas", QuickActionExecutor::requestApiDatas);
-    quickActions.put("onim.en.etl.quickAction.commandQuest", QuickActionExecutor::openQuestGUI);
-    quickActions.put("onim.en.etl.quickAction.commandNoThrow", QuickActionExecutor::executeNoThrow);
-    quickActions.put("onim.en.etl.quickAction.commandStats", QuickActionExecutor::executeStatsCommand);
+    quickActions.addAll(QuickActionExecutor.getBuiltinActions().keySet());
   }
 
   public static void register(String actionId, Runnable action) {
-    quickActions.put(actionId, action);
+    quickActions.add(actionId);
   }
 
   public static String[] getActionIds() {
-    return quickActions.keySet().toArray(new String[quickActions.size()]);
+    return quickActions.toArray(new String[quickActions.size()]);
   }
 
   public static void execute(String actionId) {
-    Runnable action = quickActions.get(actionId);
+    Runnable action = QuickActionExecutor.getBuiltinActions().get(actionId);
     if (action != null) {
       action.run();
     }
@@ -48,13 +42,15 @@ public class QuickActionManager {
     try {
       if (Files.exists(path)) {
         json = Files.lines(path, StandardCharsets.UTF_8).collect(Collectors.joining("\n"));
-        quickActions = gson.fromJson(json, new TypeToken<Map<String, Runnable>>() {}.getType());
+        quickActions.clear();
+        quickActions.addAll(gson.fromJson(json, new TypeToken<List<String>>() {}.getType()));
       } else {
-        quickActions = Maps.newHashMap();
+        reset();
         return;
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
+      reset();
       return;
     }
   }
@@ -65,11 +61,16 @@ public class QuickActionManager {
       Gson gson = new Gson();
       try {
         Files.write(path, Arrays.asList(gson.toJson(quickActions).split("\n")), StandardCharsets.UTF_8);
-      } catch (IOException e) {
+      } catch (Exception e) {
         e.printStackTrace();
         return;
       }
     }).start();
+  }
+
+  public static void reset() {
+    quickActions.clear();
+    quickActions.addAll(QuickActionExecutor.getBuiltinActions().keySet());
   }
 
 }
