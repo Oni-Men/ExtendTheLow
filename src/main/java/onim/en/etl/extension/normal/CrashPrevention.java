@@ -3,7 +3,7 @@ package onim.en.etl.extension.normal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.custom.GuiEquipMagicOre;
@@ -31,7 +31,7 @@ public class CrashPrevention extends TheLowExtension {
   }
 
   @SubscribeEvent
-  public void onInitGui(InitGuiEvent.Pre event) {
+  public void onInitGui(GuiOpenEvent event) {
     if (event.gui instanceof GuiEquipMagicOre) {
       return;
     }
@@ -51,7 +51,7 @@ public class CrashPrevention extends TheLowExtension {
     GuiEquipMagicOre equipMagicOre =
         new GuiEquipMagicOre(mc.thePlayer.inventory, gui.getMerchant(), mc.theWorld);
 
-    mc.displayGuiScreen(equipMagicOre);
+    event.gui = equipMagicOre;
   }
 
 }

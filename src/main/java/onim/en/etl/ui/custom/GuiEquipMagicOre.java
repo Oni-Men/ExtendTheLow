@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.world.World;
+import onim.en.etl.util.TheLowUtil;
 
 public class GuiEquipMagicOre extends GuiMerchant {
 
@@ -11,6 +12,15 @@ public class GuiEquipMagicOre extends GuiMerchant {
     super(inventoryPlayer, merchant, worldIn);
   }
 
-  public void updateScreen() {}
-
+  @Override
+  public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    try {
+      super.drawScreen(mouseX, mouseY, partialTicks);
+    } catch (IndexOutOfBoundsException e) {
+      if (TheLowUtil.isPlayingTheLow()) {
+        return;
+      }
+      e.printStackTrace();
+    }
+  }
 }
