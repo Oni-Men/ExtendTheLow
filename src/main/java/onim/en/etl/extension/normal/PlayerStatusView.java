@@ -11,7 +11,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -61,8 +63,11 @@ public class PlayerStatusView extends TheLowExtension {
     if (!TheLowUtil.isPlayingTheLow()) {
       return;
     }
+
+    EntityLivingBase entity = event.entity;
+
     if (event.entity instanceof EntityPlayer) {
-      PlayerStatus status = DataStorage.getStatusByUniqueId(event.entity.getUniqueID());
+      PlayerStatus status = DataStorage.getStatusByUniqueId(entity.getUniqueID());
       if (status == null) {
         return;
       }
@@ -70,11 +75,22 @@ public class PlayerStatusView extends TheLowExtension {
       event.setCanceled(true);
       RenderManager renderManager = event.renderer.getRenderManager();
 
+      double distanceSq = entity.getDistanceSqToEntity(renderManager.livingPlayer);
+      double range = entity.isSneaking() ? RendererLivingEntity.NAME_TAG_RANGE_SNEAK
+          : RendererLivingEntity.NAME_TAG_RANGE;
+
+      if (distanceSq > range * range) {
+        return;
+      }
+
       Vector3f vec3f = new Vector3f((float) event.x, (float) event.y, (float) event.z);
       float a = Math.max(0.2F, this.alphaByAngle(vec3f, renderManager));
+      if (entity.isSneaking()) {
+        a *= 0.75F;
+      }
 
       GlStateManager.pushMatrix();
-      GlStateManager.translate(event.x, event.y + event.entity.height, event.z);
+      GlStateManager.translate(event.x, event.y + entity.height, event.z);
 
       GL11.glNormal3f(0F, 1F, 0F);
       GlStateManager.rotate(-renderManager.playerViewY, 0F, 1F, 0F);
@@ -87,12 +103,14 @@ public class PlayerStatusView extends TheLowExtension {
 
       GlStateManager.scale(-0.0266667F, -0.0266667F, 0.0266667F);
 
-      GlStateManager.depthMask(false);
-      GlStateManager.disableDepth();
-      this.renderStatusView(renderManager, (EntityPlayer) event.entity, status, 0.4F);
+      if (!entity.isSneaking()) {
+        GlStateManager.depthMask(false);
+        GlStateManager.disableDepth();
+        this.renderStatusView(renderManager, (EntityPlayer) entity, status, 0.4F);
+      }
       GlStateManager.depthMask(true);
       GlStateManager.enableDepth();
-      this.renderStatusView(renderManager, (EntityPlayer) event.entity, status, a);
+      this.renderStatusView(renderManager, (EntityPlayer) entity, status, a);
 
       GlStateManager.popMatrix();
     }
@@ -101,10 +119,10 @@ public class PlayerStatusView extends TheLowExtension {
   private void renderStatusView(RenderManager renderManager, EntityPlayer target, PlayerStatus status, float a) {
     boolean detailed = a > 0.75;
 
-    GlStateManager.disableLighting();
     GlStateManager.enableBlend();
-    GlStateManager.disableAlpha();
-    GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+    GlStateManager.disableLighting();
+    GlStateManager.disableTexture2D();
+    GlStateManager.tryBlendFuncSeparate(770, 771, 0, 1);
 
     GlStateManager.pushMatrix();
     GlStateManager.translate(0, -30, 0);
@@ -125,8 +143,10 @@ public class PlayerStatusView extends TheLowExtension {
           .applyAlpha(applyColorHealthBar(0xFF336699, healthRatio), a));
     GL11.glPushAttrib(GL11.GL_DEPTH_BUFFER_BIT);
     GlStateManager.pushMatrix();
+    GlStateManager.translate(0, 0, -0.01);
     GlStateManager.scale(0.75, 0.75, 0.75);
-    GlStateManager.disableDepth();
+
+    // GlStateManager.disableDepth();
     this.drawText(String.format("%.0f/%.0f", target.getHealth(), target.getMaxHealth()), 0, -1, a, true);
     GL11.glPopAttrib();
     GlStateManager.popMatrix();
