@@ -100,7 +100,6 @@ public class AdvancedIngameGUI extends GuiIngameForge {
   @Override
   protected void renderScoreboard(ScoreObjective scoreObjective, ScaledResolution scaledResolution) {
     if (TheLowUtil.isPlayingTheLow() && Prefs.get().customTheLowStatus) {
-      TheLowUtil.applyPlayerStatus(scoreObjective);
       this.renderTheLowStatus(scaledResolution);
       return;
     }
