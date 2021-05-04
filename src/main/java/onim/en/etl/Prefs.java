@@ -57,4 +57,6 @@ public class Prefs {
   public boolean customTheLowStatus = true;
 
   public boolean invertTheLowStatus = false;
+
+  public boolean debugMode = true;
 }

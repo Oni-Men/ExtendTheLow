@@ -1,6 +1,8 @@
 package onim.en.etl.util;
 
 import java.lang.reflect.Field;
+import java.nio.file.NoSuchFileException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -146,5 +148,27 @@ public class JavaUtil {
     builder.append(text);
 
     return builder.substring(builder.length() - i, builder.length());
+  }
+
+  public static boolean lengthCheck(Collection<?> c, int i) {
+    return (i >= 0 && i < c.size());
+  }
+
+  public static boolean executeIOProcess(ExceptionThrows f) {
+    try {
+      f.execute();
+    } catch (NoSuchFileException e) {
+      System.err.println(e.getMessage());
+      return false;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+
+  public interface ExceptionThrows {
+
+    public void execute() throws Exception;
   }
 }

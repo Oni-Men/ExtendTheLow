@@ -19,6 +19,7 @@ import com.google.gson.JsonSyntaxException;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.api.dto.PlayerStatus;
+import onim.en.etl.util.JavaUtil;
 
 public class DataStorage {
 
@@ -116,12 +117,8 @@ public class DataStorage {
     playerStatusProvider.clear();
     dungeons.clear();
 
-    try {
-      Files.delete(statusesPath);
-      Files.delete(dungeonsPath);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    JavaUtil.executeIOProcess(() -> Files.delete(statusesPath));
+    JavaUtil.executeIOProcess(() -> Files.delete(dungeonsPath));
   }
 
 }

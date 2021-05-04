@@ -1,39 +1,18 @@
 package onim.en.etl.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.EnumChatFormatting;
+import onim.en.etl.Prefs;
 import onim.en.etl.api.dto.PlayerStatus;
 import onim.en.etl.api.dto.PlayerStatus.ClanInfo;
 
 public class TheLowUtil {
 
   private static final String THELOW_SCOREBOARD_TITLE = EnumChatFormatting.AQUA + "===== The Low =====";
-
-  private static final Pattern levelPattern = Pattern.compile("(?<level>\\d+)レベル");
-  private static final Pattern galionPattern = Pattern.compile("(?<galion>\\d+) G");
-
-  private static int getLevel(String levelString) {
-    Matcher matcher = levelPattern.matcher(levelString);
-    if (matcher.matches()) {
-      return JavaUtil.parseInt(matcher.group("level"), 0);
-    }
-    return 0;
-  }
-
-  private static int getGalion(String galionString) {
-    Matcher matcher = galionPattern.matcher(galionString);
-    if (matcher.matches()) {
-      return JavaUtil.parseInt(matcher.group("galion"), 0);
-    }
-    return 0;
-  }
 
   public static boolean isPlayingTheLow() {
     Minecraft minecraft = Minecraft.getMinecraft();
@@ -43,9 +22,11 @@ public class TheLowUtil {
       return false;
     }
 
-    // if (!currentServerData.serverIP.equalsIgnoreCase("mc.eximradar.jp")) {
-    // return false;
-    // }
+    if (!Prefs.get().debugMode) {
+      if (!currentServerData.serverIP.equalsIgnoreCase("mc.eximradar.jp")) {
+        return false;
+      }
+    }
 
     WorldClient world = minecraft.theWorld;
 
