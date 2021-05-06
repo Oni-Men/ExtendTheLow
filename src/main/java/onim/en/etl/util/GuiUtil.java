@@ -170,13 +170,21 @@ public class GuiUtil {
     return button;
   }
 
+  public static Button getResetSettingsButton() {
+    Button button = new Button(100, "onim.en.etl.resetSettings");
+    button.setOnAction(() -> {
+      Prefs.reset();
+      ExtensionManager.resetModuleSettings();
+    });
+    return button;
+  }
+
   public static void openGeneralSettingsGUI(GuiScreen prevScreen) {
     GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.generalSettings", prevScreen);
     gui.setInitializer(buttonList -> {
       buttonList.add(new ToggleButton("onim.en.etl.advancedFont", Prefs.get().betterFont, b -> {
         Prefs.get().betterFont = b;
       }));
-      // buttonList.add(getFontSettingButton(gui));
       buttonList
         .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> {
           Prefs.get().customTheLowStatus = b;
@@ -185,6 +193,7 @@ public class GuiUtil {
         Prefs.get().invertTheLowStatus = b;
       }));
       buttonList.add(getClearCacheButton());
+      buttonList.add(getResetSettingsButton());
     });
 
     gui.setOnClose(() -> Prefs.save());

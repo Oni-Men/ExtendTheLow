@@ -3,6 +3,7 @@ onim.en.etl.openPrefs=Open ExtendTheLow Settings GUI
 
 onim.en.etl.toggleEnabled=On/Off
 onim.en.etl.clearCache=Clear caches
+onim.en.etl.resetSettings=Reset settings
 
 onim.en.etl.settings=ExtendTheLow Settings
 onim.en.etl.category.util=Utilities

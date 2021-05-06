@@ -44,7 +44,22 @@ public class Prefs {
       Path path = ExtendTheLow.configPath.resolve("general.json");
       Gson gson = new Gson();
       try {
-        Files.write(path, Arrays.asList(gson.toJson(instance).split("\n")), StandardCharsets.UTF_8);
+        Files.write(path, Arrays.asList(gson.toJson(get()).split("\n")), StandardCharsets.UTF_8);
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
+    }).start();
+  }
+
+  public static void reset() {
+    instance = null;
+
+    new Thread(() -> {
+      Path path = ExtendTheLow.configPath.resolve("general.json");
+      try {
+        if (Files.exists(path))
+          Files.delete(path);
       } catch (IOException e) {
         e.printStackTrace();
         return;
@@ -59,4 +74,5 @@ public class Prefs {
   public boolean invertTheLowStatus = false;
 
   public boolean debugMode = true;
+
 }

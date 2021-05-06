@@ -23,6 +23,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.annotation.PrefItem;
@@ -49,6 +50,12 @@ public class ExtensionManager {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static void unregisterAll() {
+    disableAll();
+    idToExtension.clear();
+    extensionsByCategory.clear();
   }
 
   public static void register(Class<?> target) {
@@ -167,6 +174,20 @@ public class ExtensionManager {
         continue;
       }
     }
+  }
+
+  public static void resetModuleSettings() {
+    unregisterAll();
+    registerAll();
+
+    for (Entry<String, TheLowExtension> entry : idToExtension.entrySet()) {
+      try {
+        Files.delete(ExtendTheLow.configPath.resolve(entry.getKey() + ".json"));
+      } catch (Exception e) {
+        continue;
+      }
+    }
+    Minecraft.getMinecraft().displayGuiScreen(null);
   }
 
   /**
