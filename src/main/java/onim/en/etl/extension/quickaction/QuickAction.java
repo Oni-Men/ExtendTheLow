@@ -74,7 +74,7 @@ public class QuickAction extends TheLowExtension {
         mc.setIngameFocus();
         displayed = false;
 
-        QuickActionManager.execute(actionId);
+        QuickActionExecutor.execute(actionId);
       }
     }
     this.frames = 0;
@@ -155,9 +155,10 @@ public class QuickAction extends TheLowExtension {
     GlStateManager.popMatrix();
 
     if (ratio > 0.08F) {
-      String s = this.actionId != null ? this.actionId : I18n.format(this.id());
+      String s = this.actionId != null ? this.actionId : this.id();
+      s = I18n.format(s).replaceAll(System.lineSeparator(), " ");
       RenderingContext.color(ColorUtil.applyAlpha(0xFFFFFFFF, ratio));
-      GuiUtil.drawCenteredString(I18n.format(s), width / 2, height / 2 - 104, true);
+      GuiUtil.drawCenteredString(s, width / 2, height / 2 - 104, true);
     }
   }
 

@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import onim.en.etl.ExtendTheLow;
+import onim.en.etl.util.JavaUtil;
 
 public class QuickActionManager {
 
@@ -20,19 +21,28 @@ public class QuickActionManager {
     quickActions.addAll(QuickActionExecutor.getBuiltinActions().keySet());
   }
 
-  public static void register(String actionId, Runnable action) {
+  public static void add(String actionId) {
     quickActions.add(actionId);
+  }
+
+  public static void set(int i, String actionId) {
+    if (JavaUtil.lengthCheck(quickActions, i)) {
+      quickActions.set(i, actionId);
+    }
+  }
+
+  public static void remove(int i) {
+    if (JavaUtil.lengthCheck(quickActions, i)) {
+      quickActions.remove(i);
+    }
+  }
+
+  public static boolean remove(String actionId) {
+    return quickActions.remove(actionId);
   }
 
   public static String[] getActionIds() {
     return quickActions.toArray(new String[quickActions.size()]);
-  }
-
-  public static void execute(String actionId) {
-    Runnable action = QuickActionExecutor.getBuiltinActions().get(actionId);
-    if (action != null) {
-      action.run();
-    }
   }
 
   public static void load() {

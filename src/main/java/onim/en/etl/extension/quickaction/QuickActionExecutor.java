@@ -22,6 +22,7 @@ public class QuickActionExecutor {
     quickActions.put("onim.en.etl.quickAction.commandQuest", QuickActionExecutor::openQuestGUI);
     quickActions.put("onim.en.etl.quickAction.commandNoThrow", QuickActionExecutor::executeNoThrow);
     quickActions.put("onim.en.etl.quickAction.commandStats", QuickActionExecutor::executeStatsCommand);
+    // quickActions.put("onim.en.etl.quickAction.customCommand", new CustomCommandAction(""));
   }
 
   public static Map<String, Runnable> getBuiltinActions() {
@@ -58,5 +59,12 @@ public class QuickActionExecutor {
 
   public static void executeNoThrow() {
     ExtendTheLow.executeCommand("/noThrow");
+  }
+
+  public static void execute(String actionId) {
+    Runnable action = getBuiltinActions().get(actionId);
+    if (action != null) {
+      action.run();
+    }
   }
 }
