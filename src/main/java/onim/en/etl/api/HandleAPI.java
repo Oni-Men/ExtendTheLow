@@ -39,6 +39,7 @@ public class HandleAPI {
   }
 
   public static void startApiUpdateRoutine() {
+    // 再起動などで一斉にログインした際の負荷軽減の為にランダムにディレイをかける
     long randomDelay = new Random().nextInt(100) * 20;
     TickTaskExecutor.addTask(() -> {
       Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
@@ -71,7 +72,7 @@ public class HandleAPI {
     });
   }
 
-  public static boolean process(ClientChatReceivedEvent event) {
+  public static boolean processChat(ClientChatReceivedEvent event) {
     String message = event.message.getUnformattedText();
 
     if (!message.startsWith("$api")) {

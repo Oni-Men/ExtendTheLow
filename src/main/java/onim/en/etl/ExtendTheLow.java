@@ -3,7 +3,6 @@ package onim.en.etl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
@@ -42,7 +41,7 @@ import onim.en.etl.util.TickTaskExecutor.TickTask;
 @Mod(modid = ExtendTheLow.MODID, version = ExtendTheLow.VERSION)
 public class ExtendTheLow {
   public static final String MODID = "onim.en.etl";
-  public static final String VERSION = "1.0";
+  public static final String VERSION = "1.0.2";
 
   private static ExtendTheLow instance = null;
   private static AdvancedIngameGUI ingameGUI = null;
@@ -139,19 +138,10 @@ public class ExtendTheLow {
 
   @SubscribeEvent
   public void onClientChatReceived(ClientChatReceivedEvent event) {
-    event.setCanceled(HandleAPI.process(event));
+    event.setCanceled(HandleAPI.processChat(event));
 
     if (event.message.getFormattedText().startsWith(HandleAPI.PLAYER_DATA_MSG)) {
-      // 再起動などで一斉にログインした際の負荷軽減の為にランダムにディレイをかける
-      long randomDelay = new Random().nextInt(100) * 20;
-      TickTaskExecutor.addTask(() -> {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
-      });
-
-      // 一分ごとにデータを更新
-      apiScheduler = TickTaskExecutor.scheduleTask(() -> {
-        HandleAPI.requestDatas();
-      }, randomDelay, 20 * 60);
+      HandleAPI.startApiUpdateRoutine();
     }
   }
 
