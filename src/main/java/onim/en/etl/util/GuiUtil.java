@@ -206,7 +206,8 @@ public class GuiUtil {
     button.setOnAction(() -> {
       if (!TheLowUtil.isPlayingTheLow())
         return;
-      DataStorage.clearCache();
+      DataStorage.deleteDungeonDataCaches();
+      DataStorage.deletePlayerStatusCaches();
       HandleAPI.requestDatas();
     });
     return button;

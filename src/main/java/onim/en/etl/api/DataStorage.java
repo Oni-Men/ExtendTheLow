@@ -1,5 +1,6 @@
 package onim.en.etl.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -68,57 +69,65 @@ public class DataStorage {
     Gson gson = new GsonBuilder().create();
     Path statusesPath = ExtendTheLow.configPath.resolve("dataStorage.statuses.json");
     Path dungeonsPath = ExtendTheLow.configPath.resolve("dataStorage.dungeons.json");
-
-    try {
-      if (Files.exists(statusesPath)) {
-        playerStatusProvider =
-            gson.fromJson(Files.newBufferedReader(statusesPath), PlayerStatusProvider.class);
+    if (Files.exists(statusesPath)) {
+      try (BufferedReader reader = Files.newBufferedReader(statusesPath)) {
+        playerStatusProvider = gson.fromJson(reader, PlayerStatusProvider.class);
+      } catch (JsonSyntaxException jsonSyntaxError) {
+        playerStatusProvider = new PlayerStatusProvider();
+        deletePlayerStatusCaches();
+      } catch (JsonIOException | IOException e) {
+        e.printStackTrace();
       }
-
-    } catch (JsonSyntaxException jsonSyntaxError) {
-      playerStatusProvider = new PlayerStatusProvider();
-      clearCache();
-    } catch (JsonIOException | IOException e) {
-      e.printStackTrace();
     }
 
-    try {
-      if (Files.exists(dungeonsPath)) {
-        dungeons = gson.fromJson(Files.newBufferedReader(dungeonsPath),
-            new TypeToken<HashSet<DungeonInfo>>() {}.getType());
+    if (Files.exists(dungeonsPath)) {
+      try (BufferedReader reader = Files.newBufferedReader(dungeonsPath)) {
+        dungeons = gson.fromJson(reader, new TypeToken<HashSet<DungeonInfo>>() {}.getType());
+      } catch (JsonSyntaxException jsonSyntaxError) {
+        dungeons = new HashSet<>();
+        deleteDungeonDataCaches();
+      } catch (JsonIOException | IOException e) {
+        e.printStackTrace();
       }
-    } catch (JsonSyntaxException jsonSyntaxError) {
-      dungeons = new HashSet<>();
-      clearCache();
-    } catch (JsonIOException | IOException e) {
-      e.printStackTrace();
     }
   }
 
-  public static void cache() {
+  public static void cachePlayerStatuses() {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     Path statusesPath = ExtendTheLow.configPath.resolve("dataStorage.statuses.json");
-    Path dungeonsPath = ExtendTheLow.configPath.resolve("dataStorage.dungeons.json");
 
     try {
-      Files.write(statusesPath, Arrays.asList(gson.toJson(playerStatusProvider).split("\n")),
-          StandardCharsets.UTF_8);
-      Files.write(dungeonsPath, Arrays.asList(gson.toJson(dungeons).split("\n")),
-          StandardCharsets.UTF_8);
+      Files.write(statusesPath, Arrays.asList(gson.toJson(playerStatusProvider).split("\n")), StandardCharsets.UTF_8);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public static void clearCache() {
-    Path statusesPath = ExtendTheLow.configPath.resolve("dataStorage.statuses.json");
+  public static void cacheDungeonDatas() {
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
     Path dungeonsPath = ExtendTheLow.configPath.resolve("dataStorage.dungeons.json");
 
-    playerStatusProvider.clear();
-    dungeons.clear();
+    try {
+      Files.write(dungeonsPath, Arrays.asList(gson.toJson(dungeons).split("\n")), StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
+  public static void deletePlayerStatusCaches() {
+    playerStatusProvider.clear();
+    Path statusesPath = ExtendTheLow.configPath.resolve("dataStorage.statuses.json");
     JavaUtil.executeIOProcess(() -> Files.delete(statusesPath));
+
+    HandleAPI.makeNextRequestImmediately();
+  }
+
+  public static void deleteDungeonDataCaches() {
+    Path dungeonsPath = ExtendTheLow.configPath.resolve("dataStorage.dungeons.json");
+    dungeons.clear();
     JavaUtil.executeIOProcess(() -> Files.delete(dungeonsPath));
+
+    HandleAPI.makeNextRequestImmediately();
   }
 
 }

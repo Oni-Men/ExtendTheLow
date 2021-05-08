@@ -10,8 +10,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
 import onim.en.etl.core.HookInjector;
 import onim.en.etl.core.ObfuscateType;
 
@@ -28,10 +26,6 @@ public class HookBroadcastSound extends HookInjector {
   @Override
   public boolean injectHook(InsnList list, ObfuscateType type) {
     InsnList inject = new InsnList();
-
-    System.out.println(MinecraftForge.class.getName());
-    System.out.println(EventBus.class.getName());
-
 
     FieldInsnNode event_bus = new FieldInsnNode(Opcodes.GETSTATIC, "net/minecraftforge/common/MinecraftForge", "EVENT_BUS", "Lnet/minecraftforge/fml/common/eventhandler/EventBus;");
     MethodInsnNode post = new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraftforge/fml/common/eventhandler/EventBus", "post", "(Lnet/minecraftforge/fml/common/eventhandler/Event;)Z", false);

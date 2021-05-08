@@ -21,6 +21,12 @@ public class TickTaskExecutor {
     return task;
   }
 
+  public static TickTask executeLater(Runnable run, long delay) {
+    TickTask task = new TickTask(scheduledTasks.size(), delay, run);
+    scheduledTasks.put(task.id, task);
+    return task;
+  }
+
   public static Runnable getNextTask() {
     if (taskList.isEmpty()) {
       return null;
@@ -30,13 +36,15 @@ public class TickTaskExecutor {
   }
 
   public static void advanceScheduledTasks() {
+    scheduledTasks.entrySet().removeIf(e -> e.getValue().isCanceled());
     scheduledTasks.values().forEach(task -> {
       task.tick();
     });
   }
 
   public static void cancel(int id) {
-    scheduledTasks.remove(id);
+    if (scheduledTasks.containsKey(id))
+      scheduledTasks.get(id).cancel();
   }
 
   public static class TickTask {
@@ -49,11 +57,24 @@ public class TickTaskExecutor {
     private final Runnable task;
     private int tick = 0;
 
+    private final boolean once;
+
+    private boolean canceled = false;
+
     private TickTask(int id, long delay, long interval, Runnable run) {
       this.id = id;
       this.delay = delay;
       this.interval = Math.max(1, interval);
       this.task = run;
+      this.once = false;
+    }
+
+    private TickTask(int id, long delay, Runnable run) {
+      this.id = id;
+      this.delay = delay;
+      this.interval = Math.max(1, interval);
+      this.task = run;
+      this.once = true;
     }
 
     protected void tick() {
@@ -68,11 +89,23 @@ public class TickTaskExecutor {
       if (this.tick >= this.interval) {
         this.tick = 0;
         this.task.run();
+
+        if (this.once) {
+          this.cancel();
+        }
       }
     }
 
+    public void setTick(int delay) {
+      this.tick = delay;
+    }
+
     public void cancel() {
-      TickTaskExecutor.cancel(this.id);
+      this.canceled = true;
+    }
+
+    public boolean isCanceled() {
+      return this.canceled;
     }
   }
 }

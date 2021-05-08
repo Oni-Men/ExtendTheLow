@@ -3,6 +3,7 @@ package onim.en.etl.api;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
+import onim.en.etl.ExtendTheLow;
 import onim.en.etl.api.dto.ApiResponse;
 import onim.en.etl.api.dto.DungeonInfo;
 import onim.en.etl.api.dto.LocationResponse;
@@ -20,6 +22,7 @@ import onim.en.etl.api.dto.PlayerStatus;
 import onim.en.etl.api.dto.SkillCooltimeResponse;
 import onim.en.etl.event.SkillEnterCooltimeEvent;
 import onim.en.etl.util.TickTaskExecutor;
+import onim.en.etl.util.TickTaskExecutor.TickTask;
 
 public class HandleAPI {
   public static final String PLAYER_DATA_MSG = "§r§a正常にプレイヤーデータを";
@@ -27,8 +30,37 @@ public class HandleAPI {
 
   public static List<String> API_TYPES = Arrays.asList("dungeon", "player");
 
+  private static boolean requestImmediately = false;
+
+  private static TickTask cacheTask = null;
+
+  public static void makeNextRequestImmediately() {
+    requestImmediately = true;
+  }
+
+  public static void startApiUpdateRoutine() {
+    long randomDelay = new Random().nextInt(100) * 20;
+    TickTaskExecutor.addTask(() -> {
+      Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
+    });
+
+    if (requestImmediately) {
+      requestDatas();
+      requestImmediately = false;
+    }
+
+    // 一分ごとにデータを更新
+    ExtendTheLow.apiScheduler = TickTaskExecutor.scheduleTask(() -> {
+      requestDatas();
+    }, randomDelay, 20 * 60);
+  }
+
   public static void requestDatas() {
-    for (String type : HandleAPI.API_TYPES) {
+    cacheTask = TickTaskExecutor.executeLater(() -> {
+      DataStorage.cacheDungeonDatas();
+      DataStorage.cachePlayerStatuses();
+    }, 20);
+    for (String type : API_TYPES) {
       sendRequest(type);
     }
   }
@@ -54,7 +86,9 @@ public class HandleAPI {
 
     service.submit(() -> {
       processJSON(split[1]);
-      DataStorage.cache();
+      if (cacheTask != null) {
+        cacheTask.setTick(0);
+      }
     });
 
     return true;
