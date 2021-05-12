@@ -52,14 +52,14 @@ public class DungeonMarker extends TheLowExtension {
 
   @PrefItem(id = "onim.en.etl.dungeonMarker.levelHighest", type = int.class, min = 0F, max = 80F,
       unit = "lv", step = 10F)
-  public int displayLevelHighest = 0;
+  public int displayLevelHighest = 80;
 
   @PrefItem(id = "onim.en.etl.dungeonMarker.displaySpecials", type = boolean.class)
   public boolean displaySpecials = false;
 
   @PrefItem(id = "onim.en.etl.dungeonMarker.scale", type = float.class, min = 0.05F, max = 2.0F, step = 0.05F,
       format = "x%.2f")
-  public float configScale;
+  public float configScale = 1F;
 
   @Override
   public String id() {
