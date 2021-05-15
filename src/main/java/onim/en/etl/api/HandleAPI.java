@@ -41,9 +41,9 @@ public class HandleAPI {
   public static void startApiUpdateRoutine() {
     // 再起動などで一斉にログインした際の負荷軽減の為にランダムにディレイをかける
     long randomDelay = new Random().nextInt(100) * 20;
-    TickTaskExecutor.addTask(() -> {
+    TickTaskExecutor.executeLater(() -> {
       Minecraft.getMinecraft().thePlayer.sendChatMessage("/thelow_api subscribe skill_cooltime");
-    });
+    }, 2L);
 
     if (requestImmediately) {
       requestDatas();
@@ -57,12 +57,18 @@ public class HandleAPI {
   }
 
   public static void requestDatas() {
+    for (String type : API_TYPES) {
+      sendRequest(type);
+    }
     cacheTask = TickTaskExecutor.executeLater(() -> {
       DataStorage.cacheDungeonDatas();
       DataStorage.cachePlayerStatuses();
+      cacheTask = null;
     }, 20);
-    for (String type : API_TYPES) {
-      sendRequest(type);
+
+    // スケジューラーをリセットする
+    if (ExtendTheLow.apiScheduler != null) {
+      ExtendTheLow.apiScheduler.setTick(0);
     }
   }
 
@@ -86,10 +92,10 @@ public class HandleAPI {
     }
 
     service.submit(() -> {
-      processJSON(split[1]);
       if (cacheTask != null) {
         cacheTask.setTick(0);
       }
+      processJSON(split[1]);
     });
 
     return true;

@@ -1,38 +1,35 @@
 package onim.en.etl.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.collect.Maps;
 
 public class TickTaskExecutor {
 
-  private static List<Runnable> taskList = new LinkedList<>();
+  private static int taskIdCounter = 0;
+
   private static HashMap<Integer, TickTask> scheduledTasks = Maps.newHashMap();
 
+  private static List<TickTask> syncTaskPool = new ArrayList<>();
+
   public static void addTask(Runnable task) {
-    taskList.add(task);
+    executeLater(task, 0);
   }
 
   public static TickTask scheduleTask(Runnable run, long delay, long interval) {
-    TickTask task = new TickTask(scheduledTasks.size(), delay, interval, run);
-    scheduledTasks.put(task.id, task);
+    TickTask task = new TickTask(taskIdCounter, delay, interval, run);
+    syncTaskPool.add(task);
+    taskIdCounter++;
     return task;
   }
 
   public static TickTask executeLater(Runnable run, long delay) {
-    TickTask task = new TickTask(scheduledTasks.size(), delay, run);
-    scheduledTasks.put(task.id, task);
+    TickTask task = new TickTask(taskIdCounter, delay, run);
+    syncTaskPool.add(task);
+    taskIdCounter++;
     return task;
-  }
-
-  public static Runnable getNextTask() {
-    if (taskList.isEmpty()) {
-      return null;
-    }
-
-    return taskList.remove(0);
   }
 
   public static void advanceScheduledTasks() {
@@ -40,6 +37,13 @@ public class TickTaskExecutor {
     scheduledTasks.values().forEach(task -> {
       task.tick();
     });
+
+    TickTask task = null;
+    while (syncTaskPool.size() > 0) {
+      task = syncTaskPool.remove(0);
+      scheduledTasks.put(task.id, task);
+    }
+
   }
 
   public static void cancel(int id) {
@@ -72,14 +76,13 @@ public class TickTaskExecutor {
     private TickTask(int id, long delay, Runnable run) {
       this.id = id;
       this.delay = delay;
-      this.interval = Math.max(1, interval);
+      this.interval = 0;
       this.task = run;
       this.once = true;
     }
 
     protected void tick() {
       this.tick++;
-
       if (delay != 0 && tick < delay) {
         return;
       }
@@ -89,15 +92,15 @@ public class TickTaskExecutor {
       if (this.tick >= this.interval) {
         this.tick = 0;
         this.task.run();
-
         if (this.once) {
           this.cancel();
         }
       }
+
     }
 
-    public void setTick(int delay) {
-      this.tick = delay;
+    public void setTick(int tick) {
+      this.tick = tick;
     }
 
     public void cancel() {

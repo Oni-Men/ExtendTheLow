@@ -128,11 +128,6 @@ public class ExtendTheLow {
       }
     }
 
-    Runnable task = TickTaskExecutor.getNextTask();
-    if (task != null) {
-      task.run();
-    }
-
     TickTaskExecutor.advanceScheduledTasks();
   }
 

@@ -15,7 +15,6 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
 
 import onim.en.etl.ExtendTheLow;
 import onim.en.etl.api.dto.DungeonInfo;
@@ -72,23 +71,23 @@ public class DataStorage {
     if (Files.exists(statusesPath)) {
       try (BufferedReader reader = Files.newBufferedReader(statusesPath)) {
         playerStatusProvider = gson.fromJson(reader, PlayerStatusProvider.class);
-      } catch (JsonSyntaxException jsonSyntaxError) {
-        playerStatusProvider = new PlayerStatusProvider();
-        deletePlayerStatusCaches();
       } catch (JsonIOException | IOException e) {
+        deletePlayerStatusCaches();
         e.printStackTrace();
       }
+    } else {
+      HandleAPI.makeNextRequestImmediately();
     }
 
     if (Files.exists(dungeonsPath)) {
       try (BufferedReader reader = Files.newBufferedReader(dungeonsPath)) {
         dungeons = gson.fromJson(reader, new TypeToken<HashSet<DungeonInfo>>() {}.getType());
-      } catch (JsonSyntaxException jsonSyntaxError) {
-        dungeons = new HashSet<>();
-        deleteDungeonDataCaches();
       } catch (JsonIOException | IOException e) {
+        deleteDungeonDataCaches();
         e.printStackTrace();
       }
+    } else {
+      HandleAPI.makeNextRequestImmediately();
     }
   }
 

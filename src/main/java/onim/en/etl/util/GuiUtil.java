@@ -204,10 +204,10 @@ public class GuiUtil {
   public static Button getClearCacheButton() {
     Button button = new Button(100, "onim.en.etl.clearCache");
     button.setOnAction(() -> {
-      if (!TheLowUtil.isPlayingTheLow())
-        return;
       DataStorage.deleteDungeonDataCaches();
       DataStorage.deletePlayerStatusCaches();
+      if (!TheLowUtil.isPlayingTheLow())
+        return;
       HandleAPI.requestDatas();
     });
     return button;
