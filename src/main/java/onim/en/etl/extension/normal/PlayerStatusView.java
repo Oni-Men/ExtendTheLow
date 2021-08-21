@@ -147,7 +147,8 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.scale(0.75, 0.75, 0.75);
 
     // GlStateManager.disableDepth();
-    this.drawText(String.format("%.0f/%.0f", target.getHealth(), target.getMaxHealth()), 0, -1, a, true);
+    String hpText = String.format("%d/%d", Math.round(target.getHealth()), Math.round(target.getMaxHealth()));
+    this.drawText(hpText, 0, -1, a, true);
     GL11.glPopAttrib();
     GlStateManager.popMatrix();
     // HP BAR End
