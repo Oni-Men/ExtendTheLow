@@ -9,6 +9,7 @@ import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.extension.TheLowExtension;
 import onim.en.etl.ui.custom.GuiFreeMarket;
 import onim.en.etl.util.MinecraftUtil;
+import onim.en.etl.util.TheLowUtil;
 
 public class ImproveFreeMarket extends TheLowExtension {
 
@@ -37,6 +38,10 @@ public class ImproveFreeMarket extends TheLowExtension {
   @SubscribeEvent
   public void onGuiOpen(GuiOpenEvent event) {
     if (!(event.gui instanceof GuiChest)) {
+      return;
+    }
+
+    if (!TheLowUtil.isPlayingTheLow()) {
       return;
     }
 
