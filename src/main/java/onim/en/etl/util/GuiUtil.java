@@ -192,6 +192,9 @@ public class GuiUtil {
       buttonList.add(new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
         Prefs.get().invertTheLowStatus = b;
       }));
+      buttonList.add(new ToggleButton("onim.en.etl.smartHealthBar", Prefs.get().smartHealthBar, b -> {
+        Prefs.get().smartHealthBar = b;
+      }));
       buttonList.add(getClearCacheButton());
       buttonList.add(getResetSettingsButton());
     });

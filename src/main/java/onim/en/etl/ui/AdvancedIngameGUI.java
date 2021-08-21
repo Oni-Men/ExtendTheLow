@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -14,6 +15,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -95,6 +98,134 @@ public class AdvancedIngameGUI extends GuiIngameForge {
   protected void renderBossHealth() {
     Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.icons);
     super.renderBossHealth();
+  }
+
+  @Override
+  public void renderHealth(int width, int height) {
+    if (!Prefs.get().smartHealthBar) {
+      super.renderHealth(width, height);
+      return;
+    }
+    
+    mc.getTextureManager().bindTexture(icons);
+    mc.mcProfiler.startSection("health");
+    GlStateManager.enableBlend();
+
+    EntityPlayer player = (EntityPlayer) this.mc.getRenderViewEntity();
+    int health = MathHelper.ceiling_float_int(player.getHealth());
+    boolean highlight = healthUpdateCounter > (long) updateCounter
+        && (healthUpdateCounter - (long) updateCounter) / 3L % 2L == 1L;
+
+    if (health < this.playerHealth && player.hurtResistantTime > 0) {
+      this.lastSystemTime = Minecraft.getSystemTime();
+      this.healthUpdateCounter = (long) (this.updateCounter + 20);
+    } else if (health > this.playerHealth && player.hurtResistantTime > 0) {
+      this.lastSystemTime = Minecraft.getSystemTime();
+      this.healthUpdateCounter = (long) (this.updateCounter + 10);
+    }
+
+    if (Minecraft.getSystemTime() - this.lastSystemTime > 1000L) {
+      this.playerHealth = health;
+      this.lastPlayerHealth = health;
+      this.lastSystemTime = Minecraft.getSystemTime();
+    }
+
+    this.playerHealth = health;
+    float maxHealth = player.getMaxHealth();
+    int healthLast = this.lastPlayerHealth;
+    float absorb = player.getAbsorptionAmount();
+
+    this.rand.setSeed((long) (updateCounter * 312871));
+
+    int left = width / 2 - 91;
+    int top = height - left_height;
+    left_height += 10;
+
+    int regen = -1;
+    if (player.isPotionActive(Potion.regeneration)) {
+      regen = updateCounter % 25;
+    }
+
+    final int TOP = 9 * (mc.theWorld.getWorldInfo().isHardcoreModeEnabled() ? 5 : 0);
+    final int BACKGROUND = (highlight ? 25 : 16);
+    int MARGIN = 16;
+    if (player.isPotionActive(Potion.poison))
+      MARGIN += 36;
+    else if (player.isPotionActive(Potion.wither))
+      MARGIN += 72;
+
+    float maxAmount = maxHealth + absorb;
+    float absorbAmount = absorb / maxAmount;
+    float healthAmount = health / maxAmount;
+
+    int x = left;
+
+    for (int i = 0; i < 10; i++) {
+      int y = top;
+      if (health <= 4)
+        y += rand.nextInt(2);
+      if (i == regen)
+        y -= 2;
+
+      GlStateManager.pushMatrix();
+      GlStateManager.translate(0, 0, -10);
+      drawTexturedModalRect(left + i * 8, y, BACKGROUND, TOP, 9, 9);
+      GlStateManager.popMatrix();
+
+      if (highlight) {
+        if (i * 2 + 1 < healthLast)
+          drawTexturedModalRect(left + i * 8, y, MARGIN + 54, TOP, 9, 9); // 6
+        else if (i * 2 + 1 == healthLast)
+          drawTexturedModalRect(left + i * 8, y, MARGIN + 63, TOP, 9, 9); // 7
+      }
+
+      if (healthAmount > 0.0F) {
+
+        if (healthAmount >= 0.1F) {
+          drawTexturedModalRect(x, y, MARGIN + 36, TOP, 9, 9); // 5
+          healthAmount -= 0.1F;
+          x += 8;
+        } else {
+          int w = (int) (healthAmount * 90F);
+          drawTexturedModalRect(x, y, MARGIN + 36, TOP, w, 9); // 5
+          x += w;
+          healthAmount = 0.0F;
+        }
+
+      }
+
+      if (healthAmount <= 0F) {
+        if (absorbAmount > 0.0F) {
+          int mod = (x - left) % 8;
+          if (mod == 0) {
+            drawTexturedModalRect(x, y, MARGIN + 144, TOP, 9, 9); // 16
+            x += 8;
+            absorbAmount -= 0.1F;
+          } else {
+            drawTexturedModalRect(x, y, MARGIN + 144 + mod, TOP, 9 - mod, 9); // 16
+            x += 8 - mod;
+            absorbAmount -= (8 - mod) / 80F;
+          }
+        }
+      }
+    }
+
+    GlStateManager.disableBlend();
+
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(width / 2 - 50, height - 37, 0);
+    GlStateManager.scale(0.5F, 0.5F, 1.0F);
+
+    String absorbText = absorb == 0F ? "" : ChatFormatting.YELLOW + String.format(" + %d", (int) absorb);
+    String healthText = String.format("%d/%d%s", Math.round(player.getHealth()), Math.round(maxHealth), absorbText);
+    this.getFontRenderer()
+      .drawStringWithShadow(healthText, -this.getFontRenderer().getStringWidth(healthText) / 2, 0, 0xFFFFFF);
+
+    GlStateManager.popMatrix();
+    GlStateManager.color(1F, 1F, 1F, 1F);
+
+    mc.getTextureManager().bindTexture(icons);
+    mc.mcProfiler.endSection();
   }
 
   @Override

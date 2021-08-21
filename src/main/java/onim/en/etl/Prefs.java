@@ -75,4 +75,5 @@ public class Prefs {
 
   public boolean debugMode = true;
 
+  public boolean smartHealthBar = true;
 }

@@ -4,6 +4,7 @@ onim.en.etl.keyCategory=Extend TheLow
 onim.en.etl.toggleEnabled=有効/無効
 onim.en.etl.clearCache=キャッシュを削除
 onim.en.etl.resetSettings=設定をリセット
+onim.en.etl.smartHealthBar=スマート体力バー
 
 onim.en.etl.settings=ExtendTheLowの設定
 onim.en.etl.category.util=ユーティリティ
