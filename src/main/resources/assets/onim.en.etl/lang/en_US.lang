@@ -52,6 +52,8 @@ onim.en.etl.improveFreeMarket.clickAgain=Click it again within %s to Purchase.
 
 onim.en.etl.muteDragonDead=Mute enderdragon's death sound
 
+onim.en.etl.noThrowMarker=NoThrow Marker
+
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font
 onim.en.etl.changeFont=Change Font

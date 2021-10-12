@@ -52,6 +52,8 @@ onim.en.etl.improveFreeMarket.clickAgain=%s秒以内に再度クリックする�
 
 onim.en.etl.muteDragonDead=エンダードラゴンの死亡音をミュート
 
+onim.en.etl.noThrowMarker=NoThrowマーカー
+
 onim.en.etl.generalSettings=一般設定
 onim.en.etl.advancedFont=高解像度フォント
 onim.en.etl.changeFont=フォントを変更
