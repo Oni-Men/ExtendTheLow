@@ -37,4 +37,15 @@ public abstract class HookInjector {
 
   public abstract boolean injectHook(InsnList list, ObfuscateType type);
 
+  protected String toDescriptor(String ret, String... args) {
+    StringBuffer buf = new StringBuffer();
+    buf.append("(");
+    for (String s : args) {
+      buf.append(s);
+    }
+    buf.append(")");
+    buf.append(ret);
+    
+    return buf.toString();
+  }
 }

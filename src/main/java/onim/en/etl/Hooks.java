@@ -1,5 +1,6 @@
 package onim.en.etl;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S3EPacketTeams;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
@@ -7,6 +8,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import onim.en.etl.event.GetCharWidthEvent;
+import onim.en.etl.event.GuiRenderItemEvent;
 import onim.en.etl.event.RenderCharAtPosEvent;
 
 public class Hooks {
@@ -79,5 +81,9 @@ public class Hooks {
       return 0F;
     }
     return offset;
+  }
+
+  public static void renderItemIntoGUI(ItemStack stack, int x, int y) {
+    MinecraftForge.EVENT_BUS.post(new GuiRenderItemEvent(stack, x, y));
   }
 }

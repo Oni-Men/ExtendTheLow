@@ -7,6 +7,7 @@ import com.google.common.collect.HashMultimap;
 import onim.en.etl.core.injector.DrawStringDropShadow;
 import onim.en.etl.core.injector.GetCharWidthFloatHook;
 import onim.en.etl.core.injector.HookBroadcastSound;
+import onim.en.etl.core.injector.HookRenderItem;
 import onim.en.etl.core.injector.PatchScoreNullError;
 import onim.en.etl.core.injector.PreventRenderBold;
 import onim.en.etl.core.injector.RenderCharAtPos;
@@ -35,5 +36,6 @@ public class HookInjectorRegistry {
     registerInjector(new PatchScoreNullError());
     registerInjector(new DrawStringDropShadow());
     registerInjector(new HookBroadcastSound());
+    registerInjector(new HookRenderItem());
   }
 }
