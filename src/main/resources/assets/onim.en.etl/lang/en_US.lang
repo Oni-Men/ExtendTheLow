@@ -9,6 +9,7 @@ onim.en.etl.smartHealthBar=Smart Health-Bar
 onim.en.etl.settings=ExtendTheLow Settings
 onim.en.etl.category.util=Utilities
 onim.en.etl.category.rendering=Rendering
+onim.en.etl.category.photo=Photo
 
 onim.en.etl.dungeonMarker=Dungeon Marker
 onim.en.etl.dungeonMarker.distanceAlwaysRender=Distance always show
@@ -21,6 +22,11 @@ onim.en.etl.dungeonMarker.scale=Scale
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=Normal
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=Accumulate
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=Off
+
+onim.en.etl.extension.photo.GridType.NONE=None
+onim.en.etl.extension.photo.GridType.DIAGONAL=Diagonal
+onim.en.etl.extension.photo.GridType.TRISECTION=Trisection
+onim.en.etl.extension.photo.GridType.QUARTER=Quarter
 
 onim.en.etl.crashPrevention=Prevent crash on Equipment magic ore
 
@@ -53,6 +59,12 @@ onim.en.etl.improveFreeMarket.clickAgain=Click it again within %s to Purchase.
 onim.en.etl.muteDragonDead=Mute enderdragon's death sound
 
 onim.en.etl.noThrowMarker=NoThrow Marker
+
+onim.en.etl.photo=Photo Functions
+onim.en.etl.photo.gridType=Grid type
+onim.en.etl.photo.hideNametag=Hide nametags
+onim.en.etl.photo.worldTime=World Time (client-side)
+
 
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font

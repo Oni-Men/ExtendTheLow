@@ -35,8 +35,18 @@ public class GuiUtil {
     gui.setInitializer(buttonList -> {
       buttonList.add(getGeneralSettingButton(gui));
       ExtensionManager.getCategories().forEach(category -> {
+        if (category.equals("onim.en.etl.categories")) {
+          return;
+        }
+        
         Button button = new Button(100, category);
         button.setOnAction(() -> openCategorySettingGUI(category, gui));
+        buttonList.add(button);
+      });
+      
+      ExtensionManager.getCategoryExtensions("onim.en.etl.categories").forEach(extension -> {
+        Button button = new Button(100, extension.id());
+        button.setOnAction(() -> openExtensionSettingGUI(extension, gui));
         buttonList.add(button);
       });
       // buttonList.add(getQuickActionButton());

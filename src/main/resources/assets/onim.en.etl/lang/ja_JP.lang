@@ -9,6 +9,7 @@ onim.en.etl.smartHealthBar=スマート体力バー
 onim.en.etl.settings=ExtendTheLowの設定
 onim.en.etl.category.util=ユーティリティ
 onim.en.etl.category.rendering=描画
+onim.en.etl.category.photo=フォト
 
 onim.en.etl.dungeonMarker=ダンジョンマーカー
 onim.en.etl.dungeonMarker.distanceAlwaysRender=つねに描画する距離
@@ -21,6 +22,11 @@ onim.en.etl.dungeonMarker.scale=拡大率
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.NORMAL=通常
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.STACK=蓄積
 onim.en.etl.extension.normal.ExpMessageUtil$ExpMessageProcessing.OFF=オフ
+
+onim.en.etl.extension.photo.GridType.NONE=非表示
+onim.en.etl.extension.photo.GridType.DIAGONAL=対角線
+onim.en.etl.extension.photo.GridType.TRISECTION=三等分
+onim.en.etl.extension.photo.GridType.QUARTER=四等分
 
 onim.en.etl.crashPrevention=魔法石装着画面でのクラッシュ防止
 
@@ -53,6 +59,11 @@ onim.en.etl.improveFreeMarket.clickAgain=%s秒以内に再度クリックする�
 onim.en.etl.muteDragonDead=エンダードラゴンの死亡音をミュート
 
 onim.en.etl.noThrowMarker=NoThrowマーカー
+
+onim.en.etl.photo=フォト機能
+onim.en.etl.photo.gridType=グリッドの種類
+onim.en.etl.photo.hideNametag=ネームタグの非表示
+onim.en.etl.photo.worldTime=ワールド時間(クライアントサイド)
 
 onim.en.etl.generalSettings=一般設定
 onim.en.etl.advancedFont=高解像度フォント
