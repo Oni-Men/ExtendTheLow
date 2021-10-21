@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
-@MCVersion("1.8.9")
+@MCVersion("1.8.8")
 @TransformerExclusions("onim.en.etl.core")
 public class CoreLoader implements IFMLLoadingPlugin {
 
