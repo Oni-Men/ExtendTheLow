@@ -25,10 +25,10 @@ public class PhotoMode extends TheLowExtension {
 
   @PrefItem(id = "onim.en.etl.photo.hideNametag", type = boolean.class)
   public boolean hideNametag = false;
-  
+
   @PrefItem(id = "onim.en.etl.photo.worldTime", type = float.class, min = -0.01F, max = 1F, step = 0.01F)
-  public float worldTime = -0.99f;
-  
+  public float worldTime = -0.01f;
+
   @Override
   public String id() {
     return "onim.en.etl.photo";
@@ -50,36 +50,36 @@ public class PhotoMode extends TheLowExtension {
     if (event.type != ElementType.CROSSHAIRS) {
       return;
     }
-    
+
     ScaledResolution sr = event.resolution;
 
     if (gridType == GridType.NONE) {
       return;
     }
-    
+
     event.setCanceled(true);
-    
+
     double width = sr.getScaledWidth_double();
     double height = sr.getScaledHeight_double();
-    
+
     double margin = Math.min(width, height) * 0.05;
-    
+
     width -= margin;
     height -= margin;
-    
-    
+
+
     GlStateManager.pushMatrix();
     GlStateManager.translate(margin / 2, margin / 2, 0);
     GlStateManager.color(1F, 1F, 1F, 1F);
     GlStateManager.disableTexture2D();
     GlStateManager.disableLighting();
     GL11.glLineWidth(1f);
-    
+
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
     buf.func_181668_a(GL11.GL_LINES, DefaultVertexFormats.field_181705_e);
-    
+
     renderFrame(width, height);
-    
+
     switch (gridType) {
       case DIAGONAL:
         renderDiagonal(width, height);
@@ -93,20 +93,18 @@ public class PhotoMode extends TheLowExtension {
       default:
         break;
     }
-    
+
     Tessellator.getInstance().draw();
-    
+
     GlStateManager.popMatrix();
     GlStateManager.enableTexture2D();
   }
-  
+
   @SubscribeEvent
   public void preRenderLivingSpecials(RenderLivingEvent.Specials.Pre<EntityLivingBase> event) {
     if (hideNametag) {
-      return;
+      event.setCanceled(true);
     }
-
-    event.setCanceled(true);
   }
 
   @SubscribeEvent
@@ -114,7 +112,7 @@ public class PhotoMode extends TheLowExtension {
     if (worldTime >= 0) {
       Minecraft mc = Minecraft.getMinecraft();
       WorldClient world = mc.theWorld;
-      
+
       if (world != null) {
         world.setWorldTime((long) (worldTime * 24000));
       }
@@ -123,17 +121,17 @@ public class PhotoMode extends TheLowExtension {
 
   private void renderFrame(double w, double h) {
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
-    
+
     buf.func_181662_b(0, 0, 0).func_181675_d();
     buf.func_181662_b(w, 0, 0).func_181675_d();
-    
+
     buf.func_181662_b(w, 0, 0).func_181675_d();
     buf.func_181662_b(w, h, 0).func_181675_d();
 
-    
+
     buf.func_181662_b(w, h, 0).func_181675_d();
     buf.func_181662_b(0, h, 0).func_181675_d();
-    
+
     buf.func_181662_b(0, h, 0).func_181675_d();
     buf.func_181662_b(0, 0, 0).func_181675_d();
   }
