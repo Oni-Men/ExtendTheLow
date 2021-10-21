@@ -259,7 +259,7 @@ public class GuiUtil {
     GlStateManager.shadeModel(7425);
     Tessellator tessellator = Tessellator.getInstance();
     WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181705_e);
+    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
     worldrenderer.func_181662_b((double) right, (double) top, (double) 0).func_181666_a(red2, green2, blue2, alpha2)
       .func_181675_d();
     worldrenderer.func_181662_b((double) left, (double) top, (double) 0).func_181666_a(red1, green1, blue1, alpha1)
