@@ -1,27 +1,19 @@
-package onim.en.etl.extension.freemarket;
+package onim.en.etl.extension.normal;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import onim.en.etl.annotation.PrefItem;
 import onim.en.etl.extension.TheLowExtension;
-import onim.en.etl.ui.custom.GuiFreeMarket;
+import onim.en.etl.ui.custom.GuiSearchChest;
 import onim.en.etl.util.MinecraftUtil;
-import onim.en.etl.util.TheLowUtil;
 
-public class ImproveFreeMarket extends TheLowExtension {
-
-  @PrefItem(id = "onim.en.etl.improveFreeMarket.preventAccidentalPurchases", type = boolean.class)
-  public boolean preventAccidentalPurchases = true;
-
-  @PrefItem(id = "onim.en.etl.improveFreeMarket.improveBackgroundRender", type = boolean.class)
-  public boolean improveBackgroundRender = true;
+public class ChestSearchBox extends TheLowExtension {
 
   @Override
   public String id() {
-    return "onim.en.etl.improveFreeMarket";
+    return "onim.en.etl.chestSearchBox";
   }
 
   @Override
@@ -41,25 +33,17 @@ public class ImproveFreeMarket extends TheLowExtension {
       return;
     }
 
-    if (!TheLowUtil.isPlayingTheLow()) {
-      return;
-    }
-
     GuiChest gui = (GuiChest) event.gui;
     IInventory inv = MinecraftUtil.getChestInventory(gui);
 
     if (inv == null) {
       return;
     }
-    
-    if (!inv.getDisplayName().getFormattedText().contains("フリーマーケット")) {
-      return;
-    }
-    
+
     Minecraft mc = Minecraft.getMinecraft();
-    GuiFreeMarket guiFreeMarket = new GuiFreeMarket(this, mc.thePlayer.inventory, inv);
-    
-    event.gui = guiFreeMarket;
+    GuiSearchChest chest = new GuiSearchChest(mc.thePlayer.inventory, inv);
+
+    event.gui = chest;
   }
 
 }
