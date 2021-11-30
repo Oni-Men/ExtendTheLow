@@ -65,6 +65,9 @@ onim.en.etl.photo.gridType=Grid type
 onim.en.etl.photo.hideNametag=Hide nametags
 onim.en.etl.photo.worldTime=World Time (client-side)
 
+onim.en.etl.chestSearchBox=Search in chest
+onim.en.etl.chestSearchBox.help1=Type enter to open search box.
+onim.en.etl.chestSearchBox.help2=Search word: %s
 
 onim.en.etl.generalSettings=General Settings
 onim.en.etl.advancedFont=Better Font
