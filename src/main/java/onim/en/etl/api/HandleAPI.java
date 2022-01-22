@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import onim.en.etl.ExtendTheLow;
@@ -74,7 +75,11 @@ public class HandleAPI {
 
   public static void sendRequest(String apiType) {
     TickTaskExecutor.addTask(() -> {
-      Minecraft.getMinecraft().thePlayer.sendChatMessage(String.format("/thelow_api %s", apiType));
+      EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+      
+      if (player != null) {
+        player.sendChatMessage(String.format("/thelow_api %s", apiType));
+      }
     });
   }
 
