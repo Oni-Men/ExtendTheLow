@@ -306,10 +306,11 @@ public class AdvancedIngameGUI extends GuiIngameForge {
 
     if (right) {
       GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 32, 0x00336633, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 32, 0xAA336666, 0xAA336699);
+      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i, 42, 0xAA336666, 0xAA336699);
     } else {
-      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 32, 0xAA336699, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 32, 0xAA336666, 0x00336633);
+      // bottomの編集 32 -> 42
+      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 42, 0xAA336699, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 42, 0xAA336666, 0x00336633);
     }
 
     GlStateManager.pushMatrix();
@@ -356,6 +357,8 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       font
         .drawStringWithShadow(String.format("%d Units", playerStatus.unit), widthGalions + 4, 22, 0xFFFFFF);
 
+      //job の追加
+      font.drawStringWithShadow(String.format("Job: %s", playerStatus.jobName), 4, 32, 0xFF6CFF);
     } else {
       font.drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
     }
