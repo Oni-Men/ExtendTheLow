@@ -169,6 +169,8 @@ public class ExtensionManager {
 
         if (entry.getValue().isEnabled()) {
           ExtensionManager.enableExtension(entry.getValue());
+        } else {
+          ExtensionManager.disableExtension(entry.getValue());
         }
       } catch (Exception e) {
         continue;
