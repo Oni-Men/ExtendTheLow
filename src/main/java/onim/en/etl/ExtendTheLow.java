@@ -148,12 +148,12 @@ public class ExtendTheLow {
     }
   }
 
-  // @SubscribeEvent
-  // public void onGetCharWidth(GetCharWidthEvent event) {
-  // if (Prefs.get().betterFont) {
-  // event.setWidth(AdvancedFont.getCharWidth(event.getChar()));
-  // }
-  // }
+  // *@SubscribeEvent
+  // *public void onGetCharWidth(GetCharWidthEvent event) {
+  // *if (Prefs.get().betterFont) {
+  // *event.setWidth(AdvancedFont.getCharWidth(event.getChar()));
+  // *}
+  // *}
 
   @SubscribeEvent
   public void onRenderCharAtPos(RenderCharAtPosEvent event) {

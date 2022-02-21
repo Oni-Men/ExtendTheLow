@@ -53,8 +53,10 @@ public class GuiFreeMarket extends GuiChest {
   public void initGui() {
     super.initGui();
 
-    this.searchField = new GuiTextField(5505, ExtendTheLow.AdvancedFont, this.width / 2 - 75, this.height / 2
-        - 6, 150, 12);
+    this.searchField = new GuiTextField(
+            5505, ExtendTheLow.AdvancedFont, this.width / 2 - 75, this.height / 2 - 6,
+            150, 12
+    );
 
     PreventPurchase.reset();
   }
