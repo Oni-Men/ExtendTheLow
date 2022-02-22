@@ -9,7 +9,6 @@ import onim.en.etl.core.injector.GetCharWidthFloatHook;
 import onim.en.etl.core.injector.HookBroadcastSound;
 import onim.en.etl.core.injector.HookRenderItem;
 import onim.en.etl.core.injector.PatchScoreNullError;
-import onim.en.etl.core.injector.PreventRenderBold;
 import onim.en.etl.core.injector.RenderCharAtPos;
 
 
@@ -31,7 +30,7 @@ public class HookInjectorRegistry {
 
   static {
     registerInjector(new GetCharWidthFloatHook());
-    registerInjector(new PreventRenderBold());
+//    registerInjector(new PreventRenderBold());
     registerInjector(new RenderCharAtPos());
     registerInjector(new PatchScoreNullError());
     registerInjector(new DrawStringDropShadow());
