@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 public class TheLowUtil {
 
   private static final String THELOW_SCOREBOARD_TITLE = EnumChatFormatting.AQUA + "===== The Low =====";
+  private static DecimalFormat df1 = new DecimalFormat("#,###,###");
 
   public static boolean isPlayingTheLow() {
     Minecraft minecraft = Minecraft.getMinecraft();
@@ -51,7 +52,6 @@ public class TheLowUtil {
 
     return THELOW_SCOREBOARD_TITLE.equals(displaySlot.getDisplayName());
   }
-  static DecimalFormat df1 = new DecimalFormat("#,###,###");
 
   public static String formatGalions(long galion) {
     if (galion < 1000) {
