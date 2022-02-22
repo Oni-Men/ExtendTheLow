@@ -42,6 +42,7 @@ onim.en.etl.playerStatusView.showReincCount=常に転生数を表示
 onim.en.etl.playerStatusView.showMainLevel=常にレベルを表示
 onim.en.etl.playerStatusView.showClanName=常にクラン名を表示
 onim.en.etl.playerStatusView.scale=拡大率
+onim.en.etl.playerStatusView.expText=lv.%d, 次のlv.まで: %d exp
 
 onim.en.etl.quickAction=クイックアクション
 onim.en.etl.quickAction.toggleDungeonMarker=ダンジョンマーカー%nON/OFF

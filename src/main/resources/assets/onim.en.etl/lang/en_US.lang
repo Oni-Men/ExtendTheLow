@@ -42,6 +42,7 @@ onim.en.etl.playerStatusView.showReincCount=Show Reinc. always
 onim.en.etl.playerStatusView.showMainLevel=Show Level always
 onim.en.etl.playerStatusView.showClanName=Show clan name always
 onim.en.etl.playerStatusView.scale=Scale
+onim.en.etl.playerStatusView.expText=lv.%d, need %d exp to lv. up
 
 onim.en.etl.quickAction=Quick Action
 onim.en.etl.quickAction.toggleDungeonMarker=Dungeon Marker%nON/OFF

@@ -14,6 +14,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -347,15 +348,15 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       // 残りexpの追加
       if (f < 3) {
         drawIcon(TEX_SWORD, 2, 2, 8, 8);
-        String s = String.format("lv.%d, 次のlv.まで: %d exp", playerStatus.swordStatus.leve, SwordRemainExp);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.swordStatus.leve, SwordRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else if (f < 6) {
         drawIcon(TEX_WAND, 2, 2, 8, 8);
-        String s = String.format("lv.%d, 次のlv.まで: %d exp", playerStatus.magicStatus.leve, MagicRemainExp);
+        String s = I18n.format("onim.en.etl.playerStatusView.expTextp", playerStatus.magicStatus.leve, MagicRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else {
         drawIcon(TEX_BOW, 2, 2, 8, 8);
-        String s = String.format("lv.%d, 次のlv.まで: %d exp", playerStatus.bowStatus.leve, BowRemainExp);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.bowStatus.leve, BowRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       }
       GlStateManager.popMatrix();
