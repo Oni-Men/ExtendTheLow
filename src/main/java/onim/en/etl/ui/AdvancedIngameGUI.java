@@ -352,7 +352,7 @@ public class AdvancedIngameGUI extends GuiIngameForge {
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else if (f < 6) {
         drawIcon(TEX_WAND, 2, 2, 8, 8);
-        String s = I18n.format("onim.en.etl.playerStatusView.expTextp", playerStatus.magicStatus.leve, MagicRemainExp);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.magicStatus.leve, MagicRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else {
         drawIcon(TEX_BOW, 2, 2, 8, 8);
