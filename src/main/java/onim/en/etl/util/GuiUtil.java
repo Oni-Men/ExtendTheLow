@@ -38,12 +38,12 @@ public class GuiUtil {
         if (category.equals("onim.en.etl.categories")) {
           return;
         }
-        
+
         Button button = new Button(100, category);
         button.setOnAction(() -> openCategorySettingGUI(category, gui));
         buttonList.add(button);
       });
-      
+
       ExtensionManager.getCategoryExtensions("onim.en.etl.categories").forEach(extension -> {
         Button button = new Button(100, extension.id());
         button.setOnAction(() -> openExtensionSettingGUI(extension, gui));
@@ -183,10 +183,33 @@ public class GuiUtil {
   public static Button getResetSettingsButton() {
     Button button = new Button(100, "onim.en.etl.resetSettings");
     button.setOnAction(() -> {
-      Prefs.reset();
-      ExtensionManager.resetModuleSettings();
+      openConfirmGUI("onim.en.etl.confirmResetSettings", () -> {
+        Prefs.reset();
+        ExtensionManager.resetModuleSettings();
+      });
     });
     return button;
+  }
+
+  public static void openConfirmGUI(String title, Runnable onAccepted) {
+    GuiExtendTheLow gui = new GuiExtendTheLow(title);
+    gui.setInitializer(buttonList -> {
+      Button noButton = new Button(100, "onim.en.etl.no");
+      Button yesButton = new Button(100, "onim.en.etl.yes");
+      yesButton.setOnAction(() -> {
+        onAccepted.run();
+        Minecraft.getMinecraft().displayGuiScreen(null);
+      });
+      
+      noButton.setOnAction(() -> {
+        Minecraft.getMinecraft().displayGuiScreen(null);
+      });
+
+      buttonList.add(noButton);
+      buttonList.add(yesButton);
+    });
+
+    Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 
   public static void openGeneralSettingsGUI(GuiScreen prevScreen) {
