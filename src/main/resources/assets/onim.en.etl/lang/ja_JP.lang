@@ -74,5 +74,3 @@ onim.en.etl.advancedFont=高解像度フォント
 onim.en.etl.changeFont=フォントを変更
 onim.en.etl.customStatus=ステータス描画の変更
 onim.en.etl.invertCustomStatus=ステータス位置を右
-
-onim.en.etl.levelMessageUtil=取得経験値の表示方法
