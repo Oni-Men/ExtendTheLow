@@ -74,3 +74,5 @@ onim.en.etl.advancedFont=Better Font
 onim.en.etl.changeFont=Change Font
 onim.en.etl.customStatus=Change status rendering
 onim.en.etl.invertCustomStatus=Invert status position
+
+onim.en.etl.levelMessageUtil=Messagetype when getting Exp
