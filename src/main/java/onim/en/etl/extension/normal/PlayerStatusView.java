@@ -161,6 +161,7 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.translate(i + 1, 0, 0);
     GlStateManager.scale(0.75, 0.75, 0.75);
     this.drawText(TheLowUtil.formatClanName(status.clanInfo), 0, 2, a, false);
+    this.drawText(TheLowUtil.formatJobName(status.jobName), 0,  2, a, false);
     GlStateManager.popMatrix();
 
     // Reinc count and main level
