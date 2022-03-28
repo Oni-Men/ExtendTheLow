@@ -44,6 +44,7 @@ onim.en.etl.playerStatusView.clanInfo=[%s]
 onim.en.etl.playerStatusView.showReincCount=Show Reinc. always
 onim.en.etl.playerStatusView.showMainLevel=Show Level always
 onim.en.etl.playerStatusView.showClanName=Show clan name always
+onim.en.etl.playerStatusView.showJobName=Show job name always
 onim.en.etl.playerStatusView.scale=Scale
 onim.en.etl.playerStatusView.expText=lv.%d, need %d exp to lv. up
 
