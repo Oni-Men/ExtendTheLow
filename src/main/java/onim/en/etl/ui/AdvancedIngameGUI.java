@@ -14,6 +14,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -118,10 +119,10 @@ public class AdvancedIngameGUI extends GuiIngameForge {
 
     if (health < this.playerHealth && player.hurtResistantTime > 0) {
       this.lastSystemTime = Minecraft.getSystemTime();
-      this.healthUpdateCounter = (long) (this.updateCounter + 20);
+      this.healthUpdateCounter = this.updateCounter + 20;
     } else if (health > this.playerHealth && player.hurtResistantTime > 0) {
       this.lastSystemTime = Minecraft.getSystemTime();
-      this.healthUpdateCounter = (long) (this.updateCounter + 10);
+      this.healthUpdateCounter = this.updateCounter + 10;
     }
 
     if (Minecraft.getSystemTime() - this.lastSystemTime > 1000L) {
@@ -135,7 +136,7 @@ public class AdvancedIngameGUI extends GuiIngameForge {
     int healthLast = this.lastPlayerHealth;
     float absorb = player.getAbsorptionAmount();
 
-    this.rand.setSeed((long) (updateCounter * 312871));
+    this.rand.setSeed(updateCounter * 312871L);
 
     int left = width / 2 - 91;
     int top = height - left_height;
@@ -303,25 +304,27 @@ public class AdvancedIngameGUI extends GuiIngameForge {
 
     int i = scaledResolution.getScaledWidth();
     boolean right = Prefs.get().invertTheLowStatus;
-
+    /*
+      draw rect top of left or right.
+     */
     if (right) {
-      GuiUtil.drawGradientRectHorizontal(i - 120, 0, i - 60, 32, 0x00336633, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(i - 60, 0, i, 32, 0xAA336666, 0xAA336699);
+      GuiUtil.drawGradientRectHorizontal(i - 170, 0, i - 85, 52, 0x00336633, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(i - 85, 0, i, 52, 0xAA336666, 0xAA336699);
     } else {
-      GuiUtil.drawGradientRectHorizontal(0, 0, 60, 32, 0xAA336699, 0xAA336666);
-      GuiUtil.drawGradientRectHorizontal(60, 0, 120, 32, 0xAA336666, 0x00336633);
+      // bottomの編集 32 -> 52
+      GuiUtil.drawGradientRectHorizontal(0, 0, 85, 52, 0xAA336699, 0xAA336666);
+      GuiUtil.drawGradientRectHorizontal(85, 0, 170, 52, 0xAA336666, 0x00336633);
     }
 
     GlStateManager.pushMatrix();
-    GlStateManager.translate(right ? i - 116 : 4, 4, 0);
+    GlStateManager.translate(right ? i - 170 : 4, 4, 0);
     GlStateManager.color(0.3F, 0.3F, 0.4F);
     this.drawFace(player.getLocationSkin(), 1, 1);
     GlStateManager.color(1.0F, 1.0F, 1.0F);
     this.drawFace(player.getLocationSkin(), 0, 0);
     GlStateManager.popMatrix();
-
     GlStateManager.pushMatrix();
-    GlStateManager.translate(right ? i - 120 : 0, 0, 0);
+    GlStateManager.translate(right ? i - 170 : 0, 0, 0);
     if (playerStatus != null) {
 
       int widthLevel = font.drawStringWithShadow("Lv." + playerStatus.mainLevel, 22, 2, 0xFFFFFF);
@@ -334,18 +337,45 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       GlStateManager.pushMatrix();
       GlStateManager.translate(widthLevel + 4, 0, 0);
 
+      int swordExp = playerStatus.swordStatus.exp;
+      int bowExp = playerStatus.bowStatus.exp;
+      int magicExp = playerStatus.magicStatus.exp;
+
+      int SwordRemainExp = ExpArray.ExpArrays(playerStatus.swordStatus.leve, swordExp, playerStatus.swordStatus.reincCount);
+      int BowRemainExp = ExpArray.ExpArrays(playerStatus.bowStatus.leve, bowExp, playerStatus.bowStatus.reincCount);
+      int MagicRemainExp = ExpArray.ExpArrays(playerStatus.magicStatus.leve, magicExp, playerStatus.magicStatus.reincCount);
+
+      // 残りexpの追加
       if (f < 3) {
         drawIcon(TEX_SWORD, 2, 2, 8, 8);
-        String s = String.format("(lv. %d)", playerStatus.swordStatus.leve);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.swordStatus.leve, SwordRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else if (f < 6) {
         drawIcon(TEX_WAND, 2, 2, 8, 8);
-        String s = String.format("(lv. %d)", playerStatus.magicStatus.leve);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.magicStatus.leve, MagicRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
       } else {
         drawIcon(TEX_BOW, 2, 2, 8, 8);
-        String s = String.format("(lv. %d)", playerStatus.bowStatus.leve);
+        String s = I18n.format("onim.en.etl.playerStatusView.expText", playerStatus.bowStatus.leve, BowRemainExp);
         font.drawStringWithShadow(s, 12, 2, 0xFFFFFF);
+      }
+      GlStateManager.popMatrix();
+
+      // 以下転生数の追加
+      int widthReinc = font.drawStringWithShadow(playerStatus.getReinCount() + " 転生", 4, 32, 0xFFFFFF);
+      GlStateManager.pushMatrix();
+      GlStateManager.translate(widthReinc + 4, 32, 0);
+
+
+      if (f < 3) {
+        String t = String.format("剣: %d 転生", playerStatus.swordStatus.reincCount);
+        font.drawStringWithShadow(t, 4, 0, 0xFFFFFF);
+      } else if (f < 6) {
+        String t = String.format("魔: %d 転生", playerStatus.magicStatus.reincCount);
+        font.drawStringWithShadow(t, 4, 0, 0xFFFFFF);
+      } else {
+        String t = String.format("弓: %d 転生", playerStatus.bowStatus.reincCount);
+        font.drawStringWithShadow(t, 4, 0, 0xFFFFFF);
       }
 
       GlStateManager.popMatrix();
@@ -356,10 +386,16 @@ public class AdvancedIngameGUI extends GuiIngameForge {
       font
         .drawStringWithShadow(String.format("%d Units", playerStatus.unit), widthGalions + 4, 22, 0xFFFFFF);
 
+
+
+      // job の追加
+      font.drawStringWithShadow(String.format("Job: %s", playerStatus.jobName), 4, 42, 0xFF6CFF);
     } else {
       font.drawStringWithShadow(player.getDisplayNameString(), 20, 6, 0xFFFFFF);
     }
+
     GlStateManager.popMatrix();
+
   }
 
   private void drawIcon(ResourceLocation iconLocation, int x, int y, int w, int h) {

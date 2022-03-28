@@ -10,9 +10,13 @@ import onim.en.etl.Prefs;
 import onim.en.etl.api.dto.PlayerStatus;
 import onim.en.etl.api.dto.PlayerStatus.ClanInfo;
 
+import java.text.DecimalFormat;
+
+
 public class TheLowUtil {
 
   private static final String THELOW_SCOREBOARD_TITLE = EnumChatFormatting.AQUA + "===== The Low =====";
+  private static DecimalFormat df1 = new DecimalFormat("#,###,###");
 
   public static boolean isPlayingTheLow() {
     Minecraft minecraft = Minecraft.getMinecraft();
@@ -51,20 +55,24 @@ public class TheLowUtil {
 
   public static String formatGalions(long galion) {
     if (galion < 1000) {
-      return galion + "G";
+      return galion + " Galion";
     }
-    return String.format("%.2fkG", (galion / 1000F));
+    return String.format("%s Galion", df1.format(galion));
   }
 
   public static String formatPlayerName(PlayerStatus status) {
-    if (status.clanInfo == null) {
-      return status.mcid;
-    }
-    return String.format("%s %s", status.mcid, formatClanName(status.clanInfo));
+    // * if (status.clanInfo == null) {
+    // *   return status.mcid;
+    // * }
+    return String.format("%s %s", status.mcid, formatClanName(status.clanInfo)); //
   }
 
   public static String formatClanName(ClanInfo clanInfo) {
     return ClanUtil.formatClanName(clanInfo);
+  }
+  // `職業` 追加
+  public static String formatJobName(String jobName) {
+    return String.format("%s", jobName);
   }
 
   public static String formatCooltime(float sec) {
