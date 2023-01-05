@@ -76,7 +76,7 @@ public class PhotoMode extends TheLowExtension {
     GL11.glLineWidth(1f);
 
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
-    buf.func_181668_a(GL11.GL_LINES, DefaultVertexFormats.field_181705_e);
+    buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 
     renderFrame(width, height);
 
@@ -122,38 +122,38 @@ public class PhotoMode extends TheLowExtension {
   private void renderFrame(double w, double h) {
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
 
-    buf.func_181662_b(0, 0, 0).func_181675_d();
-    buf.func_181662_b(w, 0, 0).func_181675_d();
+    buf.pos(0, 0, 0).endVertex();
+    buf.pos(w, 0, 0).endVertex();
 
-    buf.func_181662_b(w, 0, 0).func_181675_d();
-    buf.func_181662_b(w, h, 0).func_181675_d();
+    buf.pos(w, 0, 0).endVertex();
+    buf.pos(w, h, 0).endVertex();
 
 
-    buf.func_181662_b(w, h, 0).func_181675_d();
-    buf.func_181662_b(0, h, 0).func_181675_d();
+    buf.pos(w, h, 0).endVertex();
+    buf.pos(0, h, 0).endVertex();
 
-    buf.func_181662_b(0, h, 0).func_181675_d();
-    buf.func_181662_b(0, 0, 0).func_181675_d();
+    buf.pos(0, h, 0).endVertex();
+    buf.pos(0, 0, 0).endVertex();
   }
 
   private void renderDivideLines(double w, double h, int sect) {
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
     for (int i = 1; i < sect; i++) {
-      buf.func_181662_b(w / sect * i, 0, 0).func_181675_d();
-      buf.func_181662_b(w / sect * i, h, 0).func_181675_d();
+      buf.pos(w / sect * i, 0, 0).endVertex();
+      buf.pos(w / sect * i, h, 0).endVertex();
 
-      buf.func_181662_b(0, h / sect * i, 0).func_181675_d();
-      buf.func_181662_b(w, h / sect * i, 0).func_181675_d();
+      buf.pos(0, h / sect * i, 0).endVertex();
+      buf.pos(w, h / sect * i, 0).endVertex();
     }
   }
 
   private void renderDiagonal(double w, double h) {
     WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
-    buf.func_181662_b(0, 0, 0).func_181675_d();
-    buf.func_181662_b(w, h, 0).func_181675_d();
+    buf.pos(0, 0, 0).endVertex();
+    buf.pos(w, h, 0).endVertex();
 
-    buf.func_181662_b(w, 0, 0).func_181675_d();
-    buf.func_181662_b(0, h, 0).func_181675_d();
+    buf.pos(w, 0, 0).endVertex();
+    buf.pos(0, h, 0).endVertex();
   }
 
 }
