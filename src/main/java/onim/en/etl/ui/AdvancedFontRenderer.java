@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
@@ -134,11 +135,10 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
 
     switch (ch) {
       case 160:
+      case ' ':
         return 4F;
       case 167:
         return -1F;
-      case ' ':
-        return 4F;
     }
 
     float k = italic ? 1.2F : 0.0F;
@@ -187,11 +187,10 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
   public float getCharWidthFloat(char ch) {
     switch (ch) {
       case 160:
+      case ' ':
         return 4F;
       case 167:
         return -1F;
-      case ' ':
-        return 4F;
     }
 
     int scaleFactor = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
@@ -257,7 +256,7 @@ public class AdvancedFontRenderer extends FontRenderer implements IResourceManag
   }
 
   private List<Font> deriveFonts(float scale, int style) {
-    return fonts.stream().filter(f -> f != null).map(f -> {
+    return fonts.stream().filter(Objects::nonNull).map(f -> {
       if (f.getFamily().equals("Ubuntu") && style == Font.BOLD) {
         return UbuntuBold.deriveFont(scale);
       }

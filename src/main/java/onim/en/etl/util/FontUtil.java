@@ -59,7 +59,7 @@ public class FontUtil {
     // String[] availableFontFamilyNames = localGfxEnv.getAvailableFontFamilyNames();
     // return Arrays.asList(availableFontFamilyNames);
     return Stream.of(localGfxEnv.getAllFonts()).map(
-        f -> f.getFamily()).distinct().collect(
+        Font::getFamily).distinct().collect(
         Collectors.toList());
   }
 
