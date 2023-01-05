@@ -42,11 +42,9 @@ public class ExtensionManager {
       ClassPath.from(loader)
         .getTopLevelClassesRecursive(PACKAGE_NAME)
         .stream()
-        .map(info -> info.load())
+        .map(ClassPath.ClassInfo::load)
         .sorted((a, b) -> a.getSimpleName().compareTo(b.getSimpleName()))
-        .forEach(c -> {
-          register(c);
-        });
+        .forEach(ExtensionManager::register);
     } catch (IOException e) {
       e.printStackTrace();
     }

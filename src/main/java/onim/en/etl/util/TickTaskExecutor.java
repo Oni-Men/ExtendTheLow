@@ -34,9 +34,7 @@ public class TickTaskExecutor {
 
   public static void advanceScheduledTasks() {
     scheduledTasks.entrySet().removeIf(e -> e.getValue().isCanceled());
-    scheduledTasks.values().forEach(task -> {
-      task.tick();
-    });
+    scheduledTasks.values().forEach(TickTask::tick);
 
     TickTask task = null;
     while (syncTaskPool.size() > 0) {

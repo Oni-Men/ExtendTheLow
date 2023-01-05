@@ -18,7 +18,7 @@ public class EnumSwitchButton<T extends Enum<T>> extends Button {
   public EnumSwitchButton(int widthIn, String initialValue, Class<T> enumType) {
     super(widthIn, "");
     this.enumType = enumType;
-    this.textList = Stream.of(enumType.getEnumConstants()).map(e -> e.name()).collect(Collectors.toList());
+    this.textList = Stream.of(enumType.getEnumConstants()).map(Enum::name).collect(Collectors.toList());
     if (initialValue != null) {
       this.enumValue = initialValue;
     } else if (!this.textList.isEmpty()) {

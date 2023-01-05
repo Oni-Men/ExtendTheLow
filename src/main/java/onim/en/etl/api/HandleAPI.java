@@ -52,9 +52,7 @@ public class HandleAPI {
     }
 
     // 一分ごとにデータを更新
-    ExtendTheLow.apiScheduler = TickTaskExecutor.scheduleTask(() -> {
-      requestDatas();
-    }, randomDelay, 20 * 60);
+    ExtendTheLow.apiScheduler = TickTaskExecutor.scheduleTask(HandleAPI::requestDatas, randomDelay, 20 * 60);
   }
 
   public static void requestDatas() {
