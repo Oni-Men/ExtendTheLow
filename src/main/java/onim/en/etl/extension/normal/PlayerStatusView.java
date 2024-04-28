@@ -37,6 +37,9 @@ public class PlayerStatusView extends TheLowExtension {
 
   @PrefItem(id = "onim.en.etl.playerStatusView.showClanName", type = boolean.class)
   public boolean showClanName = false;
+  
+  @PrefItem(id = "onim.en.etl.playerStatusView.showJobName", type = boolean.class)
+  public boolean showJobName = false;
 
   @PrefItem(id = "onim.en.etl.playerStatusView.scale", type = float.class, min = 0.1F, max = 1.5F, step = 0.05F,
       format = "x%.2f")
@@ -161,8 +164,10 @@ public class PlayerStatusView extends TheLowExtension {
     GlStateManager.translate(i + 1, 0, 0);
     GlStateManager.scale(0.75, 0.75, 0.75);
     int j = this.drawText(TheLowUtil.formatClanName(status.clanInfo), 0, 2, a, false);
-    GlStateManager.translate(j + 1, 0, 0);
-    this.drawText(TheLowUtil.formatJobName("§b" + status.jobName), 0,  2, a, false);
+    if (this.showJobName) {
+      GlStateManager.translate(j + 1, 0, 0);
+      this.drawText(TheLowUtil.formatJobName("§b" + status.jobName), 0,  2, a, false);
+    }
     GlStateManager.popMatrix();
 
     // Reinc count and main level
