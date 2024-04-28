@@ -57,13 +57,11 @@ public class GuiUtil {
 
   public static void openCategorySettingGUI(String category, GuiScreen prevScreen) {
     GuiExtendTheLow gui = new GuiExtendTheLow(category, prevScreen);
-    gui.setInitializer(buttonList -> {
-      ExtensionManager.getCategoryExtensions(category).forEach(extension -> {
-        Button button = new Button(100, extension.id());
-        button.setOnAction(() -> openExtensionSettingGUI(extension, gui));
-        buttonList.add(button);
-      });
-    });
+    gui.setInitializer(buttonList -> ExtensionManager.getCategoryExtensions(category).forEach(extension -> {
+      Button button = new Button(100, extension.id());
+      button.setOnAction(() -> openExtensionSettingGUI(extension, gui));
+      buttonList.add(button);
+    }));
 
     Minecraft.getMinecraft().displayGuiScreen(gui);
   }
@@ -85,7 +83,7 @@ public class GuiUtil {
         }
       });
     });
-    gui.setOnClose(() -> ExtensionManager.saveModuleSettings());
+    gui.setOnClose(ExtensionManager::saveModuleSettings);
     Minecraft.getMinecraft().displayGuiScreen(gui);
   }
 
@@ -182,12 +180,10 @@ public class GuiUtil {
 
   public static Button getResetSettingsButton() {
     Button button = new Button(100, "onim.en.etl.resetSettings");
-    button.setOnAction(() -> {
-      openConfirmGUI("onim.en.etl.confirmResetSettings", () -> {
-        Prefs.reset();
-        ExtensionManager.resetModuleSettings();
-      });
-    });
+    button.setOnAction(() -> openConfirmGUI("onim.en.etl.confirmResetSettings", () -> {
+      Prefs.reset();
+      ExtensionManager.resetModuleSettings();
+    }));
     return button;
   }
 
@@ -201,9 +197,7 @@ public class GuiUtil {
         Minecraft.getMinecraft().displayGuiScreen(null);
       });
       
-      noButton.setOnAction(() -> {
-        Minecraft.getMinecraft().displayGuiScreen(null);
-      });
+      noButton.setOnAction(() -> Minecraft.getMinecraft().displayGuiScreen(null));
 
       buttonList.add(noButton);
       buttonList.add(yesButton);
@@ -215,24 +209,16 @@ public class GuiUtil {
   public static void openGeneralSettingsGUI(GuiScreen prevScreen) {
     GuiExtendTheLow gui = new GuiExtendTheLow("onim.en.etl.generalSettings", prevScreen);
     gui.setInitializer(buttonList -> {
-      buttonList.add(new ToggleButton("onim.en.etl.advancedFont", Prefs.get().betterFont, b -> {
-        Prefs.get().betterFont = b;
-      }));
+      buttonList.add(new ToggleButton("onim.en.etl.advancedFont", Prefs.get().betterFont, b -> Prefs.get().betterFont = b));
       buttonList
-        .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> {
-          Prefs.get().customTheLowStatus = b;
-        }));
-      buttonList.add(new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> {
-        Prefs.get().invertTheLowStatus = b;
-      }));
-      buttonList.add(new ToggleButton("onim.en.etl.smartHealthBar", Prefs.get().smartHealthBar, b -> {
-        Prefs.get().smartHealthBar = b;
-      }));
+        .add(new ToggleButton("onim.en.etl.customStatus", Prefs.get().customTheLowStatus, b -> Prefs.get().customTheLowStatus = b));
+      buttonList.add(new ToggleButton("onim.en.etl.invertCustomStatus", Prefs.get().invertTheLowStatus, b -> Prefs.get().invertTheLowStatus = b));
+      buttonList.add(new ToggleButton("onim.en.etl.smartHealthBar", Prefs.get().smartHealthBar, b -> Prefs.get().smartHealthBar = b));
       buttonList.add(getClearCacheButton());
       buttonList.add(getResetSettingsButton());
     });
 
-    gui.setOnClose(() -> Prefs.save());
+    gui.setOnClose(Prefs::save);
 
     Minecraft.getMinecraft().displayGuiScreen(gui);
   }
@@ -282,15 +268,15 @@ public class GuiUtil {
     GlStateManager.shadeModel(7425);
     Tessellator tessellator = Tessellator.getInstance();
     WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
-    worldrenderer.func_181662_b((double) right, (double) top, (double) 0).func_181666_a(red2, green2, blue2, alpha2)
-      .func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) top, (double) 0).func_181666_a(red1, green1, blue1, alpha1)
-      .func_181675_d();
-    worldrenderer.func_181662_b((double) left, (double) bottom, (double) 0).func_181666_a(red1, green1, blue1, alpha1)
-      .func_181675_d();
-    worldrenderer.func_181662_b((double) right, (double) bottom, (double) 0).func_181666_a(red2, green2, blue2, alpha2)
-      .func_181675_d();
+    worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+    worldrenderer.pos((double) right, (double) top, (double) 0).color(red2, green2, blue2, alpha2)
+      .endVertex();
+    worldrenderer.pos((double) left, (double) top, (double) 0).color(red1, green1, blue1, alpha1)
+      .endVertex();
+    worldrenderer.pos((double) left, (double) bottom, (double) 0).color(red1, green1, blue1, alpha1)
+      .endVertex();
+    worldrenderer.pos((double) right, (double) bottom, (double) 0).color(red2, green2, blue2, alpha2)
+      .endVertex();
     tessellator.draw();
     GlStateManager.shadeModel(7424);
     GlStateManager.disableBlend();

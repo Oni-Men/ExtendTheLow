@@ -79,19 +79,19 @@ public class GuiSearchChest extends GuiChest {
       GlStateManager.disableLighting();
       GL11.glLineWidth(4f);
       WorldRenderer buf = Tessellator.getInstance().getWorldRenderer();
-      buf.func_181668_a(GL11.GL_LINES, DefaultVertexFormats.field_181705_e);
+      buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 
-      buf.func_181662_b(-0.5, 0, 0).func_181675_d();
-      buf.func_181662_b(16.5, 0, 0).func_181675_d();
+      buf.pos(-0.5, 0, 0).endVertex();
+      buf.pos(16.5, 0, 0).endVertex();
 
-      buf.func_181662_b(16, 0, 0).func_181675_d();
-      buf.func_181662_b(16, 16, 0).func_181675_d();
+      buf.pos(16, 0, 0).endVertex();
+      buf.pos(16, 16, 0).endVertex();
 
-      buf.func_181662_b(16.5, 16, 0).func_181675_d();
-      buf.func_181662_b(-0.5, 16, 0).func_181675_d();
+      buf.pos(16.5, 16, 0).endVertex();
+      buf.pos(-0.5, 16, 0).endVertex();
 
-      buf.func_181662_b(0, 16, 0).func_181675_d();
-      buf.func_181662_b(0, 0, 0).func_181675_d();
+      buf.pos(0, 16, 0).endVertex();
+      buf.pos(0, 0, 0).endVertex();
 
       Tessellator.getInstance().draw();
 

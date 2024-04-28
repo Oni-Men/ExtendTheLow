@@ -22,9 +22,7 @@ public class QuickActionSetting extends GuiExtendTheLow {
     super("onim.en.etl.quickAction");
     this.setInitializer(list -> {
       Button button = new Button(100, "Reset");
-      button.setOnAction(() -> {
-        QuickActionManager.reset();
-      });
+      button.setOnAction(QuickActionManager::reset);
       list.add(button);
     });
   }
