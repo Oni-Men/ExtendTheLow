@@ -29,7 +29,9 @@ public class HandleAPI {
   public static final String PLAYER_DATA_MSG = "§r§a正常にプレイヤーデータを";
   private static ExecutorService service = Executors.newFixedThreadPool(20);
 
-  public static List<String> API_TYPES = Arrays.asList("dungeon", "player");
+  public static List<String> API_TYPES = Arrays.asList("player");
+  // ダンジョン情報が取得できないため、一時的にプレイヤーのみ収集する
+  // public static List<String> API_TYPES = Arrays.asList("dungeon", "player");
 
   private static boolean requestImmediately = false;
 
